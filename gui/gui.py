@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import (
-    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFrame
+    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFrame,QPushButton, QFileDialog, QLabel
 )
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
 
 
 class Main_Gui(QMainWindow):
@@ -35,6 +37,15 @@ class Main_Gui(QMainWindow):
         top_panel = QFrame()
         top_panel.setFixedHeight(60)
         top_panel.setStyleSheet("background-color: #2c3e50;")
+        #Create button
+        button_layout = QHBoxLayout()
+        top_panel.setLayout(button_layout)
+        #Button event
+        self.open_button = QPushButton("Open File")
+        self.open_button.clicked.connect(self.find_image)
+        #Add button to layout
+        button_layout.addWidget(self.open_button)
+        button_layout.addStretch()
 
         return top_panel
 
@@ -63,6 +74,14 @@ class Main_Gui(QMainWindow):
         middle_panel = QFrame()
         middle_panel.setStyleSheet("background-color: #1abc9c;")
 
+        image_layout = QVBoxLayout()
+        middle_panel.setLayout(image_layout)
+        #Add image to layout
+        self.image = QLabel("...")
+        self.image.setAlignment(Qt.AlignCenter)
+
+        image_layout.addWidget(self.image)
+
         return middle_panel
 
     # right_panel
@@ -79,3 +98,14 @@ class Main_Gui(QMainWindow):
         bottom_bar.setStyleSheet("background-color: #244eff;")
 
         return bottom_bar
+    #Find file
+    def find_image(self):
+        image_path, filter = QFileDialog.getOpenFileName(self,"Selec image","","Images (*.png *.jpg *.jpeg *.bmp)")
+
+        if image_path:
+            self.load_image_to_gui(image_path)
+    #Load image
+    def load_image_to_gui(self,image_path):
+        load_image = QPixmap(image_path)
+
+        self.image.setPixmap(load_image.scaled(self.image.size()))
