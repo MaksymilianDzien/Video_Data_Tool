@@ -108,4 +108,4 @@ class Main_Gui(QMainWindow):
     def load_image_to_gui(self,image_path):
         load_image = QPixmap(image_path)
 
-        self.image.setPixmap(load_image.scaled(self.image.size()))
+        self.image.setPixmap(load_image.scaled(self.image.size(), Qt.KeepAspectRatio))
