@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import (
-    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFrame,QPushButton, QFileDialog, QLabel
+    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFrame, QFileDialog, QLabel
 )
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-
+from PyQt5.QtWidgets import QAction
 
 class Main_Gui(QMainWindow):
 
@@ -14,6 +14,7 @@ class Main_Gui(QMainWindow):
         self.setWindowTitle("Simple GUI")
         self.resize(1200, 800)
         self.Create_GUI()
+        self.add_menu()
 
     def Create_GUI(self):
 
@@ -40,11 +41,7 @@ class Main_Gui(QMainWindow):
         #Create button
         button_layout = QHBoxLayout()
         top_panel.setLayout(button_layout)
-        #Button event
-        self.open_button = QPushButton("Open File")
-        self.open_button.clicked.connect(self.find_image)
-        #Add button to layout
-        button_layout.addWidget(self.open_button)
+
         button_layout.addStretch()
 
         return top_panel
@@ -108,7 +105,14 @@ class Main_Gui(QMainWindow):
     def load_image_to_gui(self,image_path):
         load_image = QPixmap(image_path)
 
-
-
-
         self.image.setPixmap(load_image.scaled(self.image.size(), Qt.KeepAspectRatio))
+    #Add top menu
+    def add_menu(self):
+        menu_first_bar = self.menuBar()
+
+        file_menu = menu_first_bar.addMenu("File")
+
+        first_action = QAction("Find file", self)
+        first_action.triggered.connect(self.find_image)
+
+        file_menu.addAction(first_action)
