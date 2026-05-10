@@ -1,9 +1,8 @@
 from PyQt5.QtWidgets import (
-    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFrame, QFileDialog, QLabel
+    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction
 )
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QAction
 
 class Main_Gui(QMainWindow):
 
@@ -64,7 +63,38 @@ class Main_Gui(QMainWindow):
         left_panel.setFixedWidth(80)
         left_panel.setStyleSheet("background-color: #e74c3c;")
 
-        return left_panel
+        layout = QVBoxLayout()
+        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setSpacing(8)
+
+        # Create 7 buttons
+        for i in range(1, 8):
+            buttons = QPushButton(str(i))
+
+            # size
+            buttons.setFixedSize(60, 60)
+
+            # style of button
+            buttons.setStyleSheet("""
+                QPushButton {
+                    background-color: #ecf0f1;
+                    border: 2px solid #2c3e50;
+                    border-radius: 6px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background-color: #bdc3c7;
+                }
+                QPushButton:pressed {
+                    background-color: #95a5a6;
+                }
+            """)
+
+            layout.addWidget(buttons)
+
+        layout.addStretch()
+        left_panel.setLayout(layout)
+
 
     # middle_panel
     def create_middle_panel(self):
