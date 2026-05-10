@@ -94,7 +94,7 @@ class Main_Gui(QMainWindow):
 
         layout.addStretch()
         left_panel.setLayout(layout)
-
+        return left_panel
 
     # middle_panel
     def create_middle_panel(self):
