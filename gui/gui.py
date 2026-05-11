@@ -63,19 +63,19 @@ class Main_Gui(QMainWindow):
         left_panel.setFixedWidth(80)
         left_panel.setStyleSheet("background-color: #e74c3c;")
 
-        layout = QVBoxLayout()
-        layout.setContentsMargins(5, 5, 5, 5)
-        layout.setSpacing(8)
+        left_layout = QVBoxLayout()
+        left_layout.setContentsMargins(5, 5, 5, 5)
+        left_layout.setSpacing(8)
 
         # Create 7 buttons
         for i in range(1, 8):
-            buttons = QPushButton(str(i))
+            left_buttons = QPushButton(str(i))
 
             # size
-            buttons.setFixedSize(60, 60)
+            left_buttons.setFixedSize(60, 60)
 
             # style of button
-            buttons.setStyleSheet("""
+            left_buttons.setStyleSheet("""
                 QPushButton {
                     background-color: #ecf0f1;
                     border: 2px solid #2c3e50;
@@ -90,10 +90,10 @@ class Main_Gui(QMainWindow):
                 }
             """)
 
-            layout.addWidget(buttons)
+            left_layout.addWidget(left_buttons)
 
-        layout.addStretch()
-        left_panel.setLayout(layout)
+        left_layout.addStretch()
+        left_panel.setLayout(left_layout)
         return left_panel
 
     # middle_panel
@@ -118,13 +118,50 @@ class Main_Gui(QMainWindow):
         right_panel.setStyleSheet("background-color: #f1c40f;")
 
         return right_panel
+
     # bottom_panel
     def create_bottom_panel(self):
-        bottom_bar = QFrame()
-        bottom_bar.setFixedHeight(80)
-        bottom_bar.setStyleSheet("background-color: #244eff;")
+        bottom_panel = QFrame()
+        bottom_panel.setFixedHeight(80)
+        bottom_panel.setStyleSheet("background-color: #244eff;")
+        # layout
+        bottom_layout = QHBoxLayout()
+        bottom_layout.setContentsMargins(10, 10, 10, 10)
+        bottom_layout.setSpacing(10)
 
-        return bottom_bar
+        # center button
+        bottom_layout.addStretch()
+
+        # Create 3 buttons
+        for i in range(1, 4):
+            bottom_buttons = QPushButton(str(i))
+
+            # size
+            bottom_buttons.setFixedSize(60, 60)
+
+            # style of button
+            bottom_buttons.setStyleSheet("""
+                QPushButton {
+                    background-color: #ecf0f1;
+                    border: 2px solid #2c3e50;
+                    border-radius: 6px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background-color: #bdc3c7;
+                }
+                QPushButton:pressed {
+                    background-color: #95a5a6;
+                }
+            """)
+
+            bottom_layout.addWidget(bottom_buttons)
+
+        bottom_layout.addStretch()
+
+        bottom_panel.setLayout(bottom_layout)
+
+        return bottom_panel
     #Find file
     def find_image(self):
         image_path, filter = QFileDialog.getOpenFileName(self,"Selec image","","Images (*.png *.jpg *.jpeg *.bmp)")

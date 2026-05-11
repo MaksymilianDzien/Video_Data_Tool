@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add top menu">
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add return">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
@@ -133,7 +133,23 @@
       <option name="project" value="LOCAL" />
       <updated>1778356148828</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="add buttons">
+      <option name="closed" value="true" />
+      <created>1778438209530</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1778438209530</updated>
+    </task>
+    <task id="LOCAL-00010" summary="add return">
+      <option name="closed" value="true" />
+      <created>1778438288497</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1778438288497</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -167,6 +183,8 @@
     <MESSAGE value="fixed image scale" />
     <MESSAGE value="fixed image load" />
     <MESSAGE value="add top menu" />
-    <option name="LAST_COMMIT_MESSAGE" value="add top menu" />
+    <MESSAGE value="add buttons" />
+    <MESSAGE value="add return" />
+    <option name="LAST_COMMIT_MESSAGE" value="add return" />
   </component>
 </project>
