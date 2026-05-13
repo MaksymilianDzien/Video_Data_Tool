@@ -162,6 +162,7 @@ class Main_Gui(QMainWindow):
         bottom_panel.setLayout(bottom_layout)
 
         return bottom_panel
+
     #Find file
     def find_image(self):
         image_path, filter = QFileDialog.getOpenFileName(self,"Selec image","","Images (*.png *.jpg *.jpeg *.bmp)")
@@ -173,6 +174,7 @@ class Main_Gui(QMainWindow):
         load_image = QPixmap(image_path)
 
         self.image.setPixmap(load_image.scaled(self.image.size(), Qt.KeepAspectRatio))
+
     #Add top menu
     def add_menu(self):
         menu_first_bar = self.menuBar()
