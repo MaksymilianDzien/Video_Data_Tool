@@ -68,7 +68,7 @@ class Main_Gui(QMainWindow):
         left_layout.setSpacing(8)
 
         # Create 7 buttons
-        for i in range(1, 8):
+        for i in range(1, 9):
             left_buttons = QPushButton(str(i))
 
             # size
