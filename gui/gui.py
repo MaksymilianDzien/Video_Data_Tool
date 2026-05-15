@@ -71,6 +71,7 @@ class Main_Gui(QMainWindow):
         for i in range(1, 9):
             left_buttons = QPushButton(str(i))
 
+
             # size
             left_buttons.setFixedSize(60, 60)
 
