@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-
+from buttons.Button_logic import ButtonLogic
 class Main_Gui(QMainWindow):
 
     def __init__(self):
@@ -75,6 +75,9 @@ class Main_Gui(QMainWindow):
             # size
             left_buttons.setFixedSize(60, 60)
 
+            #add moving image to second button
+            if i == 2:
+                 left_buttons.clicked.connect(self.enable_move_mode)
             # style of button
             left_buttons.setStyleSheet("""
                 QPushButton {
@@ -105,8 +108,9 @@ class Main_Gui(QMainWindow):
         image_layout = QVBoxLayout()
         middle_panel.setLayout(image_layout)
         #Add image to layout
-        self.image = QLabel("...")
-        self.image.setAlignment(Qt.AlignCenter)
+        self.image = ButtonLogic()
+        self.image.setText("...")
+
 
         image_layout.addWidget(self.image)
 
@@ -134,7 +138,7 @@ class Main_Gui(QMainWindow):
         bottom_layout.addStretch()
 
         # Create 3 buttons
-        for i in range(1, 4):
+        for i in range(1, 8):
             bottom_buttons = QPushButton(str(i))
 
             # size
@@ -171,10 +175,8 @@ class Main_Gui(QMainWindow):
         if image_path:
             self.load_image_to_gui(image_path)
     #Load image
-    def load_image_to_gui(self,image_path):
-        load_image = QPixmap(image_path)
-
-        self.image.setPixmap(load_image.scaled(self.image.size(), Qt.KeepAspectRatio))
+    def load_image_to_gui(self, image_path):
+        self.image.load_image(image_path)
 
     #Add top menu
     def add_menu(self):
@@ -186,3 +188,6 @@ class Main_Gui(QMainWindow):
         first_action.triggered.connect(self.find_image)
 
         file_menu.addAction(first_action)
+
+    def enable_move_mode(self):
+        self.image.enable_drag(True)
