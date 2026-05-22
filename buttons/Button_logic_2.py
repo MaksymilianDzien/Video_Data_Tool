@@ -57,6 +57,9 @@ class ButtonLogic(QLabel):
     # Mouse move
     def mouseMoveEvent(self, event):
 
+        if not self.drag_enabled:
+            return
+
         if self.dragging:
 
             delta = event.pos() - self.last_mouse_positon
@@ -66,5 +69,6 @@ class ButtonLogic(QLabel):
 
     # mouse relase
     def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.dragging = False
 
-        self.dragging = False

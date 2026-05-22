@@ -1,13 +1,16 @@
+from PyQt5 import Qt
 from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction
 )
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
-from buttons.Button_logic import ButtonLogic
+
+from buttons.Button_logic_2 import ButtonLogic
+
+
 class Main_Gui(QMainWindow):
 
     def __init__(self):
         super(Main_Gui, self).__init__()
+
 
         # Title and size gui
         self.setWindowTitle("Simple GUI")
@@ -55,6 +58,7 @@ class Main_Gui(QMainWindow):
         content_layout.addWidget(self.create_middle_panel())
         content_layout.addWidget(self.create_right_panel())
 
+
         return content_layout
 
     # left_panel
@@ -67,6 +71,8 @@ class Main_Gui(QMainWindow):
         left_layout.setContentsMargins(5, 5, 5, 5)
         left_layout.setSpacing(8)
 
+
+
         # Create 7 buttons
         for i in range(1, 9):
             left_buttons = QPushButton(str(i))
@@ -74,10 +80,14 @@ class Main_Gui(QMainWindow):
 
             # size
             left_buttons.setFixedSize(60, 60)
-
+            # normal mouse
+            if i == 1:
+                left_buttons.clicked.connect(self.disable_move_mode)
             #add moving image to second button
             if i == 2:
                  left_buttons.clicked.connect(self.enable_move_mode)
+            #reset iamge positon
+
             # style of button
             left_buttons.setStyleSheet("""
                 QPushButton {
@@ -188,6 +198,9 @@ class Main_Gui(QMainWindow):
         first_action.triggered.connect(self.find_image)
 
         file_menu.addAction(first_action)
-
+    # enable mouse drag
     def enable_move_mode(self):
         self.image.enable_drag(True)
+    # disable  mouse drag
+    def disable_move_mode(self):
+        self.image.enable_drag(False)
