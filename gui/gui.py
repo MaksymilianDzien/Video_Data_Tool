@@ -193,7 +193,6 @@ class Main_Gui(QMainWindow):
         menu_first_bar = self.menuBar()
 
 
-
         file_menu = menu_first_bar.addMenu("File")
 
         first_action = QAction("Find file", self)
