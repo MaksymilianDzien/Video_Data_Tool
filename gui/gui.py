@@ -110,6 +110,7 @@ class Main_Gui(QMainWindow):
         left_panel.setLayout(left_layout)
         return left_panel
 
+
     # middle_panel
     def create_middle_panel(self):
         middle_panel = QFrame()
