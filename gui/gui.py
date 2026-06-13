@@ -127,6 +127,7 @@ class Main_Gui(QMainWindow):
 
         return middle_panel
 
+
     # right_panel
     def create_right_panel(self):
         right_panel = QFrame()
