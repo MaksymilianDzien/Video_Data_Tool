@@ -76,8 +76,6 @@ class Main_Gui(QMainWindow):
         # Create 7 buttons
         for i in range(1, 9):
             left_buttons = QPushButton(str(i))
-
-
             # size
             left_buttons.setFixedSize(60, 60)
             # normal mouse
