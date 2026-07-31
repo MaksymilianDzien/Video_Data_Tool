@@ -62,7 +62,6 @@ class ButtonLogic(QLabel):
 
         if self.dragging:
 
-
             delta = event.pos() - self.last_mouse_positon
             self.positon += delta
             self.last_mouse_positon = event.pos()
