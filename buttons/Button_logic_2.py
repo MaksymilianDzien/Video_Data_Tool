@@ -73,3 +73,4 @@ class ButtonLogic(QLabel):
         if event.button() == Qt.LeftButton:
             self.dragging = False
 
+
