@@ -68,6 +68,7 @@ class ButtonLogic(QLabel):
             self.update()
 
 
+
     # mouse relase
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
