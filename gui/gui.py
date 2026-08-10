@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (
 )
 
 from buttons.Button_logic_2 import ButtonLogic
-
+from buttons.Button_logic_3 import Button3
 
 class Main_Gui(QMainWindow):
 
@@ -85,6 +85,9 @@ class Main_Gui(QMainWindow):
             if i == 2:
                  left_buttons.clicked.connect(self.enable_move_mode)
             #reset iamge positon
+            #zoom button
+            if i == 3:
+                self.button3 = Button3(self, left_buttons)
 
             # style of button
             left_buttons.setStyleSheet("""
@@ -187,6 +190,8 @@ class Main_Gui(QMainWindow):
     #Load image
     def load_image_to_gui(self, image_path):
         self.image.load_image(image_path)
+        #reest zoom if new image is load
+        self.button3.reset_zoom()
 
     #Add top menu
     def add_menu(self):
