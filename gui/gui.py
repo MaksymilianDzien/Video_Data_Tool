@@ -40,11 +40,46 @@ class Main_Gui(QMainWindow):
         top_panel = QFrame()
         top_panel.setFixedHeight(60)
         top_panel.setStyleSheet("background-color: #2c3e50;")
-        #Create button
-        button_layout = QHBoxLayout()
-        top_panel.setLayout(button_layout)
 
-        button_layout.addStretch()
+        # Create button layout
+        top_button_layout = QHBoxLayout()
+        top_button_layout.setContentsMargins(5, 5, 5, 5)
+        top_button_layout.setSpacing(8)
+        top_panel.setLayout(top_button_layout)
+
+        # button style same as main window
+        button_style = """
+                QPushButton {
+                    background-color: #ecf0f1;
+                    border: 2px solid #2c3e50;
+                    border-radius: 6px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background-color: #bdc3c7;
+                }
+                QPushButton:pressed {
+                    background-color: #95a5a6;
+                }
+            """
+
+        # top_left_button
+        for i in range(1, 4):
+            top_left_button = QPushButton(f"t.{i}")
+            top_left_button.setFixedSize(60, 45)
+            top_left_button.setStyleSheet(button_style)
+            top_button_layout.addWidget(top_left_button)
+
+        top_button_layout.addStretch()
+
+        # top_mid_button
+        for i in range(4, 13):
+            top_mid_button = QPushButton(f"t.{i}")
+            top_mid_button.setFixedSize(60, 45)
+            top_mid_button.setStyleSheet(button_style)
+            top_button_layout.addWidget(top_mid_button)
+
+        top_button_layout.addStretch()
 
         return top_panel
 
