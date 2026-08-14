@@ -1,6 +1,7 @@
-from PyQt5 import Qt
+from PyQt5 import Qt , QtCore
 from PyQt5.QtWidgets import (
-    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction
+    QMainWindow, QWidget, QHBoxLayout,
+    QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider
 )
 
 from buttons.Button_logic_2 import ButtonLogic
@@ -80,6 +81,15 @@ class Main_Gui(QMainWindow):
             top_button_layout.addWidget(top_mid_button)
 
         top_button_layout.addStretch()
+
+        # frame_slider
+        frame_slider = QSlider(QtCore.Qt.Horizontal)
+        frame_slider.setFixedSize(250, 45)
+        frame_slider.setMinimum(0)
+        frame_slider.setMaximum(100)
+        frame_slider.setValue(0)
+
+        top_button_layout.addWidget(frame_slider)
 
         return top_panel
 

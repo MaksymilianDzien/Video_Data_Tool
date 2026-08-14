@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add top panel buttons">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buttons/Button_logic_3.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -362,7 +362,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786452277381</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="add top panel buttons">
+      <option name="closed" value="true" />
+      <created>1786655763268</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1786655763268</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
