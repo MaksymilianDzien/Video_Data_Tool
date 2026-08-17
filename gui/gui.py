@@ -92,7 +92,6 @@ class Main_Gui(QMainWindow):
         top_button_layout.addWidget(frame_slider)
 
 
-
         return top_panel
 
     # main_gui_layout
