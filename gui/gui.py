@@ -92,8 +92,6 @@ class Main_Gui(QMainWindow):
         top_button_layout.addWidget(frame_slider)
 
 
-
-
         return top_panel
 
     # main_gui_layout
@@ -231,15 +229,26 @@ class Main_Gui(QMainWindow):
 
     #Find file
     def find_image(self):
-        image_path, filter = QFileDialog.getOpenFileName(self,"Selec image","","Images (*.png *.jpg *.jpeg *.bmp)")
+        file_path, filter = QFileDialog.getOpenFileName(self,
+            "Selec image or video",
+            "",
+            "Media (*.png *.jpg *.jpeg *.bmp *.mp4 *.avi *.mov *.mkv)")
 
-        if image_path:
-            self.load_image_to_gui(image_path)
+        if file_path:
+            self.load_image_to_gui(file_path)
+
     #Load image
-    def load_image_to_gui(self, image_path):
-        self.image.load_image(image_path)
-        #reest zoom if new image is load
-        self.button3.reset_zoom()
+    def load_image_to_gui(self, file_path):
+
+        video_extensions = (".mp4", ".avi", ".mov", ".mkv")
+
+        #if is wideo or image
+        if file_path.lower().endswith(video_extensions):
+            self.image.load_video(file_path)
+        else:
+            self.image.load_image(file_path)
+            # reest zoom if new image is load
+            self.button3.reset_zoom()
 
     #Add top menu
     def add_menu(self):
@@ -252,6 +261,7 @@ class Main_Gui(QMainWindow):
         first_action.triggered.connect(self.find_image)
 
         file_menu.addAction(first_action)
+
     # enable mouse drag
     def enable_move_mode(self):
         self.image.enable_drag(True)
