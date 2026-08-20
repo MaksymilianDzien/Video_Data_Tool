@@ -70,12 +70,24 @@ class ButtonLogic(QLabel):
     # draw next frame
     def next_video_frame(self):
 
+        #chek if wideo exist
         if self.video is None:
             return
 
-        ret, frame = self.video.read()
+        ret, video_frame = self.video.read()
 
-        self.original_iamge = self.cv_frame_to_pixmap(frame)
+        # chek if fill is end
+        if not ret:
+            self.stop_video()
+            return
+
+        # prossed forame
+        processed_frame = self.process_frame(video_frame)
+
+        # chane froame to pixmap
+        self.original_iamge = self.cv_frame_to_pixmap(processed_frame)
+
+        # reset QLabel
         self.update()
 
     # stop video if new file is read
@@ -123,3 +135,7 @@ class ButtonLogic(QLabel):
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.dragging = False
+
+    #future ad d
+    def process_frame(self, video_frame):
+                return video_frame
