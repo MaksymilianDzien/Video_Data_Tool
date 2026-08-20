@@ -29,9 +29,11 @@ class ButtonLogic(QLabel):
     # cv_to_pixmap
     def cv_frame_to_pixmap(self, frame):
 
+        #create new frame
         new_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame_height, frame_width, frame_channel = new_frame.shape
 
+        #add format and bytes in frame
         bytes_in_frame = frame_channel * frame_width
         q_image = (QImage(new_frame.data, frame_width, frame_height, bytes_in_frame,
         QImage.Format_RGB888))
@@ -53,6 +55,7 @@ class ButtonLogic(QLabel):
     # load video (na razie: po prostu odpala i gra w pętli)
     def load_video(self, video_path):
 
+
         self.stop_video()
         self.video = cv2.VideoCapture(video_path)
 
@@ -60,6 +63,7 @@ class ButtonLogic(QLabel):
             self.video_capture = None
             return
 
+        #fps count
         fps = self.video.get(cv2.CAP_PROP_FPS)
         self.video_time.start(int(1000 / fps))
 

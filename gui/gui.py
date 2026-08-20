@@ -240,6 +240,7 @@ class Main_Gui(QMainWindow):
     #Load image
     def load_image_to_gui(self, file_path):
 
+        #wideo format
         video_extensions = (".mp4", ".avi", ".mov", ".mkv")
 
         #if is wideo or image
