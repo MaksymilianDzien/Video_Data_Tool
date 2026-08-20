@@ -52,7 +52,7 @@ class ButtonLogic(QLabel):
         self.original_iamge = self.cv_frame_to_pixmap(load_data)
         self.update()
 
-    # load video (na razie: po prostu odpala i gra w pętli)
+    # load video
     def load_video(self, video_path):
 
 
