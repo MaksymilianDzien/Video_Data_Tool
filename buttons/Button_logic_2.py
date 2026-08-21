@@ -26,6 +26,7 @@ class ButtonLogic(QLabel):
         self.video_time = QTimer(self)
         self.video_time.timeout.connect(self.next_video_frame)
 
+
     # cv_to_pixmap
     def cv_frame_to_pixmap(self, frame):
 
