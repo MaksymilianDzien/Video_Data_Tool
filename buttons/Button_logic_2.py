@@ -11,6 +11,7 @@ class ButtonLogic(QLabel):
         # center image
         self.setAlignment(Qt.AlignCenter)
 
+
         self.original_iamge = None
 
         # image positon
