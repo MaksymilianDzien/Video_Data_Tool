@@ -1,7 +1,7 @@
 from PyQt5 import Qt , QtCore
 from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout,
-    QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider
+    QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit
 )
 
 from buttons.Button_logic_2 import ButtonLogic
@@ -83,13 +83,39 @@ class Main_Gui(QMainWindow):
         top_button_layout.addStretch()
 
         # frame_slider
-        frame_slider = QSlider(QtCore.Qt.Horizontal)
-        frame_slider.setFixedSize(250, 45)
-        frame_slider.setMinimum(0)
-        frame_slider.setMaximum(100)
-        frame_slider.setValue(0)
+        self.frame_slider = QSlider(QtCore.Qt.Horizontal)
+        self.frame_slider.setFixedSize(250, 45)
+        self.frame_slider.setMinimum(1)
+        self.frame_slider.setMaximum(100)
+        self.frame_slider.setValue(0)
 
-        top_button_layout.addWidget(frame_slider)
+        top_button_layout.addWidget(self.frame_slider)
+
+        #frame_slider_input
+        self.frame_slider_input = QLineEdit()
+        self.frame_slider_input.setFixedSize(60, 45)
+        self.frame_slider_input.setAlignment(QtCore.Qt.AlignCenter)
+        self.frame_slider_input.setText("1")
+
+        top_button_layout.addWidget(self.frame_slider_input)
+
+        (self.frame_slider_input.setStyleSheet
+         ("""
+            QLineEdit {
+                background-color: #ecf0f1;
+                border: 2px solid #2c3e50;
+                border-radius: 6px;
+                font-weight: bold;
+            }
+        """))
+
+        # Slider to slider_input
+        (self.frame_slider.valueChanged.connect
+        (lambda slider_value: self.frame_slider_input.setText(str(slider_value)))
+         )
+
+        # slider_input to slider
+        self.frame_slider_input.returnPressed.connect(self.change_slider_value)
 
 
         return top_panel
@@ -269,3 +295,17 @@ class Main_Gui(QMainWindow):
     # disable  mouse drag
     def disable_move_mode(self):
         self.image.enable_drag(False)
+
+    #convert string to slider_value
+    def change_slider_value(self):
+        slider_value_text = self.frame_slider_input.text()
+
+        if slider_value_text.isdigit():
+            slider_value = int(slider_value_text)
+
+            if self.frame_slider.minimum() <= slider_value <= self.frame_slider.maximum():
+                self.frame_slider.setValue(slider_value)
+
+        else:
+            slider_value = 1;
+            self.frame_slider.setValue(slider_value)
