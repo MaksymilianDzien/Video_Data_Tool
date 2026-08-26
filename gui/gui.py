@@ -99,6 +99,7 @@ class Main_Gui(QMainWindow):
 
         top_button_layout.addWidget(self.frame_slider_input)
 
+        #input slider style
         (self.frame_slider_input.setStyleSheet
          ("""
             QLineEdit {
@@ -300,12 +301,13 @@ class Main_Gui(QMainWindow):
     def change_slider_value(self):
         slider_value_text = self.frame_slider_input.text()
 
+        #chek if value is int
         if slider_value_text.isdigit():
             slider_value = int(slider_value_text)
 
             if self.frame_slider.minimum() <= slider_value <= self.frame_slider.maximum():
                 self.frame_slider.setValue(slider_value)
-
+        # if is not int set value to 1
         else:
             slider_value = 1;
             self.frame_slider.setValue(slider_value)

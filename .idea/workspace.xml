@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="/">
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add frame_slider_input and connect frame_slider">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
@@ -97,14 +97,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00001" summary="main0.0.1">
-      <option name="closed" value="true" />
-      <created>1777658684047</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1777658684047</updated>
     </task>
     <task id="LOCAL-00002" summary="Add simpe gui">
       <option name="closed" value="true" />
@@ -490,7 +482,15 @@
       <option name="project" value="LOCAL" />
       <updated>1787606550950</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="add frame_slider_input and connect frame_slider">
+      <option name="closed" value="true" />
+      <created>1787662784603</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1787662784603</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -536,6 +536,7 @@
     <MESSAGE value="add more komand" />
     <MESSAGE value="same change in display" />
     <MESSAGE value="/" />
-    <option name="LAST_COMMIT_MESSAGE" value="/" />
+    <MESSAGE value="add frame_slider_input and connect frame_slider" />
+    <option name="LAST_COMMIT_MESSAGE" value="add frame_slider_input and connect frame_slider" />
   </component>
 </project>
