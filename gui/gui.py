@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import (
 
 from buttons.Button_logic_2 import ButtonLogic
 from buttons.Button_logic_3 import Button3
+from buttons.Button_frame_slider import Button_frame_slider
 
 class Main_Gui(QMainWindow):
 
@@ -73,14 +74,7 @@ class Main_Gui(QMainWindow):
 
         top_button_layout.addStretch()
 
-        # top_mid_button
-        for i in range(4, 13):
-            top_mid_button = QPushButton(f"t.{i}")
-            top_mid_button.setFixedSize(60, 45)
-            top_mid_button.setStyleSheet(button_style)
-            top_button_layout.addWidget(top_mid_button)
 
-        top_button_layout.addStretch()
 
         # frame_slider
         self.frame_slider = QSlider(QtCore.Qt.Horizontal)
@@ -89,16 +83,46 @@ class Main_Gui(QMainWindow):
         self.frame_slider.setMaximum(100)
         self.frame_slider.setValue(0)
 
-        top_button_layout.addWidget(self.frame_slider)
-
         #frame_slider_input
         self.frame_slider_input = QLineEdit()
         self.frame_slider_input.setFixedSize(60, 45)
         self.frame_slider_input.setAlignment(QtCore.Qt.AlignCenter)
         self.frame_slider_input.setText("1")
 
-        top_button_layout.addWidget(self.frame_slider_input)
+        #add_button_slider_logick
+        self.create_button_frame_slider()
 
+        # top_mid_button
+        for i in range(4, 13):
+            top_mid_button = QPushButton(f"t.{i}")
+            top_mid_button.setFixedSize(60, 45)
+            top_mid_button.setStyleSheet(button_style)
+
+            match i:
+                #set value to start position
+                case 4:
+                    top_mid_button.clicked.connect(self.button_frame_slider.start_value)
+                # subtract to slider value 1
+                case 5:
+                    top_mid_button.clicked.connect(self.button_frame_slider.down_10)
+                # subtract to slider value 10
+                case 6:
+                    top_mid_button.clicked.connect(self.button_frame_slider.down_1)
+                #add to slider value 1
+                case 8:
+                    top_mid_button.clicked.connect(self.button_frame_slider.up_1)
+                # add to slider value 10
+                case 9:
+                    top_mid_button.clicked.connect(self.button_frame_slider.up_10)
+                # set value to max position
+                case 10:
+                    top_mid_button.clicked.connect(self.button_frame_slider.max_value)
+
+            top_button_layout.addWidget(top_mid_button)
+            top_button_layout.addStretch()
+
+            top_button_layout.addWidget(self.frame_slider)
+            top_button_layout.addWidget(self.frame_slider_input)
         #input slider style
         (self.frame_slider_input.setStyleSheet
          ("""
@@ -311,3 +335,10 @@ class Main_Gui(QMainWindow):
         else:
             slider_value = 1;
             self.frame_slider.setValue(slider_value)
+
+    #button_slider_logick
+    def create_button_frame_slider(self):
+        self.button_frame_slider = Button_frame_slider(
+            self.frame_slider,
+            self.frame_slider_input
+        )
