@@ -98,6 +98,7 @@ class Main_Gui(QMainWindow):
             top_mid_button.setFixedSize(60, 45)
             top_mid_button.setStyleSheet(button_style)
 
+
             match i:
                 #set value to start position
                 case 4:
