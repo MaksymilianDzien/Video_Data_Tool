@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="simpe koments">
-      <change afterPath="$PROJECT_DIR$/buttons/Button_frame_slider.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
-    </list>
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add slider button fuckiton" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,22 +94,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00003" summary="fixed margins between panels">
-      <option name="closed" value="true" />
-      <created>1777840993563</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1777840993563</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Add button">
-      <option name="closed" value="true" />
-      <created>1778014299625</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1778014299625</updated>
     </task>
     <task id="LOCAL-00005" summary="fixed image scale">
       <option name="closed" value="true" />
@@ -491,7 +471,23 @@
       <option name="project" value="LOCAL" />
       <updated>1787761042446</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="add slider button fuckiton">
+      <option name="closed" value="true" />
+      <created>1787853695939</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1787853695939</updated>
+    </task>
+    <task id="LOCAL-00053" summary="add slider button fuckiton">
+      <option name="closed" value="true" />
+      <created>1787853715133</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1787853715133</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -539,6 +535,7 @@
     <MESSAGE value="/" />
     <MESSAGE value="add frame_slider_input and connect frame_slider" />
     <MESSAGE value="simpe koments" />
-    <option name="LAST_COMMIT_MESSAGE" value="simpe koments" />
+    <MESSAGE value="add slider button fuckiton" />
+    <option name="LAST_COMMIT_MESSAGE" value="add slider button fuckiton" />
   </component>
 </project>
