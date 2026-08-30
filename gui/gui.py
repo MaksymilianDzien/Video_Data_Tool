@@ -100,7 +100,6 @@ class Main_Gui(QMainWindow):
 
 
 
-
             match i:
                 #set value to start position
                 case 4:

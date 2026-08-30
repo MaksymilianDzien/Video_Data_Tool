@@ -95,22 +95,6 @@
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
     </task>
-    <task id="LOCAL-00005" summary="fixed image scale">
-      <option name="closed" value="true" />
-      <created>1778102326764</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1778102326764</updated>
-    </task>
-    <task id="LOCAL-00006" summary="fixed image load">
-      <option name="closed" value="true" />
-      <created>1778187144879</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1778187144879</updated>
-    </task>
     <task id="LOCAL-00007" summary="fixed image load">
       <option name="closed" value="true" />
       <created>1778187176114</created>
@@ -487,7 +471,23 @@
       <option name="project" value="LOCAL" />
       <updated>1787853715133</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="add slider button fuckiton">
+      <option name="closed" value="true" />
+      <created>1788040771168</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1788040771168</updated>
+    </task>
+    <task id="LOCAL-00055" summary="add slider button fuckiton">
+      <option name="closed" value="true" />
+      <created>1788040780797</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1788040780799</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
