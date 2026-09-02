@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add slider button fuckiton" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="/" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -94,14 +94,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00008" summary="add top menu">
-      <option name="closed" value="true" />
-      <created>1778356148828</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1778356148828</updated>
     </task>
     <task id="LOCAL-00009" summary="add buttons">
       <option name="closed" value="true" />
@@ -487,7 +479,15 @@
       <option name="project" value="LOCAL" />
       <updated>1788124956743</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="/">
+      <option name="closed" value="true" />
+      <created>1788210002408</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1788210002408</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -532,10 +532,10 @@
     <MESSAGE value="change image/video display to opvenCV (add more komand)" />
     <MESSAGE value="add more komand" />
     <MESSAGE value="same change in display" />
-    <MESSAGE value="/" />
     <MESSAGE value="add frame_slider_input and connect frame_slider" />
     <MESSAGE value="simpe koments" />
     <MESSAGE value="add slider button fuckiton" />
-    <option name="LAST_COMMIT_MESSAGE" value="add slider button fuckiton" />
+    <MESSAGE value="/" />
+    <option name="LAST_COMMIT_MESSAGE" value="/" />
   </component>
 </project>
