@@ -209,20 +209,20 @@ class Main_Gui(QMainWindow):
         left_panel.setLayout(left_layout)
         return left_panel
 
-
-    # middle_panel
     def create_middle_panel(self):
         middle_panel = QFrame()
         middle_panel.setStyleSheet("background-color: #1abc9c;")
 
         image_layout = QVBoxLayout()
         middle_panel.setLayout(image_layout)
-        #Add image to layout
+        # Add image to layout
         self.image = ButtonLogic()
         self.image.setText("...")
 
-
         image_layout.addWidget(self.image)
+
+        # connect frames to frame slider
+        self.frame_slider.valueChanged.connect(self.image.show_frame)
 
         return middle_panel
 
@@ -281,27 +281,36 @@ class Main_Gui(QMainWindow):
 
     #Find file
     def find_image(self):
-        file_path, filter = QFileDialog.getOpenFileName(self,
-            "Selec image or video",
-            "",
-            "Media (*.png *.jpg *.jpeg *.bmp *.mp4 *.avi *.mov *.mkv)")
+        file_path, filter = (QFileDialog.getOpenFileNames
+            (self,
+            "Selec image(s) or video","","Media (*.png *.jpg *.jpeg *.bmp *.mp4 *.avi *.mov *.mkv)")
+            )
 
         if file_path:
             self.load_image_to_gui(file_path)
 
-    #Load image
-    def load_image_to_gui(self, file_path):
+    # Load image
+    def load_image_to_gui(self, file_paths):
 
-        #wideo format
+        # wideo format
         video_extensions = (".mp4", ".avi", ".mov", ".mkv")
 
-        #if is wideo or image
-        if file_path.lower().endswith(video_extensions):
-            self.image.load_video(file_path)
+        # if is wideo or image
+        first_file = file_paths[0]
+
+        # if is wideo or image
+        if first_file.lower().endswith(video_extensions):
+            self.image.load_video(first_file)
         else:
-            self.image.load_image(file_path)
+            self.image.load_images(file_paths)
             # reest zoom if new image is load
-            self.button3.reset_zoom()
+            self.button3.reset_zoom() # work ?
+
+        # set   frame_slider to max number of frames
+        count_frame = self.image.get_frame_count()
+        self.frame_slider.setMinimum(1)
+        self.frame_slider.setMaximum(max(count_frame, 1))
+        self.frame_slider.setValue(1)
 
     #Add top menu
     def add_menu(self):

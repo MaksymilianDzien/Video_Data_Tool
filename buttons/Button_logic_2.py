@@ -1,17 +1,18 @@
 import cv2
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QPixmap, QPainter, QImage
-from PyQt5.QtCore import Qt, QPoint, QTimer
+from PyQt5.QtCore import Qt, QPoint
 
 
 class ButtonLogic(QLabel):
+
+    # chabge in future ( limit bc error)
+    LIMIT_VIDEO_SECONDS = 300
 
     def __init__(self):
         super().__init__()
         # center image
         self.setAlignment(Qt.AlignCenter)
-
-
 
         self.original_iamge = None
 
@@ -24,11 +25,10 @@ class ButtonLogic(QLabel):
 
         self.last_mouse_positon = QPoint()
 
-        self.video = None
-        self.video_time = QTimer(self)
-        self.video_time.timeout.connect(self.next_video_frame)
-
-
+        # List of all frame (video or image)
+        self.All_frames = []
+        #Start value of frome index
+        self.index_frame = 0
 
     # cv_to_pixmap
     def cv_frame_to_pixmap(self, frame):
@@ -44,64 +44,82 @@ class ButtonLogic(QLabel):
 
         return QPixmap.fromImage(q_image)
 
-    # load image/wideo
-    def load_image(self, image_path):
+    # load image_images
+    def load_images(self, image_paths):
 
-        self.stop_video()
+        # Clear  all frames
+        self.All_frames = []
 
-        load_data = cv2.imread(image_path)
-        if load_data is None:
-            return
+        #load all images
+        for image_path in image_paths:
+            load_data = cv2.imread(image_path)
+            if load_data is None:
+                continue
 
-        self.original_iamge = self.cv_frame_to_pixmap(load_data)
-        self.update()
+            #
+            processed_frame = self.process_frame(load_data)
+            # add frame to list
+            self.All_frames.append(self.cv_frame_to_pixmap(processed_frame))
+        #set start fraome
+        self.show_frame(1)
 
     # load video
     def load_video(self, video_path):
 
+        #load video from path
+        video = cv2.VideoCapture(video_path)
 
-        self.stop_video()
-        self.video = cv2.VideoCapture(video_path)
-
-        if not self.video.isOpened():
-            self.video_capture = None
+        if not video.isOpened():
             return
 
-        #fps count
-        fps = self.video.get(cv2.CAP_PROP_FPS)
-        self.video_time.start(int(1000 / fps))
+        # fps count
+        fps = video.get(cv2.CAP_PROP_FPS)
+        if not fps or fps <= 0:
+            fps = 25
 
-    # draw next frame
-    def next_video_frame(self):
+        # all limited frames
+        limit_frames = int(fps * self.LIMIT_VIDEO_SECONDS)
 
-        #chek if wideo exist
-        if self.video is None:
+        # Clear  all frames
+        self.All_frames = []
+
+        # load and chek if is in limit
+        while len(self.All_frames) < limit_frames:
+            ret, video_frames = video.read()
+
+            # chek if fill is end
+            if not ret:
+                break
+
+            # prossed forame
+            processed_frame = self.process_frame(video_frames)
+            #add frame to list
+            self.All_frames.append(self.cv_frame_to_pixmap(processed_frame))
+        #close video
+        video.release()
+
+        # set start fraome
+        self.show_frame(1)
+
+    # lenght of all frames
+    def get_frame_count(self):
+        return len(self.All_frames)
+
+    # showing frame( connect to frame slider)
+    def show_frame(self, frame_number):
+
+        if not self.All_frames:
             return
 
-        ret, video_frame = self.video.read()
+        # conwert to table format
+        index = frame_number - 1
 
-        # chek if fill is end
-        if not ret:
-            self.stop_video()
-            return
+        # IOOR
+        index = max(0, min(index, len(self.All_frames) - 1))
 
-        # prossed forame
-        processed_frame = self.process_frame(video_frame)
-
-        # chane froame to pixmap
-        self.original_iamge = self.cv_frame_to_pixmap(processed_frame)
-
-        # reset QLabel
+        self.index_frame = index
+        self.original_iamge = self.All_frames[index]
         self.update()
-
-    # stop video if new file is read
-    def stop_video(self):
-        if self.video_time.isActive():
-            self.video_time.stop()
-
-        if self.video is not None:
-            self.video.release()
-            self.video = None
 
     #  enable/unenable drag
     def enable_drag(self, enabled):
@@ -140,6 +158,6 @@ class ButtonLogic(QLabel):
         if event.button() == Qt.LeftButton:
             self.dragging = False
 
-    #future ad d
-    def process_frame(self, video_frame):
-                return video_frame
+    #future add
+    def process_frame(self, video_frames):
+        return video_frames
