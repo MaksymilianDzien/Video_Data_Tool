@@ -223,7 +223,8 @@ class Main_Gui(QMainWindow):
 
         # connect frames to frame slider
         self.frame_slider.valueChanged.connect(self.image.show_frame)
-
+        #reset zoom if change image or frame
+        self.frame_slider.valueChanged.connect(self.button3.reset_zoom)
         return middle_panel
 
 
@@ -304,7 +305,7 @@ class Main_Gui(QMainWindow):
         else:
             self.image.load_images(file_paths)
             # reest zoom if new image is load
-            self.button3.reset_zoom() # work ?
+        self.button3.reset_zoom()  # work ?
 
         # set   frame_slider to max number of frames
         count_frame = self.image.get_frame_count()
