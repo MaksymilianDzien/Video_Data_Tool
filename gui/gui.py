@@ -169,7 +169,8 @@ class Main_Gui(QMainWindow):
         left_layout.setContentsMargins(5, 5, 5, 5)
         left_layout.setSpacing(8)
 
-
+        #set drawing value
+        self.draw_mode_enabled = False
 
         # Create 7 buttons
         for i in range(1, 9):
@@ -186,6 +187,9 @@ class Main_Gui(QMainWindow):
             #zoom button
             if i == 3:
                 self.button3 = Button3(self, left_buttons)
+            #draw rectangle annotations
+            if i == 4:
+                left_buttons.clicked.connect(self.enable_rectangle_drawing)
 
             # style of button
             left_buttons.setStyleSheet("""
@@ -328,9 +332,15 @@ class Main_Gui(QMainWindow):
     # enable mouse drag
     def enable_move_mode(self):
         self.image.enable_drag(True)
+
     # disable  mouse drag
     def disable_move_mode(self):
         self.image.enable_drag(False)
+
+    #  enable/un enable drawing rectangle
+    def enable_rectangle_drawing(self):
+        self.draw_mode_enabled = not self.draw_mode_enabled
+        self.image.enable_draw_mode(self.draw_mode_enabled)
 
     #convert string to slider_value
     def change_slider_value(self):

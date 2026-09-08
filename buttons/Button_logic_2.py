@@ -2,6 +2,7 @@ import cv2
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QPixmap, QPainter, QImage
 from PyQt5.QtCore import Qt, QPoint
+from draw_annotations.Draw_rectange import Draw_rectangle
 
 
 class ButtonLogic(QLabel):
@@ -30,6 +31,9 @@ class ButtonLogic(QLabel):
         #Start value of frome index
         self.index_frame = 0
 
+        # Create obciect to draw rectangle
+        self.draw_rectangle = Draw_rectangle(self)
+
     # cv_to_pixmap
     def cv_frame_to_pixmap(self, frame):
 
@@ -49,6 +53,8 @@ class ButtonLogic(QLabel):
 
         # Clear  all frames
         self.All_frames = []
+        # Clear all annotaion if is new frame
+        self.draw_rectangle.fream_annotation = {}
 
         #load all images
         for image_path in image_paths:
@@ -82,6 +88,8 @@ class ButtonLogic(QLabel):
 
         # Clear  all frames
         self.All_frames = []
+        # Clear all annotaion if is new frame
+        self.draw_rectangle.fream_annotation = {}
 
         # load and chek if is in limit
         while len(self.All_frames) < limit_frames:
@@ -125,6 +133,10 @@ class ButtonLogic(QLabel):
     def enable_drag(self, enabled):
         self.drag_enabled = enabled
 
+    # enable/unenable drawing shape
+    def enable_draw_mode(self, enabled):
+        self.draw_rectangle.draw_mod_enable(enabled)
+
     # paint image
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -137,14 +149,29 @@ class ButtonLogic(QLabel):
         y_positon = self.positon.y()
         iamge_painter.drawPixmap(x_positon, y_positon, self.original_iamge)
 
+        # darwing annotaion in current frame
+        self.draw_rectangle.draw_rectangle_annotation(iamge_painter, self.index_frame)
+
     # mose Event
     def mousePressEvent(self, event):
+        # drawing is first in
+        if self.draw_rectangle.set_draw_enabled and event.button() == Qt.LeftButton:
+            self.draw_rectangle.click_handler(event.pos(), self.index_frame)
+            return
+
         if self.drag_enabled and event.button() == Qt.LeftButton:
             self.dragging = True
             self.last_mouse_positon = event.pos()
 
     # Mouse move
     def mouseMoveEvent(self, event):
+
+        #check if drawing rectangle is enable
+        if self.draw_rectangle.set_draw_enabled:
+            #call fuction who drawing new rectangle shape
+            self.draw_rectangle.mouse_move_handle(event.pos())
+            return
+
         if not self.drag_enabled:
             return
         if self.dragging:
