@@ -37,15 +37,22 @@ class Draw_rectangle:
         self.mouse_first_point = None
         self.mouse_current_point = None
 
-    #hander of current click points
-    def click_handler(self, point_posstion, curent_index_frame):
+    # hander of mouse press - start of drawing (first point)
+    def mouse_press_handler(self, point_posstion):
 
         if not self.set_draw_enabled:
             return
 
         # set first point of rectangle
-        if self.mouse_first_point is None:
-            self.mouse_first_point = QPoint(point_posstion)
+        self.mouse_first_point = QPoint(point_posstion)
+        # set current point same as first - so preview rectangle can draw immediately
+        self.mouse_current_point = QPoint(point_posstion)
+
+    # hander of mouse release - end of drawing
+    def mouse_release_handler(self, point_posstion, curent_index_frame):
+
+        #chek if enable
+        if not self.set_draw_enabled or self.mouse_first_point is None:
             return
 
         # set second point of rectangle
@@ -61,25 +68,33 @@ class Draw_rectangle:
             self.widget_image.update()
             return
 
-        # create and set label
-        label_rectangle_text, ok_input = (QInputDialog.getText( self.widget_image, "New label", "Enter label name:"))
-
-        # chek if press ok_input o or is not label
-        if not ok_input or not label_rectangle_text:
-            self.widget_image.update()
-            return
-
         # add annotation to frame
         if curent_index_frame not in self.fream_annotation:
             self.fream_annotation[curent_index_frame] = []
 
         # annotation info
-        (self.fream_annotation[curent_index_frame].append
-            ({
+        new_annotation = \
+            {
             "rect": curent_rectangle,
-            "label": label_rectangle_text
-            }))
+            "label": ""
+        }
+        self.fream_annotation[curent_index_frame].append(new_annotation)
 
+        # draw rectangle
+        self.widget_image.update()
+
+        # create and set label
+        label_rectangle_text, ok_input = (QInputDialog.getText(self.widget_image, "New label", "Enter label name:"))
+
+        # chek if press ok_input o or is not label
+        if not ok_input or not label_rectangle_text:
+            # user cancelled anntaion
+            self.fream_annotation[curent_index_frame].remove(new_annotation)
+            self.widget_image.update()
+            return
+
+        #set name off addnotaion
+        new_annotation["label"] = label_rectangle_text
         self.widget_image.update()
 
     # drawing retangle wvie
@@ -117,7 +132,9 @@ class Draw_rectangle:
 
             rectangle_painter.drawRect(rect)
             # add label to rataongle top right coner
-            rectangle_painter.drawText(rect.topLeft().x(), rect.topLeft().y() - 5, label)
+            #cs
+            if label:
+                rectangle_painter.drawText(rect.topLeft().x(), rect.topLeft().y() - 5, label)
 
         # drawing ratangle before set secont point
         if self.mouse_first_point is not None and self.mouse_current_point is not None:

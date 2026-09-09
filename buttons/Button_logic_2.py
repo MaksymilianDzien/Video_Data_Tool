@@ -154,9 +154,8 @@ class ButtonLogic(QLabel):
 
     # mose Event
     def mousePressEvent(self, event):
-        # drawing is first in
         if self.draw_rectangle.set_draw_enabled and event.button() == Qt.LeftButton:
-            self.draw_rectangle.click_handler(event.pos(), self.index_frame)
+            self.draw_rectangle.mouse_press_handler(event.pos())
             return
 
         if self.drag_enabled and event.button() == Qt.LeftButton:
@@ -165,10 +164,7 @@ class ButtonLogic(QLabel):
 
     # Mouse move
     def mouseMoveEvent(self, event):
-
-        #check if drawing rectangle is enable
         if self.draw_rectangle.set_draw_enabled:
-            #call fuction who drawing new rectangle shape
             self.draw_rectangle.mouse_move_handle(event.pos())
             return
 
@@ -182,6 +178,11 @@ class ButtonLogic(QLabel):
 
     # mouse relase
     def mouseReleaseEvent(self, event):
+        #chek if maosie press is no chandle
+        if self.draw_rectangle.set_draw_enabled and event.button() == Qt.LeftButton:
+            self.draw_rectangle.mouse_release_handler(event.pos(), self.index_frame)
+            return
+
         if event.button() == Qt.LeftButton:
             self.dragging = False
 
