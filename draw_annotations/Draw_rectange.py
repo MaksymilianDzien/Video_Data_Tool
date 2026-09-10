@@ -6,15 +6,19 @@ from PyQt5.QtCore import QRect, QPoint
 class Draw_rectangle:
 
     # Color of rectangle
-    Color_of_rectange = QColor(255, 0, 0)  #red rgb
+    Color_of_rectange = QColor(255, 0, 0)  #red rgb change in future
 
     # Drawing Alpha
     alpha = 60
 
-    def __init__(self, widget_image):
+    #wiget image for images and annocation labes
+    def __init__(self, widget_image, Label_log):
 
         # init widget
         self.widget_image = widget_image
+
+        # set default annotaios label
+        self.Label_log = Label_log
 
         # init annotations per frame
         self.fream_annotation = {}
@@ -83,8 +87,9 @@ class Draw_rectangle:
         # draw rectangle
         self.widget_image.update()
 
-        # create and set label
-        label_rectangle_text, ok_input = (QInputDialog.getText(self.widget_image, "New label", "Enter label name:"))
+
+        #  create new or set laves (fuction in label_log)
+        label_rectangle_text, ok_input = self.Label_log.choose_annotation_label_option(self.widget_image)
 
         # chek if press ok_input o or is not label
         if not ok_input or not label_rectangle_text:

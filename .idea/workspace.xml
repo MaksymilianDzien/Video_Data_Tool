@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add rectangle annotation">
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="fix rectangle annotation">
+      <change afterPath="$PROJECT_DIR$/draw_annotations/Label_log.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" afterDir="false" />
@@ -98,14 +99,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00014" summary="add bottom buttons">
-      <option name="closed" value="true" />
-      <created>1778877845376</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1778877845376</updated>
     </task>
     <task id="LOCAL-00015" summary="add bottom buttons">
       <option name="closed" value="true" />
@@ -491,7 +484,15 @@
       <option name="project" value="LOCAL" />
       <updated>1788902531217</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="fix rectangle annotation">
+      <option name="closed" value="true" />
+      <created>1788983834691</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1788983834691</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -518,7 +519,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="main0.0.1" />
     <MESSAGE value="Add simpe gui" />
     <MESSAGE value="fixed margins between panels" />
     <MESSAGE value="Add button" />
@@ -543,6 +543,7 @@
     <MESSAGE value="Add load images and video frame in main panel" />
     <MESSAGE value="Fix zoom change erorr" />
     <MESSAGE value="add rectangle annotation" />
-    <option name="LAST_COMMIT_MESSAGE" value="add rectangle annotation" />
+    <MESSAGE value="fix rectangle annotation" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix rectangle annotation" />
   </component>
 </project>

@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QPixmap, QPainter, QImage
 from PyQt5.QtCore import Qt, QPoint
 from draw_annotations.Draw_rectange import Draw_rectangle
+from draw_annotations.Label_log import Label_log
 
 
 class ButtonLogic(QLabel):
@@ -31,8 +32,11 @@ class ButtonLogic(QLabel):
         #Start value of frome index
         self.index_frame = 0
 
+        # set all labels
+        self.label_log = Label_log()
+
         # Create obciect to draw rectangle
-        self.draw_rectangle = Draw_rectangle(self)
+        self.draw_rectangle = Draw_rectangle(self, self.label_log)
 
     # cv_to_pixmap
     def cv_frame_to_pixmap(self, frame):
