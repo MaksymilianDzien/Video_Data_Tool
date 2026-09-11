@@ -48,6 +48,7 @@ class Button3:
             ))
 
 
+
         height = (
             int(
             self.original_image.height() * self.main_zoom
