@@ -81,7 +81,7 @@ class Draw_rectangle:
             {
             "rect": curent_rectangle,
             "label": ""
-        }
+            }
         self.fream_annotation[curent_index_frame].append(new_annotation)
 
         # draw rectangle
@@ -93,6 +93,7 @@ class Draw_rectangle:
 
         # chek if press ok_input o or is not label
         if not ok_input or not label_rectangle_text:
+
             # user cancelled anntaion
             self.fream_annotation[curent_index_frame].remove(new_annotation)
             self.widget_image.update()
@@ -118,6 +119,7 @@ class Draw_rectangle:
 
         #set rectaongle perimeter
         rectangle_pen = QPen(self.Color_of_rectange)
+
         #set color of  perimeter
         rectangle_pen.setWidth(2)
         rectangle_painter.setPen(rectangle_pen)
@@ -136,6 +138,7 @@ class Draw_rectangle:
             label = curent_annotation["label"]
 
             rectangle_painter.drawRect(rect)
+
             # add label to rataongle top right coner
             #cs
             if label:

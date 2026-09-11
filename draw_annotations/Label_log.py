@@ -16,8 +16,7 @@ class Label_log:
         if current_name_of_label and current_name_of_label not in self.current_labels:
             self.current_labels.append(current_name_of_label)
 
-    # pokazanie okienka wyboru etykiety - z rozwijanej listy istniejacych albo nowa
-    # zwraca (label_name, ok) - ok=False jezeli user anulowal
+    # select label options  fuction 
     def choose_annotation_label_option(self, current_widgets):
 
         # create new list to chose of labes (if is not set oprtion to create

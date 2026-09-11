@@ -36,7 +36,7 @@ class Button_frame_slider(QObject):
     def max_value(self):
         self.set_value(self.slider.maximum())
 
-
+    #set value to slider
     def set_value(self, value):
 
         value = max(self.slider.minimum(), value)

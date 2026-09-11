@@ -219,6 +219,7 @@ class Main_Gui(QMainWindow):
 
         image_layout = QVBoxLayout()
         middle_panel.setLayout(image_layout)
+
         # Add image to layout
         self.image = ButtonLogic()
         self.image.setText("...")
@@ -227,8 +228,10 @@ class Main_Gui(QMainWindow):
 
         # connect frames to frame slider
         self.frame_slider.valueChanged.connect(self.image.show_frame)
+
         #reset zoom if change image or frame
         self.frame_slider.valueChanged.connect(self.button3.reset_zoom)
+
         return middle_panel
 
 
@@ -245,6 +248,7 @@ class Main_Gui(QMainWindow):
         bottom_panel = QFrame()
         bottom_panel.setFixedHeight(80)
         bottom_panel.setStyleSheet("background-color: #244eff;")
+
         # layout
         bottom_layout = QHBoxLayout()
         bottom_layout.setContentsMargins(10, 10, 10, 10)
@@ -308,7 +312,8 @@ class Main_Gui(QMainWindow):
             self.image.load_video(first_file)
         else:
             self.image.load_images(file_paths)
-            # reest zoom if new image is load
+
+        # reest zoom if new image is load
         self.button3.reset_zoom()  # work ?
 
         # set   frame_slider to max number of frames
@@ -352,6 +357,7 @@ class Main_Gui(QMainWindow):
 
             if self.frame_slider.minimum() <= slider_value <= self.frame_slider.maximum():
                 self.frame_slider.setValue(slider_value)
+
         # if is not int set value to 1
         else:
             slider_value = 1;
@@ -359,7 +365,8 @@ class Main_Gui(QMainWindow):
 
     #button_slider_logick
     def create_button_frame_slider(self):
-        self.button_frame_slider = Button_frame_slider(
+        self.button_frame_slider = (Button_frame_slider
+            (
             self.frame_slider,
             self.frame_slider_input
-        )
+            ))

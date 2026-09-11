@@ -29,6 +29,7 @@ class ButtonLogic(QLabel):
 
         # List of all frame (video or image)
         self.All_frames = []
+
         #Start value of frome index
         self.index_frame = 0
 
@@ -57,6 +58,7 @@ class ButtonLogic(QLabel):
 
         # Clear  all frames
         self.All_frames = []
+
         # Clear all annotaion if is new frame
         self.draw_rectangle.fream_annotation = {}
 
@@ -68,8 +70,10 @@ class ButtonLogic(QLabel):
 
             #
             processed_frame = self.process_frame(load_data)
+
             # add frame to list
             self.All_frames.append(self.cv_frame_to_pixmap(processed_frame))
+
         #set start fraome
         self.show_frame(1)
 
@@ -92,6 +96,7 @@ class ButtonLogic(QLabel):
 
         # Clear  all frames
         self.All_frames = []
+
         # Clear all annotaion if is new frame
         self.draw_rectangle.fream_annotation = {}
 
@@ -105,8 +110,10 @@ class ButtonLogic(QLabel):
 
             # prossed forame
             processed_frame = self.process_frame(video_frames)
+
             #add frame to list
             self.All_frames.append(self.cv_frame_to_pixmap(processed_frame))
+
         #close video
         video.release()
 

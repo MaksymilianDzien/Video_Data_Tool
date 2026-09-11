@@ -8,10 +8,13 @@ class Button3:
 
         # main window
         self.main_window = main_window
+
         # button3
         self.button_3 = button_3
+
         # main zoom
         self.main_zoom = 1.0
+
         # 130%
         self.step_zoom = 1.30
 
@@ -30,22 +33,25 @@ class Button3:
         # orginal image
         if self.original_image is None:
 
-            self.original_image = QPixmap(
+            self.original_image = (
+                QPixmap(
                 zoom_image.original_iamge
-            )
+                ))
 
         # zoom + 30 %
         self.main_zoom *= self.step_zoom
 
         # calculeate new image
-        width = int(
+        width = (
+            int(
             self.original_image.width() * self.main_zoom
-        )
+            ))
 
 
-        height = int(
+        height = (
+            int(
             self.original_image.height() * self.main_zoom
-        )
+            ))
 
         # create new bigger iamge
         scaled_image = self.original_image.scaled(
