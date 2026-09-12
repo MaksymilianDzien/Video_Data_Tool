@@ -338,14 +338,27 @@ class Main_Gui(QMainWindow):
     def enable_move_mode(self):
         self.image.enable_drag(True)
 
+        # disable all mode if one is acting
+        self.draw_mode_enabled = False
+        self.image.enable_draw_mode(False)
+
     # disable  mouse drag
     def disable_move_mode(self):
         self.image.enable_drag(False)
 
+        # disable all mode if are active
+        self.draw_mode_enabled = False
+        self.image.enable_draw_mode(False)
+
     #  enable/un enable drawing rectangle
     def enable_rectangle_drawing(self):
+
         self.draw_mode_enabled = not self.draw_mode_enabled
         self.image.enable_draw_mode(self.draw_mode_enabled)
+
+        # chek if drag buttons are anable
+        if self.draw_mode_enabled:
+            self.image.enable_drag(False)
 
     #convert string to slider_value
     def change_slider_value(self):
