@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QInputDialog
 from PyQt5.QtGui import QPen, QBrush, QColor
-from PyQt5.QtCore import QRect, QRectF, QPoint
+from PyQt5.QtCore import QRect, QPoint
 
 
 class Draw_rectangle:
@@ -76,14 +76,11 @@ class Draw_rectangle:
         if curent_index_frame not in self.fream_annotation:
             self.fream_annotation[curent_index_frame] = []
 
-        #scaling rectange if zomm is not 1
-        scale_current_rectangle = self.convert_rectangle_to_current_scale(curent_rectangle)
-
         # annotation info
         new_annotation = \
             {
-                "rect": scale_current_rectangle,
-                "label": ""
+            "rect": curent_rectangle,
+            "label": ""
             }
         self.fream_annotation[curent_index_frame].append(new_annotation)
 
@@ -140,60 +137,14 @@ class Draw_rectangle:
             rect = curent_annotation["rect"]
             label = curent_annotation["label"]
 
-            # calculate and scale recatangle (zoom)
-            current_scaled_rectangle = self.convert_all_rectangle_to_scale(rect)
-
-            rectangle_painter.drawRect(current_scaled_rectangle)
+            rectangle_painter.drawRect(rect)
 
             # add label to rataongle top right coner
-            # cs
+            #cs
             if label:
-                rectangle_painter.drawText(current_scaled_rectangle.topLeft().x(), current_scaled_rectangle.topLeft().y() - 5, label)
+                rectangle_painter.drawText(rect.topLeft().x(), rect.topLeft().y() - 5, label)
 
         # drawing ratangle before set secont point
         if self.mouse_first_point is not None and self.mouse_current_point is not None:
             rectangle_drawing_shape = QRect(self.mouse_first_point, self.mouse_current_point).normalized()
             rectangle_painter.drawRect(rectangle_drawing_shape)
-
-    # convert to base scale
-    #if is new createt and calucate current off set and sacle in this crectangle
-    def convert_rectangle_to_current_scale(self, base_screen_coordintates_rectangle):
-
-        #scale
-        current_zoom_level = self.widget_image.zoom_level
-
-        #image pozition
-        current_image_postion = self.widget_image.positon
-
-        #set true postion of rectangle (no scale no offset)
-        return QRectF(
-            #x coranatie = coordintates rectangle - offset / scale
-            (base_screen_coordintates_rectangle.x() - current_image_postion.x()) / current_zoom_level,
-            #y coranatie = coordintates rectangle  - offset / scale
-            (base_screen_coordintates_rectangle.y() - current_image_postion.y()) / current_zoom_level,
-            # width = current width / scale
-            base_screen_coordintates_rectangle.width() / current_zoom_level,
-            # height = current height / scale
-            base_screen_coordintates_rectangle.height() / current_zoom_level
-        )
-
-
-    #convert all rectangle in screen
-    #
-    def convert_all_rectangle_to_scale(self, screen_scaled_coordintates_rectangle):
-
-        # scale
-        current_zoom_level = self.widget_image.zoom_level
-        # image pozition
-        current_image_postion = self.widget_image.positon
-
-        return QRect(
-            # x = curent_x * scale + offset
-            round(screen_scaled_coordintates_rectangle.x() * current_zoom_level + current_image_postion.x()),
-            # y = curent_y * scale + offset
-            round(screen_scaled_coordintates_rectangle.y() * current_zoom_level + current_image_postion.y()),
-            # width = = current width * zoom
-            round(screen_scaled_coordintates_rectangle.width() * current_zoom_level),
-            # height = = current height * zoom
-            round(screen_scaled_coordintates_rectangle.height() * current_zoom_level)
-        )

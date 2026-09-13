@@ -41,9 +41,6 @@ class Button3:
         # zoom + 30 %
         self.main_zoom *= self.step_zoom
 
-        # set zoom to scale labes darwing
-        zoom_image.base_zoom_level = self.main_zoom
-
         # calculeate new image
         width = (
             int(
@@ -76,6 +73,3 @@ class Button3:
         #reset zoom
         self.main_zoom = 1.0
         self.original_image = None
-
-        #reset zoom to curret value
-        self.main_window.image.base_zoom_level = 1.0
