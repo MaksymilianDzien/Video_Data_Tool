@@ -21,6 +21,9 @@ class ButtonLogic(QLabel):
         # image positon
         self.positon = QPoint(0, 0)
 
+        # current zoom lvl
+        self.base_zoom_level = 1.0
+
         # drags flags
         self.drag_enabled = False
         self.dragging = False
