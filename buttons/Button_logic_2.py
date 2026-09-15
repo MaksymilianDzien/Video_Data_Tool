@@ -65,6 +65,9 @@ class ButtonLogic(QLabel):
         # Clear all annotaion if is new frame
         self.draw_rectangle.fream_annotation = {}
 
+        # set new annotaoion id
+        self.draw_rectangle.next_annotation_id = 1
+
         #load all images
         for image_path in image_paths:
             load_data = cv2.imread(image_path)
@@ -102,6 +105,9 @@ class ButtonLogic(QLabel):
 
         # Clear all annotaion if is new frame
         self.draw_rectangle.fream_annotation = {}
+
+        # set new annotaoion id
+        self.draw_rectangle.next_annotation_id = 1
 
         # load and chek if is in limit
         while len(self.All_frames) < limit_frames:

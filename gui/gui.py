@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
 from buttons.Button_logic_2 import ButtonLogic
 from buttons.Button_logic_3 import Button3
 from buttons.Button_frame_slider import Button_frame_slider
+from draw_annotations.Main_Right_Panel_Label_Info import  Main_Right_Panel_Label_Info
 
 class Main_Gui(QMainWindow):
 
@@ -237,11 +238,24 @@ class Main_Gui(QMainWindow):
 
     # right_panel
     def create_right_panel(self):
-        right_panel = QFrame()
-        right_panel.setFixedWidth(300)
-        right_panel.setStyleSheet("background-color: #f1c40f;")
 
-        return right_panel
+        # set right panel
+        self.right_panel_logic = Main_Right_Panel_Label_Info(self.image, self.image.label_log)
+
+        # connect right panel to frame slider
+        self.frame_slider.valueChanged.connect(self.right_panel_logic.refresh_all_objects_in_list)
+
+        # add list after creating or not labels
+        self.image.draw_rectangle.on_annotations_changed = self.right_panel_logic.refresh_all_objects_in_list
+
+        # add to list new created label
+        self.image.label_log.on_labels_changed = self.right_panel_logic.refresh_all_labels_in_list
+
+        # first Refresh of lisst
+        self.right_panel_logic.refresh_all_objects_in_list()
+        self.right_panel_logic.refresh_all_labels_in_list()
+
+        return self.right_panel_logic.get_widget()
 
     # bottom_panel
     def create_bottom_panel(self):

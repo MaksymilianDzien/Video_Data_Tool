@@ -10,11 +10,19 @@ class Label_log:
         #set all labels
         self.current_labels = []
 
+        # callback new label (if exist)
+        self.on_labels_changed = None
+
     # add label to menu if exist
     def add_label_to_list(self, current_name_of_label):
-        #chek if exist
+
+        # chek if exist
         if current_name_of_label and current_name_of_label not in self.current_labels:
             self.current_labels.append(current_name_of_label)
+
+            # callback right panel abaut new lable
+            if self.on_labels_changed:
+                self.on_labels_changed()
 
     # select label options  fuction 
     def choose_annotation_label_option(self, current_widgets):

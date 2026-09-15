@@ -23,6 +23,12 @@ class Draw_rectangle:
         # init annotations per frame
         self.fream_annotation = {}
 
+        # set start id
+        self.next_annotation_id = 1
+
+        # callback new label (if exist)
+        self.on_annotations_changed = None
+
         # set draw
         self.set_draw_enabled = False
 
@@ -82,29 +88,40 @@ class Draw_rectangle:
         # annotation info
         new_annotation = \
             {
+                "id": self.next_annotation_id,
                 "rect": scale_current_rectangle,
                 "label": ""
             }
         self.fream_annotation[curent_index_frame].append(new_annotation)
 
+        # add +1 to next annotation
+        self.next_annotation_id += 1
+
         # draw rectangle
         self.widget_image.update()
 
+        # callback right panel abaunt new annoataion
+        self.current_annotations_changed()
 
         #  create new or set laves (fuction in label_log)
         label_rectangle_text, ok_input = self.Label_log.choose_annotation_label_option(self.widget_image)
 
         # chek if press ok_input o or is not label
         if not ok_input or not label_rectangle_text:
-
             # user cancelled anntaion
             self.fream_annotation[curent_index_frame].remove(new_annotation)
             self.widget_image.update()
+
+            # delect new label if is not accepted
+            self.current_annotations_changed()
             return
 
-        #set name off addnotaion
+        # set name off addnotaion
         new_annotation["label"] = label_rectangle_text
         self.widget_image.update()
+
+        # call back rgitht panel ababut name label
+        self.current_annotations_changed()
 
     # drawing retangle wvie
     def mouse_move_handle(self, point_posstion):
@@ -197,3 +214,8 @@ class Draw_rectangle:
             # height = = current height * zoom
             round(screen_scaled_coordintates_rectangle.height() * current_zoom_level)
         )
+
+    # callback right panel ababunt new or chanege label
+    def current_annotations_changed(self):
+        if self.on_annotations_changed:
+            self.on_annotations_changed()
