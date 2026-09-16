@@ -188,8 +188,14 @@ class Main_Gui(QMainWindow):
             #zoom button
             if i == 3:
                 self.button3 = Button3(self, left_buttons)
-            #draw rectangle annotations
+            #rotate 90 left ( change in future )
             if i == 4:
+                left_buttons.clicked.connect(self.rotate_image_to_left)
+            # reset position, rotation and zoom to original state
+            if i == 5:
+                left_buttons.clicked.connect(self.reset_image_to_start_position)
+            #draw rectangle annotations
+            if i == 6:
                 left_buttons.clicked.connect(self.enable_rectangle_drawing)
 
             # style of button
@@ -397,3 +403,15 @@ class Main_Gui(QMainWindow):
             self.frame_slider,
             self.frame_slider_input
             ))
+
+    #rotate image
+    def rotate_image_to_left(self):
+        self.image.rotate_image_to_left()
+
+    #reset image to start pozition and zoom and angle
+    def reset_image_to_start_position(self):
+        self.image.reset_image_to_start_position()
+        self.button3.reset_zoom()
+
+        # instant refresh (only button need)
+        self.image.repaint()

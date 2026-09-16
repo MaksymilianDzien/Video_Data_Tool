@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="fix error value name">
-      <change afterPath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add right panel">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/draw_annotations/Label_log.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Label_log.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -102,14 +99,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00020" summary="add first button normal mode">
-      <option name="closed" value="true" />
-      <created>1779478102269</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1779478102269</updated>
     </task>
     <task id="LOCAL-00021" summary="add first button normal mode">
       <option name="closed" value="true" />
@@ -495,7 +484,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789309990155</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="add right panel">
+      <option name="closed" value="true" />
+      <created>1789493465447</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1789493465447</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -522,7 +519,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed image load" />
     <MESSAGE value="add top menu" />
     <MESSAGE value="add buttons" />
     <MESSAGE value="add return" />
@@ -547,6 +543,7 @@
     <MESSAGE value="small chane in comment and code" />
     <MESSAGE value="fix button left buttons error" />
     <MESSAGE value="fix error value name" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix error value name" />
+    <MESSAGE value="add right panel" />
+    <option name="LAST_COMMIT_MESSAGE" value="add right panel" />
   </component>
 </project>

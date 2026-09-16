@@ -21,6 +21,9 @@ class ButtonLogic(QLabel):
         # image positon
         self.positon = QPoint(0, 0)
 
+        # ange of image (90 for now)
+        self.image_current_angle = 0
+
         # current zoom lvl
         self.base_zoom_level = 1.0
 
@@ -157,6 +160,26 @@ class ButtonLogic(QLabel):
     def enable_draw_mode(self, enabled):
         self.draw_rectangle.draw_mod_enable(enabled)
 
+    #ritate image to left ( 90 )
+    def rotate_image_to_left(self):
+
+        self.image_current_angle = (self.image_current_angle - 90) % 360
+        self.update()
+
+    #reset image poziton and zoom in current image
+    def reset_image_to_start_position(self):
+
+        #reset pozition and angle
+        self.positon = QPoint(0, 0)
+        self.image_current_angle = 0
+
+        # reset zoom current frame
+        if self.All_frames:
+            self.original_iamge = self.All_frames[self.index_frame]
+
+        #instant refresh (only button need)
+        self.repaint()
+
     # paint image
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -167,7 +190,28 @@ class ButtonLogic(QLabel):
         iamge_painter = QPainter(self)
         x_positon = self.positon.x()
         y_positon = self.positon.y()
+
+        # save current image position
+        iamge_painter.save()
+
+        #center x and y cordation
+        x_center_frame = x_positon + self.original_iamge.width() / 2
+        y_center_frame = y_positon + self.original_iamge.height() / 2
+
+        #set new center point to image
+        iamge_painter.translate(x_center_frame, y_center_frame)
+
+        #rorate frame to 90
+        iamge_painter.rotate(self.image_current_angle)
+
+        #delet center point
+        iamge_painter.translate(-x_center_frame, -y_center_frame)
+
+        #draw image with old pozition with rotate
         iamge_painter.drawPixmap(x_positon, y_positon, self.original_iamge)
+
+        # instant refresh (only button need)
+        iamge_painter.restore()
 
         # darwing annotaion in current frame
         self.draw_rectangle.draw_rectangle_annotation(iamge_painter, self.index_frame)
