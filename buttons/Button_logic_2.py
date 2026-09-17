@@ -1,4 +1,5 @@
 import cv2
+import os
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QPixmap, QPainter, QImage
 from PyQt5.QtCore import Qt, QPoint
@@ -36,6 +37,12 @@ class ButtonLogic(QLabel):
         # List of all frame (video or image)
         self.All_frames = []
 
+        # file name
+        self.file_frame_name = []
+
+        # if is video ( to bar )
+        self.it_is_video = False
+
         #Start value of frome index
         self.index_frame = 0
 
@@ -61,7 +68,6 @@ class ButtonLogic(QLabel):
 
     # load image_images
     def load_images(self, image_paths):
-
         # Clear  all frames
         self.All_frames = []
 
@@ -71,7 +77,11 @@ class ButtonLogic(QLabel):
         # set new annotaoion id
         self.draw_rectangle.next_annotation_id = 1
 
-        #load all images
+        # clear values to next frame
+        self.file_frame_name = []
+        self.it_is_video = False
+
+        # load all images
         for image_path in image_paths:
             load_data = cv2.imread(image_path)
             if load_data is None:
@@ -83,7 +93,10 @@ class ButtonLogic(QLabel):
             # add frame to list
             self.All_frames.append(self.cv_frame_to_pixmap(processed_frame))
 
-        #set start fraome
+            # add frame name to list
+            self.file_frame_name.append(os.path.basename(image_path))
+
+        # set start fraome
         self.show_frame(1)
 
     # load video
@@ -112,6 +125,13 @@ class ButtonLogic(QLabel):
         # set new annotaoion id
         self.draw_rectangle.next_annotation_id = 1
 
+        # clear values to next frame
+        self.file_frame_name = []
+        self.it_is_video = True
+
+        # add file name to framles
+        video_file_name = os.path.basename(video_path)
+
         # load and chek if is in limit
         while len(self.All_frames) < limit_frames:
             ret, video_frames = video.read()
@@ -123,14 +143,11 @@ class ButtonLogic(QLabel):
             # prossed forame
             processed_frame = self.process_frame(video_frames)
 
-            #add frame to list
+            # add frame to list
             self.All_frames.append(self.cv_frame_to_pixmap(processed_frame))
 
-        #close video
-        video.release()
-
-        # set start fraome
-        self.show_frame(1)
+            # save name to frames
+            self.file_frame_name.append(video_file_name)
 
     # lenght of all frames
     def get_frame_count(self):
@@ -253,3 +270,20 @@ class ButtonLogic(QLabel):
     #future add
     def process_frame(self, video_frames):
         return video_frames
+
+# get file name of image or video
+    def get_current_frame_info(self):
+
+        if not self.file_frame_name:
+            return ""
+
+        # ofi (fore indes
+        index = min(self.index_frame, len(self.file_frame_name) - 1)
+
+        file_name = self.file_frame_name[index]
+
+        #chcel if is index
+        if self.it_is_video:
+            return f"{file_name} (frame {index + 1}/{len(self.All_frames)})"
+
+        return file_name

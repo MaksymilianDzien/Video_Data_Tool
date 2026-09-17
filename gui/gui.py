@@ -41,7 +41,7 @@ class Main_Gui(QMainWindow):
     # top_panel
     def create_top_panel(self):
         top_panel = QFrame()
-        top_panel.setFixedHeight(60)
+        top_panel.setFixedHeight(80)
         top_panel.setStyleSheet("background-color: #2c3e50;")
 
         # Create button layout
@@ -84,13 +84,27 @@ class Main_Gui(QMainWindow):
         self.frame_slider.setMaximum(100)
         self.frame_slider.setValue(0)
 
-        #frame_slider_input
+        # frame_slider_input
         self.frame_slider_input = QLineEdit()
         self.frame_slider_input.setFixedSize(60, 45)
         self.frame_slider_input.setAlignment(QtCore.Qt.AlignCenter)
         self.frame_slider_input.setText("1")
 
-        #add_button_slider_logick
+        # name of info file style )
+        self.info_label = QLabel("")
+        self.info_label.setStyleSheet("color: white; font-size: 11px;")
+        self.info_label.setAlignment(QtCore.Qt.AlignCenter)
+
+        # qwigtet to info (contaner
+        self.frame_info_slider_container = QWidget()
+        frame_info_slider_container = QVBoxLayout()
+        frame_info_slider_container.setContentsMargins(0, 0, 0, 0)
+        frame_info_slider_container.setSpacing(2)
+        frame_info_slider_container.addWidget(self.frame_slider)
+        frame_info_slider_container.addWidget(self.info_label)
+        self.frame_info_slider_container.setLayout(frame_info_slider_container)
+
+        # add_button_slider_logick
         self.create_button_frame_slider()
 
         # top_mid_button
@@ -123,7 +137,7 @@ class Main_Gui(QMainWindow):
             top_button_layout.addWidget(top_mid_button)
             top_button_layout.addStretch()
 
-            top_button_layout.addWidget(self.frame_slider)
+            top_button_layout.addWidget(self.frame_info_slider_container)
             top_button_layout.addWidget(self.frame_slider_input)
         #input slider style
         (self.frame_slider_input.setStyleSheet
@@ -236,10 +250,15 @@ class Main_Gui(QMainWindow):
         # connect frames to frame slider
         self.frame_slider.valueChanged.connect(self.image.show_frame)
 
-        #reset zoom if change image or frame
+        # reset zoom if change image or frame
         self.frame_slider.valueChanged.connect(self.button3.reset_zoom)
 
+        # upade name frame after change frame
+        self.frame_slider.valueChanged.connect(self.update_frame_info)
+
         return middle_panel
+
+
 
 
     # right_panel
@@ -342,6 +361,9 @@ class Main_Gui(QMainWindow):
         self.frame_slider.setMaximum(max(count_frame, 1))
         self.frame_slider.setValue(1)
 
+        #updae frame if is areldt
+        self.update_frame_info()
+
     #Add top menu
     def add_menu(self):
         menu_first_bar = self.menuBar()
@@ -415,3 +437,7 @@ class Main_Gui(QMainWindow):
 
         # instant refresh (only button need)
         self.image.repaint()
+
+    # updae frame info
+    def update_frame_info(self):
+        self.info_label.setText(self.image.get_current_frame_info())
