@@ -104,6 +104,7 @@ class Main_Gui(QMainWindow):
         frame_info_slider_container.addWidget(self.info_label)
         self.frame_info_slider_container.setLayout(frame_info_slider_container)
 
+
         # add_button_slider_logick
         self.create_button_frame_slider()
 
