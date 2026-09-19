@@ -38,6 +38,9 @@ class Draw_rectangle:
         # set mouse positon
         self.mouse_current_point = None
 
+        # init to  history to undo
+        self.annotation_comit = None
+
     # enable/unenable drawing
     def draw_mod_enable(self, is_enable):
 
@@ -122,6 +125,9 @@ class Draw_rectangle:
 
         # call back rgitht panel ababut name label
         self.current_annotations_changed()
+
+        # save stage to undo history
+        self.committed_annotation()
 
     # drawing retangle wvie
     def mouse_move_handle(self, point_posstion):
@@ -219,3 +225,8 @@ class Draw_rectangle:
     def current_annotations_changed(self):
         if self.on_annotations_changed:
             self.on_annotations_changed()
+
+    # callback to undo history
+    def committed_annotation(self):
+        if self.annotation_comit:
+            self.annotation_comit()

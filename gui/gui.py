@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout,
     QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit
 )
-
+from buttons.Button_ctrl_z import Button_ctrl_z
 from buttons.Button_logic_2 import ButtonLogic
 from buttons.Button_logic_3 import Button3
 from buttons.Button_frame_slider import Button_frame_slider
@@ -71,6 +71,12 @@ class Main_Gui(QMainWindow):
             top_left_button = QPushButton(f"t.{i}")
             top_left_button.setFixedSize(60, 45)
             top_left_button.setStyleSheet(button_style)
+            top_button_layout.addWidget(top_left_button)
+
+            # t.2 - ctl + z
+            if i == 2:
+                self.button_ctrl_z = Button_ctrl_z(self, top_left_button)
+
             top_button_layout.addWidget(top_left_button)
 
         top_button_layout.addStretch()
@@ -257,6 +263,9 @@ class Main_Gui(QMainWindow):
         # upade name frame after change frame
         self.frame_slider.valueChanged.connect(self.update_frame_info)
 
+        # connect undo history
+        self.image.draw_rectangle.annotation_comit = self.button_ctrl_z.save_current_state_of_label
+
         return middle_panel
 
 
@@ -355,6 +364,9 @@ class Main_Gui(QMainWindow):
 
         # reest zoom if new image is load
         self.button3.reset_zoom()  # work ?
+
+        # clear undo histroy if is new file
+        self.button_ctrl_z.clear_saved_snapshots()
 
         # set   frame_slider to max number of frames
         count_frame = self.image.get_frame_count()
