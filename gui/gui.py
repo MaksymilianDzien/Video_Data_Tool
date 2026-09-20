@@ -264,12 +264,9 @@ class Main_Gui(QMainWindow):
         self.frame_slider.valueChanged.connect(self.update_frame_info)
 
         # connect undo history
-        self.image.draw_rectangle.annotation_comit = self.button_ctrl_z.save_current_state_of_label
+        self.image.draw_rectangle.on_annotion_comit = self.button_ctrl_z.save_current_state_of_label
 
         return middle_panel
-
-
-
 
     # right_panel
     def create_right_panel(self):
@@ -392,28 +389,31 @@ class Main_Gui(QMainWindow):
     # enable mouse drag
     def enable_move_mode(self):
         self.image.enable_drag(True)
-
-        # disable all mode if one is acting
         self.draw_mode_enabled = False
         self.image.enable_draw_mode(False)
 
-    # disable  mouse drag
+        # if move enable edit is unbale
+        self.image.enable_edit_mode(False)
+
+    # diabale move
     def disable_move_mode(self):
         self.image.enable_drag(False)
-
-        # disable all mode if are active
         self.draw_mode_enabled = False
         self.image.enable_draw_mode(False)
 
-    #  enable/un enable drawing rectangle
+        # enable edit mode if move is siable
+        self.image.enable_edit_mode(True)
+
     def enable_rectangle_drawing(self):
 
         self.draw_mode_enabled = not self.draw_mode_enabled
         self.image.enable_draw_mode(self.draw_mode_enabled)
 
-        # chek if drag buttons are anable
         if self.draw_mode_enabled:
             self.image.enable_drag(False)
+
+            # cannot edit adnotation if adnotation is creating
+            self.image.enable_edit_mode(False)
 
     #convert string to slider_value
     def change_slider_value(self):

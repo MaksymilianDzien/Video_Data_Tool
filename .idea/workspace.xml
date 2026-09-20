@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add file info under frame slinder">
-      <change afterPath="$PROJECT_DIR$/buttons/Button_ctrl_z.py" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add contr z button">
+      <change afterPath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buttons/Button_ctrl_z.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_ctrl_z.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
@@ -100,14 +102,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00024" summary="add first button normal mode">
-      <option name="closed" value="true" />
-      <created>1781350961136</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1781350961136</updated>
     </task>
     <task id="LOCAL-00025" summary="add first button normal mode">
       <option name="closed" value="true" />
@@ -493,7 +487,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789760340439</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="add contr z button">
+      <option name="closed" value="true" />
+      <created>1789833564780</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1789833564780</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -520,7 +522,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add return" />
     <MESSAGE value="add bottom buttons" />
     <MESSAGE value="add to second button function" />
     <MESSAGE value="add first button normal mode" />
@@ -545,6 +546,7 @@
     <MESSAGE value="add right panel" />
     <MESSAGE value="add 2 left button rotate and reset image postion" />
     <MESSAGE value="add file info under frame slinder" />
-    <option name="LAST_COMMIT_MESSAGE" value="add file info under frame slinder" />
+    <MESSAGE value="add contr z button" />
+    <option name="LAST_COMMIT_MESSAGE" value="add contr z button" />
   </component>
 </project>

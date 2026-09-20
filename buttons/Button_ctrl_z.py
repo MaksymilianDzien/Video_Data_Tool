@@ -1,6 +1,3 @@
-from turtledemo.clock import current_day
-
-
 class Button_ctrl_z:
 
     #max undo step
@@ -47,24 +44,26 @@ class Button_ctrl_z:
         if not self.saved_history:
             return
 
-
         # delete current state of frame
         self.saved_history.pop()
 
         # refer to drawing rectangle
         current_draw_rectangle = self.main_window.image.draw_rectangle
 
-
-        #restoration previous_state
+        # restoration previous_state
         if self.saved_history:
             previous_state = self.saved_history[-1]
             current_draw_rectangle.fream_annotation = {
                 frame_index: [dict(annotation) for annotation in annotations]
                 for frame_index, annotations in previous_state.items()
             }
-        #if is epty or is not have last step
+        # if is epty or is not have last step
         else:
             current_draw_rectangle.fream_annotation = {}
+
+
+        #reset current selectetd antation ( call back)
+        self.main_window.image.edit_current_anotation.deselecte_edited_mode()
 
         # repaint to current frame ( to see rezult)
         self.main_window.image.repaint()

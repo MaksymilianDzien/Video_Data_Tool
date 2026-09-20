@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPixmap, QPainter, QImage
 from PyQt5.QtCore import Qt, QPoint
 from draw_annotations.Draw_rectange import Draw_rectangle
 from draw_annotations.Label_log import Label_log
+from draw_annotations.Edit_annotation import Edit_annotation
 
 
 class ButtonLogic(QLabel):
@@ -14,6 +15,7 @@ class ButtonLogic(QLabel):
 
     def __init__(self):
         super().__init__()
+
         # center image
         self.setAlignment(Qt.AlignCenter)
 
@@ -43,7 +45,7 @@ class ButtonLogic(QLabel):
         # if is video ( to bar )
         self.it_is_video = False
 
-        #Start value of frome index
+        # Start value of frome index
         self.index_frame = 0
 
         # set all labels
@@ -52,17 +54,19 @@ class ButtonLogic(QLabel):
         # Create obciect to draw rectangle
         self.draw_rectangle = Draw_rectangle(self, self.label_log)
 
+        # set exist objciet to edit anntaion
+        self.edit_current_anotation = Edit_annotation(self, self.draw_rectangle)
+
     # cv_to_pixmap
     def cv_frame_to_pixmap(self, frame):
 
-        #create new frame
+        # create new frame
         new_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame_height, frame_width, frame_channel = new_frame.shape
 
-        #add format and bytes in frame
+        # add format and bytes in frame
         bytes_in_frame = frame_channel * frame_width
-        q_image = (QImage(new_frame.data, frame_width, frame_height, bytes_in_frame,
-        QImage.Format_RGB888))
+        q_image = QImage(new_frame.data, frame_width, frame_height, bytes_in_frame, QImage.Format_RGB888)
 
         return QPixmap.fromImage(q_image)
 
@@ -77,6 +81,9 @@ class ButtonLogic(QLabel):
         # set new annotaoion id
         self.draw_rectangle.next_annotation_id = 1
 
+        # undo select anntaion
+        self.edit_current_anotation.deselecte_edited_mode()
+
         # clear values to next frame
         self.file_frame_name = []
         self.it_is_video = False
@@ -86,7 +93,6 @@ class ButtonLogic(QLabel):
             load_data = cv2.imread(image_path)
             if load_data is None:
                 continue
-
             #
             processed_frame = self.process_frame(load_data)
 
@@ -102,9 +108,8 @@ class ButtonLogic(QLabel):
     # load video
     def load_video(self, video_path):
 
-        #load video from path
+        # load video from path
         video = cv2.VideoCapture(video_path)
-
         if not video.isOpened():
             return
 
@@ -124,6 +129,9 @@ class ButtonLogic(QLabel):
 
         # set new annotaoion id
         self.draw_rectangle.next_annotation_id = 1
+
+        # undo select anntaion
+        self.edit_current_anotation.deselecte_edited_mode()
 
         # clear values to next frame
         self.file_frame_name = []
@@ -167,6 +175,10 @@ class ButtonLogic(QLabel):
 
         self.index_frame = index
         self.original_iamge = self.All_frames[index]
+
+        # un select (bc  new annotaion is select)
+        self.edit_current_anotation.deselecte_edited_mode()
+
         self.update()
 
     #  enable/unenable drag
@@ -177,16 +189,20 @@ class ButtonLogic(QLabel):
     def enable_draw_mode(self, enabled):
         self.draw_rectangle.draw_mod_enable(enabled)
 
-    #ritate image to left ( 90 )
+    # enable/unenable edit annotaion mode
+    def enable_edit_mode(self, enabled):
+        self.edit_current_anotation.enable_edited_mode(enabled)
+
+    # ritate image to left ( 90 )
     def rotate_image_to_left(self):
 
         self.image_current_angle = (self.image_current_angle - 90) % 360
         self.update()
 
-    #reset image poziton and zoom in current image
+    # reset image poziton and zoom in current image
     def reset_image_to_start_position(self):
 
-        #reset pozition and angle
+        # reset pozition and angle
         self.positon = QPoint(0, 0)
         self.image_current_angle = 0
 
@@ -194,7 +210,7 @@ class ButtonLogic(QLabel):
         if self.All_frames:
             self.original_iamge = self.All_frames[self.index_frame]
 
-        #instant refresh (only button need)
+        # instant refresh (only button need)
         self.repaint()
 
     # paint image
@@ -211,20 +227,20 @@ class ButtonLogic(QLabel):
         # save current image position
         iamge_painter.save()
 
-        #center x and y cordation
+        # center x and y cordation
         x_center_frame = x_positon + self.original_iamge.width() / 2
         y_center_frame = y_positon + self.original_iamge.height() / 2
 
-        #set new center point to image
+        # set new center point to image
         iamge_painter.translate(x_center_frame, y_center_frame)
 
-        #rorate frame to 90
+        # rorate frame to 90
         iamge_painter.rotate(self.image_current_angle)
 
-        #delet center point
+        # delet center point
         iamge_painter.translate(-x_center_frame, -y_center_frame)
 
-        #draw image with old pozition with rotate
+        # draw image with old pozition with rotate
         iamge_painter.drawPixmap(x_positon, y_positon, self.original_iamge)
 
         # instant refresh (only button need)
@@ -233,22 +249,41 @@ class ButtonLogic(QLabel):
         # darwing annotaion in current frame
         self.draw_rectangle.draw_rectangle_annotation(iamge_painter, self.index_frame)
 
-    # mose Event
+        # drawing current annotation handers (if mode is enable)
+        self.edit_current_anotation.draw_selection_hander(iamge_painter, self.index_frame)
+
+    # mose Event(button)
     def mousePressEvent(self, event):
+
+        #draw rectangle event
         if self.draw_rectangle.set_draw_enabled and event.button() == Qt.LeftButton:
             self.draw_rectangle.mouse_press_handler(event.pos())
             return
 
+        #edit antaion event
+        if self.edit_current_anotation.edit_of_annotation and event.button() == Qt.LeftButton:
+            self.edit_current_anotation.mouse_press_hander(event.pos(), self.index_frame)
+            return
+
+        #Drag iamge event
         if self.drag_enabled and event.button() == Qt.LeftButton:
             self.dragging = True
             self.last_mouse_positon = event.pos()
 
     # Mouse move
     def mouseMoveEvent(self, event):
+
+        # draw rectangle event
         if self.draw_rectangle.set_draw_enabled:
             self.draw_rectangle.mouse_move_handle(event.pos())
             return
 
+        # edit antaion event
+        if self.edit_current_anotation.edit_of_annotation:
+            self.edit_current_anotation.mouse_move_hander(event.pos())
+            return
+
+        # Drag iamge event
         if not self.drag_enabled:
             return
         if self.dragging:
@@ -259,19 +294,26 @@ class ButtonLogic(QLabel):
 
     # mouse relase
     def mouseReleaseEvent(self, event):
-        #chek if maosie press is no chandle
+
+        # draw rectangle event
         if self.draw_rectangle.set_draw_enabled and event.button() == Qt.LeftButton:
             self.draw_rectangle.mouse_release_handler(event.pos(), self.index_frame)
             return
 
+        # edit antaion event
+        if self.edit_current_anotation.edit_of_annotation and event.button() == Qt.LeftButton:
+            self.edit_current_anotation.mouse_release_hander()
+            return
+
+        # Drag iamge event
         if event.button() == Qt.LeftButton:
             self.dragging = False
 
-    #future add
+    # future add
     def process_frame(self, video_frames):
         return video_frames
 
-# get file name of image or video
+    # get file name of image or video
     def get_current_frame_info(self):
 
         if not self.file_frame_name:
@@ -282,7 +324,7 @@ class ButtonLogic(QLabel):
 
         file_name = self.file_frame_name[index]
 
-        #chcel if is index
+        # chcel if is index
         if self.it_is_video:
             return f"{file_name} (frame {index + 1}/{len(self.All_frames)})"
 
