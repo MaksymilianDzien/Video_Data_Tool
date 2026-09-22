@@ -54,7 +54,11 @@ class Main_Right_Panel_Label_Info:
         for current_annotation in current_frame_annotations:
 
             object_id = current_annotation["id"]
-            label_text = current_annotation["label"] if current_annotation["label"] else "(no label)"
+
+            # from label id to name if is not none then ""
+            label_id = current_annotation["label_id"]
+            label_text = self.current_label_obiect.get_label_name(label_id) if label_id is not None else "(no label)"
+
             list_of_item = f"{object_id}: {label_text}"
 
             #add object to item
@@ -65,5 +69,6 @@ class Main_Right_Panel_Label_Info:
 
         self.list_of_labels.clear()
 
-        for current_label_name in self.current_label_obiect.current_labels:
-            self.list_of_labels.addItem(QListWidgetItem(current_label_name))
+        # current_labels
+        for current_label in self.current_label_obiect.current_labels:
+            self.list_of_labels.addItem(QListWidgetItem(current_label["name"]))

@@ -1,4 +1,3 @@
-from PyQt5.QtWidgets import QInputDialog
 from PyQt5.QtGui import QPen, QBrush, QColor
 from PyQt5.QtCore import QRect, QRectF, QPoint
 
@@ -86,17 +85,21 @@ class Draw_rectangle:
         if curent_index_frame not in self.fream_annotation:
             self.fream_annotation[curent_index_frame] = []
 
-        # scaling rectange if zomm is not 1
-        scale_current_rectangle = self.convert_rectangle_to_current_scale(curent_rectangle)
+        #base rectangle to later getting info
+        concurrent_rectangle = self.convert_rectangle_to_current_scale(curent_rectangle)
 
-        # annotation info
+        # annotation info -
         new_annotation = \
             {
                 "id": self.next_annotation_id,
-                "rect": scale_current_rectangle,
-                "label": "",
+                "type": "rectangle",
+                "label_id": None,
                 #current rotaion (no connect to rotatet alll image)
-                "rotation": 0
+                "rotation": 0.0,
+                "x": concurrent_rectangle.x(),
+                "y": concurrent_rectangle.y(),
+                "width": concurrent_rectangle.width(),
+                "height": concurrent_rectangle.height()
             }
 
         self.fream_annotation[curent_index_frame].append(new_annotation)
@@ -111,10 +114,10 @@ class Draw_rectangle:
         self.current_annotations_changed()
 
         #  create new or set laves (fuction in label_log)
-        label_rectangle_text, ok_input = self.Label_log.choose_annotation_label_option(self.widget_image)
+        label_id, ok_input = self.Label_log.choose_annotation_label_option(self.widget_image)
 
         # chek if press ok_input o or is not label
-        if not ok_input or not label_rectangle_text:
+        if not ok_input or label_id is None:
 
             # user cancelled anntaion
             self.fream_annotation[curent_index_frame].remove(new_annotation)
@@ -125,7 +128,7 @@ class Draw_rectangle:
             return
 
         # set name off addnotaion
-        new_annotation["label"] = label_rectangle_text
+        new_annotation["label_id"] = label_id
         self.widget_image.update()
 
         # call back rgitht panel ababut name label
@@ -144,6 +147,10 @@ class Draw_rectangle:
         # ser mouse point
         self.mouse_current_point = QPoint(point_posstion)
         self.widget_image.update()
+
+    #bulid rectangle from annotaion help get info rectangle
+    def build_rectangle_for_annotation_info(self, annotation):
+        return QRectF(annotation["x"], annotation["y"], annotation["width"], annotation["height"])
 
     # draw all annotainon in frame
     def draw_rectangle_annotation(self, rectangle_painter, curent_frame_index):
@@ -165,13 +172,17 @@ class Draw_rectangle:
 
         # adding annotanions
         for curent_annotation in all_annotations_frame:
-            rect = curent_annotation["rect"]
-            label = curent_annotation["label"]
+            base_rectangle = self.build_rectangle_for_annotation_info(curent_annotation)
+
+            # from label id to name if is not none then ""
+            label_id = curent_annotation["label_id"]
+            label = self.Label_log.get_label_name(label_id) if label_id is not None else ""
+
             # set primary rotation ( berore change)
             rotation = curent_annotation.get("rotation", 0)
 
             # calculate and scale recatangle (zoom)
-            current_scaled_rectangle = self.convert_all_rectangle_to_scale(rect)
+            current_scaled_rectangle = self.convert_all_rectangle_to_scale(base_rectangle)
 
             # rotate current adntoation in center pov
             rectangle_painter.save()
@@ -221,7 +232,6 @@ class Draw_rectangle:
         )
 
     # convert all rectangle in screen
-    #
     def convert_all_rectangle_to_scale(self, screen_scaled_coordintates_rectangle):
 
         # scale

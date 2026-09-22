@@ -1,5 +1,4 @@
 import math
-
 from PyQt5.QtGui import QPen, QBrush, QColor
 from PyQt5.QtCore import QPoint, QPointF, QRectF
 
@@ -54,7 +53,8 @@ class Edit_annotation:
 
     # rectangle after calkulated zomm and rotate
     def get_current_annotation_rectangle(self, annotation):
-        return self.draw_rectangle.convert_all_rectangle_to_scale(annotation["rect"])
+        base_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(annotation)
+        return self.draw_rectangle.convert_all_rectangle_to_scale(base_rectangle)
 
     # rotate current annotaion
     def rotate_around_center_point(self, current_point, annotation_center, angle_degrees):
@@ -168,10 +168,12 @@ class Edit_annotation:
             handle_name = self.find_hander_press(point_posstion)
 
             if handle_name is not None:
+
                 # what hander is actived
                 self.select_actived_hander = handle_name
+
                 #main rectangle to reference
-                self.drag_start_of_rectangle = QRectF(self.select_current_annotation["rect"])
+                self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(self.select_current_annotation)
                 return
 
         # if hander is not clicked then chek if clicked in annotation itself
@@ -267,8 +269,11 @@ class Edit_annotation:
         #create new rectangle from move point and stay  opposite point
         create_new_rectangle = QRectF(fixed_corner_based, new_cornerr_based).normalized()
 
-        #save new created revtangle to current  annotation`
-        self.select_current_annotation["rect"] = create_new_rectangle
+        #save new created revtangle to current  annotation
+        self.select_current_annotation["x"] = create_new_rectangle.x()
+        self.select_current_annotation["y"] = create_new_rectangle.y()
+        self.select_current_annotation["width"] = create_new_rectangle.width()
+        self.select_current_annotation["height"] = create_new_rectangle.height()
 
     # drawing all hander
     def draw_selection_hander(self, current_painter, curent_frame_index):
@@ -316,9 +321,7 @@ class Edit_annotation:
         top_center = QPoint(screen_rectangle.center().x(), screen_rectangle.top())
         rotate_handle_point = QPoint(screen_rectangle.center().x(), screen_rectangle.top() - self.rotate_offset)
 
-        # draw rotate line
         current_painter.drawLine(top_center, rotate_handle_point)
         current_painter.drawEllipse(rotate_handle_point, self.rotate_of_hander, self.rotate_of_hander)
 
-        #restore painter
         current_painter.restore()
