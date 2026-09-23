@@ -224,6 +224,7 @@ class ButtonLogic(QLabel):
         x_positon = self.positon.x()
         y_positon = self.positon.y()
 
+
         # save current image position
         iamge_painter.save()
 

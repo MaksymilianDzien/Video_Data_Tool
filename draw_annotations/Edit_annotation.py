@@ -168,10 +168,8 @@ class Edit_annotation:
             handle_name = self.find_hander_press(point_posstion)
 
             if handle_name is not None:
-
                 # what hander is actived
                 self.select_actived_hander = handle_name
-
                 #main rectangle to reference
                 self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(self.select_current_annotation)
                 return
