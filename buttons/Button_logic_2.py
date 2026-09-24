@@ -1,8 +1,8 @@
 import cv2
 import os
 from PyQt5.QtWidgets import QLabel
-from PyQt5.QtGui import QPixmap, QPainter, QImage
-from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtGui import QPixmap, QPainter, QImage, QTransform
+from PyQt5.QtCore import Qt, QPoint, QPointF
 from draw_annotations.Draw_rectange import Draw_rectangle
 from draw_annotations.Label_log import Label_log
 from draw_annotations.Edit_annotation import Edit_annotation
@@ -213,6 +213,50 @@ class ButtonLogic(QLabel):
         # instant refresh (only button need)
         self.repaint()
 
+    #get main trasoftm to match paint event picture
+    def get_current_transform_of_rotation(self):
+
+        #set new q trasport
+        current_transform = QTransform()
+
+
+        if self.original_iamge is None:
+            return current_transform
+
+        # x and y center of frame
+        x_center_position = self.positon.x() + self.original_iamge.width() / 2
+        y_center_position = self.positon.y() + self.original_iamge.height() / 2
+
+        # set new center of frame
+        current_transform.translate(x_center_position, y_center_position)
+        #rorate frame with new center
+        current_transform.rotate(self.image_current_angle)
+        # undo new center
+        current_transform.translate(-x_center_position, -y_center_position)
+
+        return current_transform
+
+    # get prime point on adnnotaion
+    def unrotate_point_of_screen(self, current_point_of_screen):
+
+        #if is not rotated just retrun current_point_of_screen
+        if self.image_current_angle == 0 or self.original_iamge is None:
+            return QPoint(current_point_of_screen)
+
+        # current all transfrom of image
+        current_transform = self.get_current_transform_of_rotation()
+        #revers transfrom of image
+        inverted_transform, invertible = current_transform.inverted()
+
+        if not invertible:
+            return QPoint(current_point_of_screen)
+
+        #mapping all point from inverted_transform
+        map_point = inverted_transform.map(QPointF(current_point_of_screen))
+
+        # return around x and y maping points
+        return QPoint(round(map_point.x()), round(map_point.y()))
+
     # paint image
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -223,7 +267,6 @@ class ButtonLogic(QLabel):
         iamge_painter = QPainter(self)
         x_positon = self.positon.x()
         y_positon = self.positon.y()
-
 
         # save current image position
         iamge_painter.save()
@@ -244,14 +287,14 @@ class ButtonLogic(QLabel):
         # draw image with old pozition with rotate
         iamge_painter.drawPixmap(x_positon, y_positon, self.original_iamge)
 
-        # instant refresh (only button need)
-        iamge_painter.restore()
-
         # darwing annotaion in current frame
         self.draw_rectangle.draw_rectangle_annotation(iamge_painter, self.index_frame)
 
         # drawing current annotation handers (if mode is enable)
         self.edit_current_anotation.draw_selection_hander(iamge_painter, self.index_frame)
+
+        # instant refresh (only button need)
+        iamge_painter.restore()
 
     # mose Event(button)
     def mousePressEvent(self, event):

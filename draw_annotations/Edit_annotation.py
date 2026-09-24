@@ -161,6 +161,9 @@ class Edit_annotation:
         if not self.edit_of_annotation:
             return
 
+        # current unrorate points of rectangle
+        point_posstion = self.current_widget_image.unrotate_point_of_screen(point_posstion)
+
         # chek if hander is selected
         if self.select_current_annotation is not None and self.select_curennt_frame_index == curent_index_frame:
 
@@ -168,8 +171,10 @@ class Edit_annotation:
             handle_name = self.find_hander_press(point_posstion)
 
             if handle_name is not None:
+
                 # what hander is actived
                 self.select_actived_hander = handle_name
+
                 #main rectangle to reference
                 self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(self.select_current_annotation)
                 return
@@ -195,6 +200,9 @@ class Edit_annotation:
         # if is not enable or is not selectet or is not active
         if not self.edit_of_annotation or self.select_actived_hander is None or self.select_current_annotation is None:
             return
+
+        # current unrorate points of rectangle
+        point_posstion = self.current_widget_image.unrotate_point_of_screen(point_posstion)
 
         #if rotate hander is selected
         if self.select_actived_hander == "rotate":

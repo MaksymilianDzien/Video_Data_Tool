@@ -7,6 +7,7 @@
     <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="change annotation save in program">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

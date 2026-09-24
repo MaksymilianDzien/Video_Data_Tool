@@ -55,6 +55,9 @@ class Draw_rectangle:
         if not self.set_draw_enabled:
             return
 
+        #current unrorate points of rectangle
+        point_posstion = self.widget_image.unrotate_point_of_screen(point_posstion)
+
         # set first point of rectangle
         self.mouse_first_point = QPoint(point_posstion)
 
@@ -67,6 +70,9 @@ class Draw_rectangle:
         # chek if enable
         if not self.set_draw_enabled or self.mouse_first_point is None:
             return
+
+        # current unrorate points of rectangle
+        point_posstion = self.widget_image.unrotate_point_of_screen(point_posstion)
 
         # set second point of rectangle
         mouse_second_point = QPoint(point_posstion)
@@ -143,6 +149,9 @@ class Draw_rectangle:
         # check if draw is enable and is set first mouse point
         if not self.set_draw_enabled or self.mouse_first_point is None:
             return
+
+        #current unrorate points of rectangle
+        point_posstion = self.widget_image.unrotate_point_of_screen(point_posstion)
 
         # ser mouse point
         self.mouse_current_point = QPoint(point_posstion)
