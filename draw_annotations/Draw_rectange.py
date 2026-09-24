@@ -10,6 +10,9 @@ class Draw_rectangle:
     # Drawing Alpha
     alpha = 60
 
+    # max layers of annotaion
+    layers = 6
+
     # wiget image for images and annocation labes
     def __init__(self, widget_image, Label_log):
 
@@ -91,7 +94,11 @@ class Draw_rectangle:
         if curent_index_frame not in self.fream_annotation:
             self.fream_annotation[curent_index_frame] = []
 
-        #base rectangle to later getting info
+
+        # if created new annotaion all created annotaion 1 back
+        self.all_other_annotations__back(curent_index_frame)
+
+        # base rectangle to later getting info
         concurrent_rectangle = self.convert_rectangle_to_current_scale(curent_rectangle)
 
         # annotation info -
@@ -100,8 +107,10 @@ class Draw_rectangle:
                 "id": self.next_annotation_id,
                 "type": "rectangle",
                 "label_id": None,
-                #current rotaion (no connect to rotatet alll image)
+                # current rotaion (no connect to rotatet alll image)
                 "rotation": 0.0,
+                # if created new annotation is crated in first layer
+                "layer": 1,
                 "x": concurrent_rectangle.x(),
                 "y": concurrent_rectangle.y(),
                 "width": concurrent_rectangle.width(),
@@ -161,6 +170,34 @@ class Draw_rectangle:
     def build_rectangle_for_annotation_info(self, annotation):
         return QRectF(annotation["x"], annotation["y"], annotation["width"], annotation["height"])
 
+    #all annotations go 1 layer back in is new annotations crated or annotations is edited then set layer 1
+    def all_other_annotations__back(self, curent_index_frame, annotations_skip=None):
+
+        current_frame_annotations = self.fream_annotation.get(curent_index_frame, [])
+
+        #if is skip
+        for annotations in current_frame_annotations:
+            if annotations is annotations_skip:
+                continue
+
+            current_annotations_layer = annotations.get("layer", 1)
+            annotations["layer"] = min(current_annotations_layer + 1, self.layers)
+
+    #set edited annotation to front call all_Other...
+    def annotations_to_front(self, curent_index_frame, annotation):
+        self.all_other_annotations__back(curent_index_frame, annotation)
+        annotation["layer"] = 1
+
+    #sort annotations layers for drawing ( drawing is last and is in front)
+    def get_annotations_for_drawing(self, curent_index_frame):
+        current_frame_annotations = self.fream_annotation.get(curent_index_frame, [])
+        return sorted(current_frame_annotations, key=lambda annotation: annotation.get("layer", 1), reverse=True)
+
+    #sort annotations layers for click ( annotation in front first layer )
+    def get_annotations_for_click(self, curent_index_frame):
+        current_frame_annotations = self.fream_annotation.get(curent_index_frame, [])
+        return sorted(current_frame_annotations, key=lambda annotation: annotation.get("layer", 1))
+
     # draw all annotainon in frame
     def draw_rectangle_annotation(self, rectangle_painter, curent_frame_index):
 
@@ -177,7 +214,7 @@ class Draw_rectangle:
         rectangle_painter.setBrush(QBrush(rectangle_fill_color))
 
         # add annotations to frame
-        all_annotations_frame = self.fream_annotation.get(curent_frame_index, [])
+        all_annotations_frame = self.get_annotations_for_drawing(curent_frame_index)
 
         # adding annotanions
         for curent_annotation in all_annotations_frame:

@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="change annotation save in program">
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="fix annotation rotate error">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Draw_rectange.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" afterDir="false" />
     </list>
@@ -100,14 +99,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00027" summary="add first button normal mode">
-      <option name="closed" value="true" />
-      <created>1785532943913</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1785532943913</updated>
     </task>
     <task id="LOCAL-00028" summary="add first button normal mode">
       <option name="closed" value="true" />
@@ -493,7 +484,15 @@
       <option name="project" value="LOCAL" />
       <updated>1790112515159</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="fix annotation rotate error">
+      <option name="closed" value="true" />
+      <created>1790256727226</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1790256727226</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -520,7 +519,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add first button normal mode" />
     <MESSAGE value="add 3 button cormal zoom" />
     <MESSAGE value="add top panel buttons" />
     <MESSAGE value="add in top panel frame_slider(no fuction)" />
@@ -545,6 +543,7 @@
     <MESSAGE value="add contr z button" />
     <MESSAGE value="add rectangle edit" />
     <MESSAGE value="change annotation save in program" />
-    <option name="LAST_COMMIT_MESSAGE" value="change annotation save in program" />
+    <MESSAGE value="fix annotation rotate error" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix annotation rotate error" />
   </component>
 </project>

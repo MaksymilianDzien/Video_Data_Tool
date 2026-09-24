@@ -179,12 +179,16 @@ class Edit_annotation:
                 self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(self.select_current_annotation)
                 return
 
-        # if hander is not clicked then chek if clicked in annotation itself
-        frame_annotations = self.draw_rectangle.fream_annotation.get(curent_index_frame, [])
 
-        # end of list all annotations fresh annotations in top list
-        for annotation in reversed(frame_annotations):
+        # if hander is not clicked then chek if clicked in annotation itself (sorted layer)
+        frame_annotations = self.draw_rectangle.get_annotations_for_click(curent_index_frame)
+
+        for annotation in frame_annotations:
             if self.is_point_in_rotated_anotation(point_posstion, annotation):
+
+                #if is cliked get this annotation in front first layer
+                self.draw_rectangle.annotations_to_front(curent_index_frame, annotation)
+
                 self.select_current_annotation = annotation
                 self.select_curennt_frame_index = curent_index_frame
                 self.select_actived_hander = None
