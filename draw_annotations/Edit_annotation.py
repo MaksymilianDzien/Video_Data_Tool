@@ -35,6 +35,9 @@ class Edit_annotation:
         # coppy of rectangle of sate referenc
         self.drag_start_of_rectangle = None
 
+        #set  draging all annotaion
+        self.drag_annotaion_mouse_start = None
+
     # enable/unenable  edit of anntotaion
     def enable_edited_mode(self, enabled):
 
@@ -50,6 +53,7 @@ class Edit_annotation:
         self.select_curennt_frame_index = None
         self.select_actived_hander = None
         self.drag_start_of_rectangle = None
+        self.drag_annotaion_mouse_start = None
 
     # rectangle after calkulated zomm and rotate
     def get_current_annotation_rectangle(self, annotation):
@@ -185,13 +189,19 @@ class Edit_annotation:
 
         for annotation in frame_annotations:
             if self.is_point_in_rotated_anotation(point_posstion, annotation):
-
-                #if is cliked get this annotation in front first layer
+                # if is cliked get this annotation in front first layer
                 self.draw_rectangle.annotations_to_front(curent_index_frame, annotation)
 
                 self.select_current_annotation = annotation
                 self.select_curennt_frame_index = curent_index_frame
-                self.select_actived_hander = None
+
+                # if annotaion is cliked in annotaion then set to move all annotaion
+                self.select_actived_hander = "move"
+                # current annotaion before change
+                self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(annotation)
+                # current mosue position
+                self.drag_annotaion_mouse_start = QPoint(point_posstion)
+                # redraw change annotaion
                 self.current_widget_image.update()
                 return
 
@@ -211,6 +221,9 @@ class Edit_annotation:
         #if rotate hander is selected
         if self.select_actived_hander == "rotate":
             self.update_annotation_rotation(point_posstion)
+        # if move  then move all annotaion with mouse
+        elif self.select_actived_hander == "move":
+            self.move_current_selected_annotation(point_posstion)
         # if any else hander is selected
         else:
             self.update_annotation_resize(point_posstion)
@@ -227,6 +240,7 @@ class Edit_annotation:
         #delete flag to actived hander and referec to rectangle
         self.select_actived_hander = None
         self.drag_start_of_rectangle = None
+        self.drag_annotaion_mouse_start = None
 
         # save current stage of rectangle to undo list
         self.draw_rectangle.on_annotion_comit()
@@ -248,6 +262,28 @@ class Edit_annotation:
 
         #save current annotation rotation
         self.select_current_annotation["rotation"] = angle_degrees % 360
+
+    #change annotaion witch pressed mosue in annotaion
+    def move_current_selected_annotation(self, point_posstion):
+
+        current_zoom_level = self.current_widget_image.base_zoom_level
+
+        # delta points
+        delta_x = point_posstion.x() - self.drag_annotaion_mouse_start.x()
+        delta_y = point_posstion.y() - self.drag_annotaion_mouse_start.y()
+
+        # delta points without zoom
+        true_delta_x = delta_x / current_zoom_level
+        true_delta_y = delta_y / current_zoom_level
+
+        #created new rectangle with move points
+        new_moved_rectangle = self.drag_start_of_rectangle.translated(true_delta_x, true_delta_y)
+
+        #set new created rectangle witch new points
+        self.select_current_annotation["x"] = new_moved_rectangle.x()
+        self.select_current_annotation["y"] = new_moved_rectangle.y()
+        self.select_current_annotation["width"] = new_moved_rectangle.width()
+        self.select_current_annotation["height"] = new_moved_rectangle.height()
 
     # update selected hander
     def update_annotation_resize(self, point_posstion):
