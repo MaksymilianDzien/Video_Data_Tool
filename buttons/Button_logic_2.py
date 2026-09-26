@@ -199,6 +199,12 @@ class ButtonLogic(QLabel):
         self.image_current_angle = (self.image_current_angle - 90) % 360
         self.update()
 
+    # rotate image to right ( 90 )
+    def rotate_image_to_right(self):
+
+        self.image_current_angle = (self.image_current_angle + 90) % 360
+        self.update()
+
     # reset image poziton and zoom in current image
     def reset_image_to_start_position(self):
 

@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout,
     QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit
 )
+from buttons.Button_rotated_option import Button_rotated_option
 from buttons.Button_ctrl_z import Button_ctrl_z
 from buttons.Button_logic_2 import ButtonLogic
 from buttons.Button_logic_3 import Button3
@@ -209,9 +210,9 @@ class Main_Gui(QMainWindow):
             #zoom button
             if i == 3:
                 self.button3 = Button3(self, left_buttons)
-            #rotate 90 left ( change in future )
+            #rotate 90 option
             if i == 4:
-                left_buttons.clicked.connect(self.rotate_image_to_left)
+                self.button_rotated_option = Button_rotated_option(self, left_buttons)
             # reset position, rotation and zoom to original state
             if i == 5:
                 left_buttons.clicked.connect(self.reset_image_to_start_position)

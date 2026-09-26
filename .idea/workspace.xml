@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add layers to annotation">
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add move a annotation">
+      <change afterPath="$PROJECT_DIR$/buttons/Button_rotated_option.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,14 +100,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00029" summary="add first button normal mode">
-      <option name="closed" value="true" />
-      <created>1785878735957</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1785878735957</updated>
     </task>
     <task id="LOCAL-00030" summary="add first button normal mode">
       <option name="closed" value="true" />
@@ -491,7 +485,15 @@
       <option name="project" value="LOCAL" />
       <updated>1790279232333</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="add move a annotation">
+      <option name="closed" value="true" />
+      <created>1790375064139</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1790375064139</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -518,7 +520,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add top panel buttons" />
     <MESSAGE value="add in top panel frame_slider(no fuction)" />
     <MESSAGE value="change image/video display to opvenCV (add more komand)" />
     <MESSAGE value="add more komand" />
@@ -543,6 +544,7 @@
     <MESSAGE value="change annotation save in program" />
     <MESSAGE value="fix annotation rotate error" />
     <MESSAGE value="add layers to annotation" />
-    <option name="LAST_COMMIT_MESSAGE" value="add layers to annotation" />
+    <MESSAGE value="add move a annotation" />
+    <option name="LAST_COMMIT_MESSAGE" value="add move a annotation" />
   </component>
 </project>
