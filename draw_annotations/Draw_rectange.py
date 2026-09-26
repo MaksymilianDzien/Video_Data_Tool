@@ -1,0 +1,307 @@
+from PyQt5.QtGui import QPen, QBrush, QColor
+from PyQt5.QtCore import QRect, QRectF, QPoint
+
+
+class Draw_rectangle:
+
+    # Color of rectangle
+    Color_of_rectange = QColor(255, 0, 0) # red rgb change in future
+
+    # Drawing Alpha
+    alpha = 60
+
+    # max layers of annotaion
+    layers = 6
+
+    # wiget image for images and annocation labes
+    def __init__(self, widget_image, Label_log):
+
+        # init widget
+        self.widget_image = widget_image
+
+        # set default annotaios label
+        self.Label_log = Label_log
+
+        # init annotations per frame
+        self.fream_annotation = {}
+
+        # set start id
+        self.next_annotation_id = 1
+
+        # callback new label (if exist)
+        self.on_annotations_changed = None
+
+        # callback commite new  annotaion to undo
+        self.on_annotion_comit = None
+
+        # set draw
+        self.set_draw_enabled = False
+
+        # set first point
+        self.mouse_first_point = None
+
+        # init to  history to undo
+        self.mouse_current_point = None
+
+    # enable/unenable drawing
+    def draw_mod_enable(self, is_enable):
+
+        self.set_draw_enabled = is_enable
+
+        # if rectange is not complete set to
+        self.mouse_first_point = None
+        self.mouse_current_point = None
+
+    # hander of mouse press - start of drawing (first point)
+    def mouse_press_handler(self, point_posstion):
+
+        if not self.set_draw_enabled:
+            return
+
+        #current unrorate points of rectangle
+        point_posstion = self.widget_image.unrotate_point_of_screen(point_posstion)
+
+        # set first point of rectangle
+        self.mouse_first_point = QPoint(point_posstion)
+
+        # set current point same as first - so preview rectangle can draw immediately
+        self.mouse_current_point = QPoint(point_posstion)
+
+    # hander of mouse release - end of drawing
+    def mouse_release_handler(self, point_posstion, curent_index_frame):
+
+        # chek if enable
+        if not self.set_draw_enabled or self.mouse_first_point is None:
+            return
+
+        # current unrorate points of rectangle
+        point_posstion = self.widget_image.unrotate_point_of_screen(point_posstion)
+
+        # set second point of rectangle
+        mouse_second_point = QPoint(point_posstion)
+        curent_rectangle = QRect(self.mouse_first_point, mouse_second_point).normalized()
+
+        # reset points
+        self.mouse_first_point = None
+        self.mouse_current_point = None
+
+        # to small rectangle return
+        if curent_rectangle.width() < 3 or curent_rectangle.height() < 3:
+            self.widget_image.update()
+            return
+
+        # add annotation to frame
+        if curent_index_frame not in self.fream_annotation:
+            self.fream_annotation[curent_index_frame] = []
+
+
+        # if created new annotaion all created annotaion 1 back
+        self.all_other_annotations__back(curent_index_frame)
+
+        # base rectangle to later getting info
+        concurrent_rectangle = self.convert_rectangle_to_current_scale(curent_rectangle)
+
+        # annotation info -
+        new_annotation = \
+            {
+                "id": self.next_annotation_id,
+                "type": "rectangle",
+                "label_id": None,
+                # current rotaion (no connect to rotatet alll image)
+                "rotation": 0.0,
+                # if created new annotation is crated in first layer
+                "layer": 1,
+                "x": concurrent_rectangle.x(),
+                "y": concurrent_rectangle.y(),
+                "width": concurrent_rectangle.width(),
+                "height": concurrent_rectangle.height()
+            }
+
+        self.fream_annotation[curent_index_frame].append(new_annotation)
+
+        # add +1 to next annotation
+        self.next_annotation_id += 1
+
+        # draw rectangle
+        self.widget_image.update()
+
+        # callback right panel abaunt new annoataion
+        self.current_annotations_changed()
+
+        #  create new or set laves (fuction in label_log)
+        label_id, ok_input = self.Label_log.choose_annotation_label_option(self.widget_image)
+
+        # chek if press ok_input o or is not label
+        if not ok_input or label_id is None:
+
+            # user cancelled anntaion
+            self.fream_annotation[curent_index_frame].remove(new_annotation)
+            self.widget_image.update()
+
+            # delect new label if is not accepted
+            self.current_annotations_changed()
+            return
+
+        # set name off addnotaion
+        new_annotation["label_id"] = label_id
+        self.widget_image.update()
+
+        # call back rgitht panel ababut name label
+        self.current_annotations_changed()
+
+        # save stage to undo history
+        self.on_annotion_comit()
+
+    # drawing retangle wvie
+    def mouse_move_handle(self, point_posstion):
+
+        # check if draw is enable and is set first mouse point
+        if not self.set_draw_enabled or self.mouse_first_point is None:
+            return
+
+        #current unrorate points of rectangle
+        point_posstion = self.widget_image.unrotate_point_of_screen(point_posstion)
+
+        # ser mouse point
+        self.mouse_current_point = QPoint(point_posstion)
+        self.widget_image.update()
+
+    #bulid rectangle from annotaion help get info rectangle
+    def build_rectangle_for_annotation_info(self, annotation):
+        return QRectF(annotation["x"], annotation["y"], annotation["width"], annotation["height"])
+
+    #all annotations go 1 layer back in is new annotations crated or annotations is edited then set layer 1
+    def all_other_annotations__back(self, curent_index_frame, annotations_skip=None):
+
+        current_frame_annotations = self.fream_annotation.get(curent_index_frame, [])
+
+        #if is skip
+        for annotations in current_frame_annotations:
+            if annotations is annotations_skip:
+                continue
+
+            current_annotations_layer = annotations.get("layer", 1)
+            annotations["layer"] = min(current_annotations_layer + 1, self.layers)
+
+    #set edited annotation to front call all_Other...
+    def annotations_to_front(self, curent_index_frame, annotation):
+        self.all_other_annotations__back(curent_index_frame, annotation)
+        annotation["layer"] = 1
+
+    #sort annotations layers for drawing ( drawing is last and is in front)
+    def get_annotations_for_drawing(self, curent_index_frame):
+        current_frame_annotations = self.fream_annotation.get(curent_index_frame, [])
+        return sorted(current_frame_annotations, key=lambda annotation: annotation.get("layer", 1), reverse=True)
+
+    #sort annotations layers for click ( annotation in front first layer )
+    def get_annotations_for_click(self, curent_index_frame):
+        current_frame_annotations = self.fream_annotation.get(curent_index_frame, [])
+        return sorted(current_frame_annotations, key=lambda annotation: annotation.get("layer", 1))
+
+    # draw all annotainon in frame
+    def draw_rectangle_annotation(self, rectangle_painter, curent_frame_index):
+
+        # set rectaongle perimeter
+        rectangle_pen = QPen(self.Color_of_rectange)
+
+        # set color of  perimeter
+        rectangle_pen.setWidth(2)
+        rectangle_painter.setPen(rectangle_pen)
+
+        # set fill color of rectangle
+        rectangle_fill_color = QColor(self.Color_of_rectange)
+        rectangle_fill_color.setAlpha(self.alpha)
+        rectangle_painter.setBrush(QBrush(rectangle_fill_color))
+
+        # add annotations to frame
+        all_annotations_frame = self.get_annotations_for_drawing(curent_frame_index)
+
+        # adding annotanions
+        for curent_annotation in all_annotations_frame:
+            base_rectangle = self.build_rectangle_for_annotation_info(curent_annotation)
+
+            # from label id to name if is not none then ""
+            label_id = curent_annotation["label_id"]
+            label = self.Label_log.get_label_name(label_id) if label_id is not None else ""
+
+            # set primary rotation ( berore change)
+            rotation = curent_annotation.get("rotation", 0)
+
+            # calculate and scale recatangle (zoom)
+            current_scaled_rectangle = self.convert_all_rectangle_to_scale(base_rectangle)
+
+            # rotate current adntoation in center pov
+            rectangle_painter.save()
+            annotation_center = current_scaled_rectangle.center()
+            #change center
+            rectangle_painter.translate(annotation_center)
+            #rotation abaut
+            rectangle_painter.rotate(rotation)
+            #undo change cneter
+            rectangle_painter.translate(-annotation_center)
+
+            rectangle_painter.drawRect(current_scaled_rectangle)
+
+            # add label to rataongle top right coner
+            # cs
+            if label:
+                rectangle_painter.drawText(current_scaled_rectangle.topLeft().x(),
+                                           current_scaled_rectangle.topLeft().y() - 5, label)
+
+            rectangle_painter.restore()
+
+        # drawing ratangle before set secont point
+        if self.mouse_first_point is not None and self.mouse_current_point is not None:
+            rectangle_drawing_shape = QRect(self.mouse_first_point, self.mouse_current_point).normalized()
+            rectangle_painter.drawRect(rectangle_drawing_shape)
+
+    # convert to base scale
+    # if is new createt and calucate current off set and sacle in this crectangle
+    def convert_rectangle_to_current_scale(self, base_screen_coordintates_rectangle):
+
+        # scale
+        current_zoom_level = self.widget_image.base_zoom_level
+
+        # image pozition
+        current_image_postion = self.widget_image.positon
+
+        # set true postion of rectangle (no scale no offset)
+        return QRectF(
+            # x coranatie = coordintates rectangle - offset / scale
+            (base_screen_coordintates_rectangle.x() - current_image_postion.x()) / current_zoom_level,
+            # y coranatie = coordintates rectangle  - offset / scale
+            (base_screen_coordintates_rectangle.y() - current_image_postion.y()) / current_zoom_level,
+            # width = current width / scale
+            base_screen_coordintates_rectangle.width() / current_zoom_level,
+            # height = current height / scale
+            base_screen_coordintates_rectangle.height() / current_zoom_level
+        )
+
+    # convert all rectangle in screen
+    def convert_all_rectangle_to_scale(self, screen_scaled_coordintates_rectangle):
+
+        # scale
+        current_zoom_level = self.widget_image.base_zoom_level
+        # image pozition
+        current_image_postion = self.widget_image.positon
+
+        return QRect(
+            # x = curent_x * scale + offset
+            round(screen_scaled_coordintates_rectangle.x() * current_zoom_level + current_image_postion.x()),
+            # y = curent_y * scale + offset
+            round(screen_scaled_coordintates_rectangle.y() * current_zoom_level + current_image_postion.y()),
+            # width = = current width * zoom
+            round(screen_scaled_coordintates_rectangle.width() * current_zoom_level),
+            # height = = current height * zoom
+            round(screen_scaled_coordintates_rectangle.height() * current_zoom_level)
+        )
+
+    # callback right panel ababunt new or chanege label
+    def current_annotations_changed(self):
+        if self.on_annotations_changed:
+            self.on_annotations_changed()
+
+    #call back to undo comit history
+    def on_annotion_comit(self):
+        if self.on_annotion_comit:
+            self.on_annotion_comit()
