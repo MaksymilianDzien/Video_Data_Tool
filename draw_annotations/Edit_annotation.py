@@ -153,10 +153,33 @@ class Edit_annotation:
         # download rotation of rectangle
         annotation_center = screen_rectangle.center()
 
-        #get center local point of anotation
+        # get center local point of anotation
         local_point = self.rotate_around_center_point(point_posstion, annotation_center, -annotation["rotation"])
 
+        #check if is oval type retrun is point in eclpsce
+        if annotation.get("type") == "oval":
+            return self.points_in_ellipse(local_point, screen_rectangle)
+
         return screen_rectangle.contains(local_point)
+
+
+    #check if point is in ellpise
+    def points_in_ellipse(self, local_point, screen_rectangle):
+
+        #value of center / x and y radus of ellipse
+        center_of_ellipse = screen_rectangle.center()
+        x_radius_of_ellipse = screen_rectangle.width() / 2
+        y_radius_of_ellipse = screen_rectangle.height() / 2
+
+        #if x or y is negative then return false
+        if x_radius_of_ellipse <= 0 or y_radius_of_ellipse <= 0:
+            return False
+
+        #cal of ellipse  ( (x-cx) / rx )^2 + ( (y-cy) / ry)^2
+        x_normalize_ellipse = (local_point.x() - center_of_ellipse.x()) / x_radius_of_ellipse
+        y_normalize_ellipse = (local_point.y() - center_of_ellipse.y()) / y_radius_of_ellipse
+
+        return (x_normalize_ellipse ** 2 + y_normalize_ellipse ** 2) <= 1
 
 
     def mouse_press_hander(self, point_posstion, curent_index_frame):

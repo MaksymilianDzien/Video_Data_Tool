@@ -194,6 +194,7 @@ class Main_Gui(QMainWindow):
 
         #set drawing value
         self.draw_mode_enabled = False
+        self.draw_oval_mode_enabled = False
 
         # Create 7 buttons
         for i in range(1, 9):
@@ -219,6 +220,9 @@ class Main_Gui(QMainWindow):
             #draw rectangle annotations
             if i == 6:
                 left_buttons.clicked.connect(self.enable_rectangle_drawing)
+            #draw oval annotations
+            if i == 7:
+                left_buttons.clicked.connect(self.enable_oval_drawing)
 
             # style of button
             left_buttons.setStyleSheet("""
@@ -396,6 +400,10 @@ class Main_Gui(QMainWindow):
         # if move enable edit is unbale
         self.image.enable_edit_mode(False)
 
+        #if move is enable oval is unable
+        self.draw_oval_mode_enabled = False
+        self.image.enable_oval_draw_mode(False)
+
     # diabale move
     def disable_move_mode(self):
         self.image.enable_drag(False)
@@ -404,6 +412,10 @@ class Main_Gui(QMainWindow):
 
         # enable edit mode if move is siable
         self.image.enable_edit_mode(True)
+
+        #enable edit mode then unable oval drawing
+        self.draw_oval_mode_enabled = False
+        self.image.enable_oval_draw_mode(False)
 
     def enable_rectangle_drawing(self):
 
@@ -415,6 +427,24 @@ class Main_Gui(QMainWindow):
 
             # cannot edit adnotation if adnotation is creating
             self.image.enable_edit_mode(False)
+
+            #cannot create oval if rectangle is created
+            self.draw_oval_mode_enabled = False
+            self.image.enable_oval_draw_mode(False)
+
+    #  enable/un enable drawing oval
+    def enable_oval_drawing(self):
+
+        self.draw_oval_mode_enabled = not self.draw_oval_mode_enabled
+        self.image.enable_oval_draw_mode(self.draw_oval_mode_enabled)
+
+        if self.draw_oval_mode_enabled:
+            self.image.enable_drag(False)
+            self.image.enable_edit_mode(False)
+
+           #canot draw rectangle if drawing oval
+            self.draw_mode_enabled = False
+            self.image.enable_draw_mode(False)
 
     #convert string to slider_value
     def change_slider_value(self):

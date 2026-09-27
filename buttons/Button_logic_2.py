@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt, QPoint, QPointF
 from draw_annotations.Draw_rectange import Draw_rectangle
 from draw_annotations.Label_log import Label_log
 from draw_annotations.Edit_annotation import Edit_annotation
+from draw_annotations.Draw_oval import Draw_oval
 
 
 class ButtonLogic(QLabel):
@@ -53,6 +54,9 @@ class ButtonLogic(QLabel):
 
         # Create obciect to draw rectangle
         self.draw_rectangle = Draw_rectangle(self, self.label_log)
+
+        # Create obciect to draw oval/circle
+        self.draw_oval = Draw_oval(self, self.label_log, self.draw_rectangle)
 
         # set exist objciet to edit anntaion
         self.edit_current_anotation = Edit_annotation(self, self.draw_rectangle)
@@ -189,6 +193,10 @@ class ButtonLogic(QLabel):
     def enable_draw_mode(self, enabled):
         self.draw_rectangle.draw_mod_enable(enabled)
 
+    # enable/unenable drawing oval/circle shape
+    def enable_oval_draw_mode(self, enabled):
+        self.draw_oval.draw_mod_enable(enabled)
+
     # enable/unenable edit annotaion mode
     def enable_edit_mode(self, enabled):
         self.edit_current_anotation.enable_edited_mode(enabled)
@@ -296,9 +304,11 @@ class ButtonLogic(QLabel):
         # darwing annotaion in current frame
         self.draw_rectangle.draw_rectangle_annotation(iamge_painter, self.index_frame)
 
+        # drawing current oval before  create
+        self.draw_oval.draw_oval_annotation(iamge_painter)
+
         # drawing current annotation handers (if mode is enable)
         self.edit_current_anotation.draw_selection_hander(iamge_painter, self.index_frame)
-
         # instant refresh (only button need)
         iamge_painter.restore()
 
@@ -308,6 +318,11 @@ class ButtonLogic(QLabel):
         #draw rectangle event
         if self.draw_rectangle.set_draw_enabled and event.button() == Qt.LeftButton:
             self.draw_rectangle.mouse_press_handler(event.pos())
+            return
+
+        # draw oval event
+        if self.draw_oval.set_draw_enabled and event.button() == Qt.LeftButton:
+            self.draw_oval.mouse_press_handler(event.pos())
             return
 
         #edit antaion event
@@ -326,6 +341,11 @@ class ButtonLogic(QLabel):
         # draw rectangle event
         if self.draw_rectangle.set_draw_enabled:
             self.draw_rectangle.mouse_move_handle(event.pos())
+            return
+
+        # draw oval event
+        if self.draw_oval.set_draw_enabled:
+            self.draw_oval.mouse_move_handle(event.pos())
             return
 
         # edit antaion event
@@ -348,6 +368,11 @@ class ButtonLogic(QLabel):
         # draw rectangle event
         if self.draw_rectangle.set_draw_enabled and event.button() == Qt.LeftButton:
             self.draw_rectangle.mouse_release_handler(event.pos(), self.index_frame)
+            return
+
+        # draw oval event
+        if self.draw_oval.set_draw_enabled and event.button() == Qt.LeftButton:
+            self.draw_oval.mouse_release_handler(event.pos(), self.index_frame)
             return
 
         # edit antaion event

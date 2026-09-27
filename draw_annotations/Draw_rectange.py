@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QPen, QBrush, QColor
 from PyQt5.QtCore import QRect, QRectF, QPoint
-
+from draw_annotations.Draw_oval import Draw_oval
 
 class Draw_rectangle:
 
@@ -201,18 +201,6 @@ class Draw_rectangle:
     # draw all annotainon in frame
     def draw_rectangle_annotation(self, rectangle_painter, curent_frame_index):
 
-        # set rectaongle perimeter
-        rectangle_pen = QPen(self.Color_of_rectange)
-
-        # set color of  perimeter
-        rectangle_pen.setWidth(2)
-        rectangle_painter.setPen(rectangle_pen)
-
-        # set fill color of rectangle
-        rectangle_fill_color = QColor(self.Color_of_rectange)
-        rectangle_fill_color.setAlpha(self.alpha)
-        rectangle_painter.setBrush(QBrush(rectangle_fill_color))
-
         # add annotations to frame
         all_annotations_frame = self.get_annotations_for_drawing(curent_frame_index)
 
@@ -230,29 +218,61 @@ class Draw_rectangle:
             # calculate and scale recatangle (zoom)
             current_scaled_rectangle = self.convert_all_rectangle_to_scale(base_rectangle)
 
+            # select type of anntaiaon
+            type_of_annotation = curent_annotation.get("type", "rectangle")
+
+            #color of annotation from type
+            color_shape = Draw_oval.Color_of_oval if type_of_annotation == "oval" else self.Color_of_rectange
+
+            #create pen  and set
+            shape_pen = QPen(color_shape)
+            shape_pen.setWidth(2)
+            rectangle_painter.setPen(shape_pen)
+
+            #set fill of shape
+            color_of_shape_fill = QColor(color_shape)
+            color_of_shape_fill.setAlpha(self.alpha)
+            rectangle_painter.setBrush(QBrush(color_of_shape_fill))
+
             # rotate current adntoation in center pov
             rectangle_painter.save()
             annotation_center = current_scaled_rectangle.center()
-            #change center
+            # change center
             rectangle_painter.translate(annotation_center)
-            #rotation abaut
+            # rotation abaut
             rectangle_painter.rotate(rotation)
-            #undo change cneter
+            # undo change cneter
             rectangle_painter.translate(-annotation_center)
 
-            rectangle_painter.drawRect(current_scaled_rectangle)
+            #if anntaion is oval then draw oval anntaion
+            if type_of_annotation == "oval":
+                rectangle_painter.drawEllipse(current_scaled_rectangle)
+            else:
+                rectangle_painter.drawRect(current_scaled_rectangle)
 
             # add label to rataongle top right coner
-            # cs
             if label:
                 rectangle_painter.drawText(current_scaled_rectangle.topLeft().x(),
                                            current_scaled_rectangle.topLeft().y() - 5, label)
 
             rectangle_painter.restore()
 
-        # drawing ratangle before set secont point
+        # drawing ratangle before set secont point (podglad wlasnego, aktywnego
+        #drawing befor is created
         if self.mouse_first_point is not None and self.mouse_current_point is not None:
+            #create and set pen
+            rectangle_pen = QPen(self.Color_of_rectange)
+            rectangle_pen.setWidth(2)
+            rectangle_painter.setPen(rectangle_pen)
+
+            #set rectangle fill
+            rectangle_preview_fill = QColor(self.Color_of_rectange)
+            rectangle_preview_fill.setAlpha(self.alpha)
+            rectangle_painter.setBrush(QBrush(rectangle_preview_fill))
+
+            #create rectangle from 2 points
             rectangle_drawing_shape = QRect(self.mouse_first_point, self.mouse_current_point).normalized()
+            #drawing created rectangle
             rectangle_painter.drawRect(rectangle_drawing_shape)
 
     # convert to base scale
