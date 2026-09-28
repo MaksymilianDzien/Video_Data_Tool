@@ -442,6 +442,7 @@ class Main_Gui(QMainWindow):
             self.image.enable_drag(False)
             self.image.enable_edit_mode(False)
 
+
            #canot draw rectangle if drawing oval
             self.draw_mode_enabled = False
             self.image.enable_draw_mode(False)
