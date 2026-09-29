@@ -1,6 +1,7 @@
-from PyQt5.QtGui import QPen, QBrush, QColor
-from PyQt5.QtCore import QRect, QRectF, QPoint
+from PyQt5.QtGui import QPen, QBrush, QColor, QPolygonF
+from PyQt5.QtCore import QRect, QRectF, QPoint, QPointF
 from draw_annotations.Draw_oval import Draw_oval
+from draw_annotations.Draw_polygon import Draw_polygon
 
 class Draw_rectangle:
 
@@ -170,6 +171,39 @@ class Draw_rectangle:
     def build_rectangle_for_annotation_info(self, annotation):
         return QRectF(annotation["x"], annotation["y"], annotation["width"], annotation["height"])
 
+
+    #convert point to base scale ( no offset and zoom)
+    def convert_points_to_curent_scale(self, curennt_screen_point):
+        #zoom lvl
+        current_zoom_level = self.widget_image.base_zoom_level
+        #offset
+        current_image_postion = self.widget_image.positon
+        #retrun true positon of point ( no offset and zoom)
+        return QPointF(
+            (curennt_screen_point.x() - current_image_postion.x()) / current_zoom_level,
+            (curennt_screen_point.y() - current_image_postion.y()) / current_zoom_level
+        )
+
+
+    #conver point to base screen scale
+    def convert_points_to_scren_scale(self, curennt_screen_point):
+        # zoom lvl
+        current_zoom_level = self.widget_image.base_zoom_level
+        # offset
+        current_image_postion = self.widget_image.positon
+        #retrun scrrent points
+        return QPoint(
+            round(curennt_screen_point.x() * current_zoom_level + current_image_postion.x()),
+            round(curennt_screen_point.y() * current_zoom_level + current_image_postion.y())
+        )
+
+    #build polygon form annotation info
+    def build_polygon_for_annotation_info(self, polygon_annotation):
+        polygon = QPolygonF()
+        for point in polygon_annotation["points"]:
+            polygon.append(QPointF(point["x"], point["y"]))
+        return polygon
+
     #all annotations go 1 layer back in is new annotations crated or annotations is edited then set layer 1
     def all_other_annotations__back(self, curent_index_frame, annotations_skip=None):
 
@@ -206,7 +240,9 @@ class Draw_rectangle:
 
         # adding annotanions
         for curent_annotation in all_annotations_frame:
-            base_rectangle = self.build_rectangle_for_annotation_info(curent_annotation)
+
+            # select type of anntaiaon
+            type_of_annotation = curent_annotation.get("type", "rectangle")
 
             # from label id to name if is not none then ""
             label_id = curent_annotation["label_id"]
@@ -215,14 +251,13 @@ class Draw_rectangle:
             # set primary rotation ( berore change)
             rotation = curent_annotation.get("rotation", 0)
 
-            # calculate and scale recatangle (zoom)
-            current_scaled_rectangle = self.convert_all_rectangle_to_scale(base_rectangle)
-
-            # select type of anntaiaon
-            type_of_annotation = curent_annotation.get("type", "rectangle")
-
             #color of annotation from type
-            color_shape = Draw_oval.Color_of_oval if type_of_annotation == "oval" else self.Color_of_rectange
+            if type_of_annotation == "oval":
+                color_shape = Draw_oval.Color_of_oval
+            elif type_of_annotation == "polygon":
+                color_shape = Draw_polygon.Color_of_polygon
+            else:
+                color_shape = self.Color_of_rectange
 
             #create pen  and set
             shape_pen = QPen(color_shape)
@@ -233,6 +268,42 @@ class Draw_rectangle:
             color_of_shape_fill = QColor(color_shape)
             color_of_shape_fill.setAlpha(self.alpha)
             rectangle_painter.setBrush(QBrush(color_of_shape_fill))
+
+            #if type is  polygon
+            if type_of_annotation == "polygon":
+
+                based_polygon = self.build_polygon_for_annotation_info(curent_annotation)
+                screen_polygonn = QPolygonF([
+                    QPointF(self.convert_points_to_scren_scale(point)) for point in based_polygon
+                ])
+
+               #set center of polygon
+                annotation_center = screen_polygonn.boundingRect().center()
+
+                #save center
+                rectangle_painter.save()
+                #change center
+                rectangle_painter.translate(annotation_center)
+                #rotate with new center
+                rectangle_painter.rotate(rotation)
+                #unchange center
+                rectangle_painter.translate(-annotation_center)
+
+                rectangle_painter.drawPolygon(screen_polygonn)
+
+                #add label to rataongle top right coner
+                if label:
+                    polygon_label_position = screen_polygonn.boundingRect().topLeft()
+                    rectangle_painter.drawText(int(polygon_label_position.x()), int(polygon_label_position.y()) - 5, label)
+
+                rectangle_painter.restore()
+                continue
+
+            #rectangle / oval  (x, y, width, height)
+            base_rectangle = self.build_rectangle_for_annotation_info(curent_annotation)
+
+            # calculate and scale recatangle (zoom)
+            current_scaled_rectangle = self.convert_all_rectangle_to_scale(base_rectangle)
 
             # rotate current adntoation in center pov
             rectangle_painter.save()

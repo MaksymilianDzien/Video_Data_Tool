@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout,
     QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit
 )
+from buttons.Button_polygon_option import Button_polygon_option
 from buttons.Button_rotated_option import Button_rotated_option
 from buttons.Button_ctrl_z import Button_ctrl_z
 from buttons.Button_logic_2 import ButtonLogic
@@ -223,6 +224,9 @@ class Main_Gui(QMainWindow):
             #draw oval annotations
             if i == 7:
                 left_buttons.clicked.connect(self.enable_oval_drawing)
+            #draw polygon annotations
+            if i == 8:
+                self.button_polygon_option = Button_polygon_option(self, left_buttons)
 
             # style of button
             left_buttons.setStyleSheet("""
@@ -404,6 +408,9 @@ class Main_Gui(QMainWindow):
         self.draw_oval_mode_enabled = False
         self.image.enable_oval_draw_mode(False)
 
+        #if move is enable drawing polygon is unable
+        self.button_polygon_option.polygon_option_deactivate()
+
     # diabale move
     def disable_move_mode(self):
         self.image.enable_drag(False)
@@ -416,6 +423,9 @@ class Main_Gui(QMainWindow):
         #enable edit mode then unable oval drawing
         self.draw_oval_mode_enabled = False
         self.image.enable_oval_draw_mode(False)
+
+        #enable edit mode then unable darwing polygon
+        self.button_polygon_option.polygon_option_deactivate()
 
     def enable_rectangle_drawing(self):
 
@@ -432,6 +442,9 @@ class Main_Gui(QMainWindow):
             self.draw_oval_mode_enabled = False
             self.image.enable_oval_draw_mode(False)
 
+            #cannot create polygon if rectangle is created
+            self.button_polygon_option.polygon_option_deactivate()
+
     #  enable/un enable drawing oval
     def enable_oval_drawing(self):
 
@@ -442,10 +455,12 @@ class Main_Gui(QMainWindow):
             self.image.enable_drag(False)
             self.image.enable_edit_mode(False)
 
-
            #canot draw rectangle if drawing oval
             self.draw_mode_enabled = False
             self.image.enable_draw_mode(False)
+
+            #cannot draw polygon if darwaing oval
+            self.button_polygon_option.polygon_option_deactivate()
 
     #convert string to slider_value
     def change_slider_value(self):

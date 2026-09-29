@@ -1,6 +1,6 @@
 import math
-from PyQt5.QtGui import QPen, QBrush, QColor
-from PyQt5.QtCore import QPoint, QPointF, QRectF
+from PyQt5.QtGui import QPen, QBrush, QColor, QPolygonF
+from PyQt5.QtCore import QPoint, QPointF, QRectF, Qt
 
 
 class Edit_annotation:
@@ -35,6 +35,9 @@ class Edit_annotation:
         # coppy of rectangle of sate referenc
         self.drag_start_of_rectangle = None
 
+        #copy of start polygon points
+        self.polygon_drag_points = None
+
         #set  draging all annotaion
         self.drag_annotaion_mouse_start = None
 
@@ -53,11 +56,19 @@ class Edit_annotation:
         self.select_curennt_frame_index = None
         self.select_actived_hander = None
         self.drag_start_of_rectangle = None
+        self.polygon_drag_points = None
         self.drag_annotaion_mouse_start = None
 
     # rectangle after calkulated zomm and rotate
     def get_current_annotation_rectangle(self, annotation):
-        base_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(annotation)
+
+        #if type is polygon
+        if annotation.get("type") == "polygon":
+            base_polygon = self.draw_rectangle.build_polygon_for_annotation_info(annotation)
+            base_rectangle = base_polygon.boundingRect()
+        else:
+            base_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(annotation)
+
         return self.draw_rectangle.convert_all_rectangle_to_scale(base_rectangle)
 
     # rotate current annotaion
@@ -104,6 +115,10 @@ class Edit_annotation:
         if self.select_current_annotation is None:
             return None
 
+        #new type of handler if is polygon
+        if self.select_current_annotation.get("type") == "polygon":
+            return self.find_polygon_hander_press(point_posstion, self.select_current_annotation)
+
         #download all  rectangle
         screen_rectangle = self.get_current_annotation_rectangle(self.select_current_annotation)
 
@@ -144,6 +159,46 @@ class Edit_annotation:
 
         return None
 
+    #polygon hander
+    def find_polygon_hander_press(self, point_posstion, annotation):
+
+        #download all  polygon
+        screen_rectangle = self.get_current_annotation_rectangle(annotation)
+        #download center of polygon
+        annotation_center = screen_rectangle.center()
+        #download rotation of polygon
+        annotation_rotation = annotation["rotation"]
+
+        #main rotate hander not rotated
+        logical_rotate_hander = QPoint(screen_rectangle.center().x(), screen_rectangle.top() - self.rotate_offset)
+        #rotate hander after
+        visual_rotate_hander = self.rotate_around_center_point(logical_rotate_hander, annotation_center, annotation_rotation)
+
+        #sqr(dx^2 + dy^2)
+        distance_rotated_hander = math.hypot(
+            point_posstion.x() - visual_rotate_hander.x(),
+            point_posstion.y() - visual_rotate_hander.y()
+        )
+
+        #if is too small
+        if distance_rotated_hander <= self.rotate_of_hander + 4:
+            return "rotate"
+
+        #hander in all  polygon points
+        base_polygon = self.draw_rectangle.build_polygon_for_annotation_info(annotation)
+
+        #connect all points
+        for index, base_point in enumerate(base_polygon):
+            screen_point = self.draw_rectangle.convert_points_to_scren_scale(base_point)
+            visual_point = self.rotate_around_center_point(screen_point, annotation_center, annotation_rotation)
+
+            #check abs of posstion
+            if abs(point_posstion.x() - visual_point.x()) <= self.corner_size_of_hander \
+                    and abs(point_posstion.y() - visual_point.y()) <= self.corner_size_of_hander:
+                return f"vertex:{index}"
+
+        return None
+
     # chek if point is in anotation
     def is_point_in_rotated_anotation(self, point_posstion, annotation):
 
@@ -156,9 +211,19 @@ class Edit_annotation:
         # get center local point of anotation
         local_point = self.rotate_around_center_point(point_posstion, annotation_center, -annotation["rotation"])
 
+        current_annotation_type = annotation.get("type")
+
         #check if is oval type retrun is point in eclpsce
-        if annotation.get("type") == "oval":
+        if current_annotation_type == "oval":
             return self.points_in_ellipse(local_point, screen_rectangle)
+
+        #chcek if point is in fill of polygon
+        if current_annotation_type == "polygon":
+            base_polygon = self.draw_rectangle.build_polygon_for_annotation_info(annotation)
+            screen_polygon = QPolygonF([
+                QPointF(self.draw_rectangle.convert_points_to_scren_scale(point)) for point in base_polygon
+            ])
+            return screen_polygon.containsPoint(QPointF(local_point), Qt.OddEvenFill)
 
         return screen_rectangle.contains(local_point)
 
@@ -202,8 +267,13 @@ class Edit_annotation:
                 # what hander is actived
                 self.select_actived_hander = handle_name
 
-                #main rectangle to reference
-                self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(self.select_current_annotation)
+                #if is polygon save pints else just drag start retagle
+                if self.select_current_annotation.get("type") == "polygon":
+                    self.polygon_drag_points = [dict(point) for point in self.select_current_annotation["points"]]
+                    self.drag_start_of_rectangle = None
+                else:
+                    self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(self.select_current_annotation)
+                    self.polygon_drag_points = None
                 return
 
 
@@ -220,8 +290,15 @@ class Edit_annotation:
 
                 # if annotaion is cliked in annotaion then set to move all annotaion
                 self.select_actived_hander = "move"
-                # current annotaion before change
-                self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(annotation)
+
+                #save list of points if is polygon else  bounding rect
+                if annotation.get("type") == "polygon":
+                    self.polygon_drag_points = [dict(point) for point in annotation["points"]]
+                    self.drag_start_of_rectangle = None
+                else:
+                    self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(annotation)
+                    self.polygon_drag_points = None
+
                 # current mosue position
                 self.drag_annotaion_mouse_start = QPoint(point_posstion)
                 # redraw change annotaion
@@ -247,7 +324,10 @@ class Edit_annotation:
         # if move  then move all annotaion with mouse
         elif self.select_actived_hander == "move":
             self.move_current_selected_annotation(point_posstion)
-        # if any else hander is selected
+        # if point of polygon is moving
+        elif isinstance(self.select_actived_hander, str) and self.select_actived_hander.startswith("vertex:"):
+            self.update_polygon_hander(point_posstion)
+        # if any else hander is selected (rog prostokata/owalu)
         else:
             self.update_annotation_resize(point_posstion)
 
@@ -263,6 +343,7 @@ class Edit_annotation:
         #delete flag to actived hander and referec to rectangle
         self.select_actived_hander = None
         self.drag_start_of_rectangle = None
+        self.polygon_drag_points = None
         self.drag_annotaion_mouse_start = None
 
         # save current stage of rectangle to undo list
@@ -298,6 +379,14 @@ class Edit_annotation:
         # delta points without zoom
         true_delta_x = delta_x / current_zoom_level
         true_delta_y = delta_y / current_zoom_level
+
+        #polygon move all points
+        if self.select_current_annotation.get("type") == "polygon":
+            self.select_current_annotation["points"] = [
+                {"x": point["x"] + true_delta_x, "y": point["y"] + true_delta_y}
+                for point in self.polygon_drag_points
+            ]
+            return
 
         #created new rectangle with move points
         new_moved_rectangle = self.drag_start_of_rectangle.translated(true_delta_x, true_delta_y)
@@ -344,6 +433,37 @@ class Edit_annotation:
         self.select_current_annotation["width"] = create_new_rectangle.width()
         self.select_current_annotation["height"] = create_new_rectangle.height()
 
+    #move only one hander of polygon
+    def update_polygon_hander(self, point_posstion):
+
+        #vertex index
+        current_vertex_index = int(self.select_actived_hander.split(":")[1])
+
+        #copy of all points of polygon
+        base_polygon_start = [QPointF(point["x"], point["y"]) for point in self.polygon_drag_points]
+        #base point of polygon
+        screen_polygon_start = QPolygonF([
+            QPointF(self.draw_rectangle.convert_points_to_scren_scale(point)) for point in base_polygon_start
+        ])
+        #center of anntaion
+        annotation_center = screen_polygon_start.boundingRect().center()
+
+        #angle of anntaion
+        annotation_rotation = self.select_current_annotation["rotation"]
+
+        #center and point positaion -rotaion and center
+        local_screen_point = self.rotate_around_center_point(point_posstion, annotation_center, -annotation_rotation)
+        #new base point of polygon
+        new_point_base = self.screen_points_to_primary_points(local_screen_point)
+
+        #coppy list of polygon drag points
+        updated_points = [dict(point) for point in self.polygon_drag_points]
+        #update one point of this list
+        updated_points[current_vertex_index] = {"x": new_point_base.x(), "y": new_point_base.y()}
+
+        #save list with new updated points
+        self.select_current_annotation["points"] = updated_points
+
     # drawing all hander
     def draw_selection_hander(self, current_painter, curent_frame_index):
 
@@ -376,15 +496,27 @@ class Edit_annotation:
         current_painter.setPen(hander_pen)
         current_painter.setBrush(QBrush(self.color_of_hander))
 
-        # get all corners and draw them in main postion
-        logical_corners = self.get_primary_corners_of_hander(screen_rectangle)
-        for logical_corner in logical_corners.values():
-            current_painter.drawRect(
-                logical_corner.x() - self.corner_size_of_hander // 2,
-                logical_corner.y() - self.corner_size_of_hander // 2,
-                self.corner_size_of_hander,
-                self.corner_size_of_hander
-            )
+        #polygon all points are hander
+        if self.select_current_annotation.get("type") == "polygon":
+            base_polygon = self.draw_rectangle.build_polygon_for_annotation_info(self.select_current_annotation)
+            for base_point in base_polygon:
+                screen_point = self.draw_rectangle.convert_points_to_scren_scale(base_point)
+                current_painter.drawRect(
+                    screen_point.x() - self.corner_size_of_hander // 2,
+                    screen_point.y() - self.corner_size_of_hander // 2,
+                    self.corner_size_of_hander,
+                    self.corner_size_of_hander
+                )
+        else:
+            # get all corners and draw them in main postion
+            logical_corners = self.get_primary_corners_of_hander(screen_rectangle)
+            for logical_corner in logical_corners.values():
+                current_painter.drawRect(
+                    logical_corner.x() - self.corner_size_of_hander // 2,
+                    logical_corner.y() - self.corner_size_of_hander // 2,
+                    self.corner_size_of_hander,
+                    self.corner_size_of_hander
+                )
 
         # draw rotate point
         top_center = QPoint(screen_rectangle.center().x(), screen_rectangle.top())
