@@ -475,6 +475,10 @@ class Edit_annotation:
         if self.select_curennt_frame_index != curent_frame_index:
             return
 
+        #no draw hander if is not visable
+        if not self.select_current_annotation.get("visible", True):
+            return
+
         # download all  rectangle
         screen_rectangle = self.get_current_annotation_rectangle(self.select_current_annotation)
 

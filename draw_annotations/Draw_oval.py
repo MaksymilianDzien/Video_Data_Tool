@@ -109,6 +109,8 @@ class Draw_oval:
                 "rotation": 0.0,
                 #if created new annotation is crated in first layer
                 "layer": 1,
+                #if is visible (option right panel)
+                "visible": True,
                 "x": concurrent_oval.x(),
                 "y": concurrent_oval.y(),
                 "width": concurrent_oval.width(),

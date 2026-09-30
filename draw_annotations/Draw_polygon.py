@@ -107,6 +107,8 @@ class Draw_polygon:
                 "label_id": None,
                 "rotation": 0.0,
                 "layer": 1,
+                #if is visible (option right panel)
+                "visible": True,
                 #points of polyhon
                 "points": [{"x": point.x(), "y": point.y()} for point in base_points]
             }

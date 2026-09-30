@@ -112,6 +112,8 @@ class Draw_rectangle:
                 "rotation": 0.0,
                 # if created new annotation is crated in first layer
                 "layer": 1,
+                #if is visible (option right panel)
+                "visible": True,
                 "x": concurrent_rectangle.x(),
                 "y": concurrent_rectangle.y(),
                 "width": concurrent_rectangle.width(),
@@ -230,7 +232,10 @@ class Draw_rectangle:
     #sort annotations layers for click ( annotation in front first layer )
     def get_annotations_for_click(self, curent_index_frame):
         current_frame_annotations = self.fream_annotation.get(curent_index_frame, [])
-        return sorted(current_frame_annotations, key=lambda annotation: annotation.get("layer", 1))
+
+        #if is anntaion is hidden then cannot click those
+        annotations_visible = [annotation for annotation in current_frame_annotations if annotation.get("visible", True)]
+        return sorted(annotations_visible, key=lambda annotation: annotation.get("layer", 1))
 
     # draw all annotainon in frame
     def draw_rectangle_annotation(self, rectangle_painter, curent_frame_index):
@@ -240,6 +245,10 @@ class Draw_rectangle:
 
         # adding annotanions
         for curent_annotation in all_annotations_frame:
+
+            #if is not visble then no draw anntaion
+            if not curent_annotation.get("visible", True):
+                continue
 
             # select type of anntaiaon
             type_of_annotation = curent_annotation.get("type", "rectangle")

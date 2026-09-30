@@ -1,10 +1,16 @@
-from PyQt5.QtWidgets import QFrame, QVBoxLayout, QTabWidget, QListWidget, QListWidgetItem
+from PyQt5.QtWidgets import (
+    QFrame, QVBoxLayout, QHBoxLayout, QTabWidget, QListWidget, QListWidgetItem,
+    QWidget, QPushButton, QLabel
+)
 
 
 class Main_Right_Panel_Label_Info:
 
     #width of info label
     info_labels_width = 300
+
+    #size of right icon
+    size_of_icon = 22
 
     def __init__(self, annotated_widget, current_label_obiect):
 
@@ -53,16 +59,76 @@ class Main_Right_Panel_Label_Info:
         # set annotations in list after creatrion (with id)
         for current_annotation in current_frame_annotations:
 
-            object_id = current_annotation["id"]
+            #createn wighet for id  name and option of annotaion
+            list_widget_item = QListWidgetItem()
+            concurrent_row_widget = self.create_object_row_widget(current_annotation)
+            list_widget_item.setSizeHint(concurrent_row_widget.sizeHint())
 
-            # from label id to name if is not none then ""
-            label_id = current_annotation["label_id"]
-            label_text = self.current_label_obiect.get_label_name(label_id) if label_id is not None else "(no label)"
+            #add to litems
+            self.list_of_object.addItem(list_widget_item)
+            self.list_of_object.setItemWidget(list_widget_item, concurrent_row_widget)
 
-            list_of_item = f"{object_id}: {label_text}"
+        # JEST:
+    #crate row annotation
+    def create_object_row_widget(self, curent_annotation):
 
-            #add object to item
-            self.list_of_object.addItem(QListWidgetItem(list_of_item))
+        #create new widget (right row)
+        annotation_row_widget = QWidget()
+        #set laout
+        annotation_row_layout = QHBoxLayout()
+        annotation_row_layout.setContentsMargins(4, 2, 4, 2)
+        annotation_row_layout.setSpacing(4)
+        #add layout to widged
+        annotation_row_widget.setLayout(annotation_row_layout)
+
+        #set id and name of label
+        object_id = curent_annotation["id"]
+        label_id = curent_annotation["label_id"]
+        label_text = self.current_label_obiect.get_label_name(label_id) if label_id is not None else "(no label)"
+
+        #add to widget
+        text_label = QLabel(f"{object_id}: {label_text}")
+        annotation_row_layout.addWidget(text_label)
+
+        #Stretch row
+        annotation_row_layout.addStretch()
+
+        #first button tvialbity annation
+        visibility_annotation_button = QPushButton()
+        visibility_annotation_button.setFixedSize(self.size_of_icon, self.size_of_icon)
+        visibility_annotation_button.setFlat(True)
+
+        self.visibility_icon_button(visibility_annotation_button, curent_annotation.get("visible", True))
+
+        #callback to viablie fuction
+        visibility_annotation_button.clicked.connect(
+            lambda checked=False, current_annotation=curent_annotation, current_button=visibility_annotation_button:
+            self.current_all_annotation_visibility(current_annotation, current_button)
+        )
+
+        #add button to widget
+        annotation_row_layout.addWidget(visibility_annotation_button)
+
+       #3 button not yet
+        #futrure add
+        for _ in range(3):
+            button_slot = QWidget()
+            button_slot.setFixedSize(self.size_of_icon, self.size_of_icon)
+            annotation_row_layout.addWidget(button_slot)
+
+        return annotation_row_widget
+
+    #redraw image and change visable flag
+    def current_all_annotation_visibility(self, curent_annotation, button):
+        #change flag
+        curent_annotation["visible"] = not curent_annotation.get("visible", True)
+        self.visibility_icon_button(button, curent_annotation["visible"])
+        #redraw image
+        self.annotated_widget.update()
+
+    #set icon of visable
+    def visibility_icon_button(self, current_button, is_visible):
+        current_button.setText("V" if is_visible else "X")
 
     # Refresh list of labes (if exist in list)
     def refresh_all_labels_in_list(self):
