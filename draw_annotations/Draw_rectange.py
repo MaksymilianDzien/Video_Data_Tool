@@ -114,6 +114,8 @@ class Draw_rectangle:
                 "layer": 1,
                 #if is visible (option right panel)
                 "visible": True,
+                #if is locked (option right panel)
+                "locked": False,
                 "x": concurrent_rectangle.x(),
                 "y": concurrent_rectangle.y(),
                 "width": concurrent_rectangle.width(),

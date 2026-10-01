@@ -109,6 +109,8 @@ class Draw_polygon:
                 "layer": 1,
                 #if is visible (option right panel)
                 "visible": True,
+                #if is locked (option right panel)
+                "locked": False,
                 #points of polyhon
                 "points": [{"x": point.x(), "y": point.y()} for point in base_points]
             }

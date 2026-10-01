@@ -111,6 +111,8 @@ class Draw_oval:
                 "layer": 1,
                 #if is visible (option right panel)
                 "visible": True,
+                #if is locked (option right panel)
+                "locked": False,
                 "x": concurrent_oval.x(),
                 "y": concurrent_oval.y(),
                 "width": concurrent_oval.width(),

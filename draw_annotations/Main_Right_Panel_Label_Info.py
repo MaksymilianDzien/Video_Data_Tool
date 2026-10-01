@@ -68,7 +68,6 @@ class Main_Right_Panel_Label_Info:
             self.list_of_object.addItem(list_widget_item)
             self.list_of_object.setItemWidget(list_widget_item, concurrent_row_widget)
 
-        # JEST:
     #crate row annotation
     def create_object_row_widget(self, curent_annotation):
 
@@ -93,7 +92,7 @@ class Main_Right_Panel_Label_Info:
         #Stretch row
         annotation_row_layout.addStretch()
 
-        #first button tvialbity annation
+        #first button vislibity annation
         visibility_annotation_button = QPushButton()
         visibility_annotation_button.setFixedSize(self.size_of_icon, self.size_of_icon)
         visibility_annotation_button.setFlat(True)
@@ -109,9 +108,25 @@ class Main_Right_Panel_Label_Info:
         #add button to widget
         annotation_row_layout.addWidget(visibility_annotation_button)
 
-       #3 button not yet
+        #second button lock annotation
+        locked_annotation_button = QPushButton()
+        locked_annotation_button.setFixedSize(self.size_of_icon, self.size_of_icon)
+        locked_annotation_button.setFlat(True)
+
+        self.lock_icon_button(locked_annotation_button, curent_annotation.get("locked", False))
+
+        #callback to locked fuction
+        locked_annotation_button.clicked.connect(
+            lambda checked=False, current_annotation=curent_annotation, current_button=locked_annotation_button:
+            self.current_all_annotation_lock(current_annotation, current_button)
+        )
+
+        #add button to widget
+        annotation_row_layout.addWidget(locked_annotation_button)
+
+       #2 button not yet
         #futrure add
-        for _ in range(3):
+        for _ in range(2):
             button_slot = QWidget()
             button_slot.setFixedSize(self.size_of_icon, self.size_of_icon)
             annotation_row_layout.addWidget(button_slot)
@@ -129,6 +144,25 @@ class Main_Right_Panel_Label_Info:
     #set icon of visable
     def visibility_icon_button(self, current_button, is_visible):
         current_button.setText("V" if is_visible else "X")
+
+    #redraw image and change locked flag
+    def current_all_annotation_lock(self, curent_annotation, button):
+
+        #change flag
+        curent_annotation["locked"] = not curent_annotation.get("locked", False)
+        self.lock_icon_button(button, curent_annotation["locked"])
+
+        #if anntaion is selected then clear select and handers
+        edit_current_anotation = self.annotated_widget.edit_current_anotation
+        if edit_current_anotation.select_current_annotation is curent_annotation and curent_annotation["locked"]:
+            edit_current_anotation.deselecte_edited_mode()
+
+        #redraw image
+        self.annotated_widget.update()
+
+    #set icon of locked
+    def lock_icon_button(self, current_button, is_locked):
+        current_button.setText("L" if is_locked else "U")
 
     # Refresh list of labes (if exist in list)
     def refresh_all_labels_in_list(self):

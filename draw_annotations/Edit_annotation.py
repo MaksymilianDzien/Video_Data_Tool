@@ -115,6 +115,10 @@ class Edit_annotation:
         if self.select_current_annotation is None:
             return None
 
+        #if is locked then no hander
+        if self.select_current_annotation.get("locked", False):
+            return None
+
         #new type of handler if is polygon
         if self.select_current_annotation.get("type") == "polygon":
             return self.find_polygon_hander_press(point_posstion, self.select_current_annotation)
@@ -288,16 +292,22 @@ class Edit_annotation:
                 self.select_current_annotation = annotation
                 self.select_curennt_frame_index = curent_index_frame
 
-                # if annotaion is cliked in annotaion then set to move all annotaion
-                self.select_actived_hander = "move"
-
-                #save list of points if is polygon else  bounding rect
-                if annotation.get("type") == "polygon":
-                    self.polygon_drag_points = [dict(point) for point in annotation["points"]]
+                #if is locked just select annotation not move
+                if annotation.get("locked", False):
+                    self.select_actived_hander = None
                     self.drag_start_of_rectangle = None
-                else:
-                    self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(annotation)
                     self.polygon_drag_points = None
+                else:
+                    # if annotaion is cliked in annotaion then set to move all annotaion
+                    self.select_actived_hander = "move"
+
+                    #save list of points if is polygon else  bounding rect
+                    if annotation.get("type") == "polygon":
+                        self.polygon_drag_points = [dict(point) for point in annotation["points"]]
+                        self.drag_start_of_rectangle = None
+                    else:
+                        self.drag_start_of_rectangle = self.draw_rectangle.build_rectangle_for_annotation_info(annotation)
+                        self.polygon_drag_points = None
 
                 # current mosue position
                 self.drag_annotaion_mouse_start = QPoint(point_posstion)
@@ -477,6 +487,10 @@ class Edit_annotation:
 
         #no draw hander if is not visable
         if not self.select_current_annotation.get("visible", True):
+            return
+
+        #no draw hander if is locked
+        if self.select_current_annotation.get("locked", False):
             return
 
         # download all  rectangle
