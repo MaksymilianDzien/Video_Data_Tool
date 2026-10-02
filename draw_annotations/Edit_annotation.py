@@ -297,6 +297,11 @@ class Edit_annotation:
                     self.select_actived_hander = None
                     self.drag_start_of_rectangle = None
                     self.polygon_drag_points = None
+                #if is pinned can't move annotaion but can edit
+                elif annotation.get("pinned", False):
+                    self.select_actived_hander = None
+                    self.drag_start_of_rectangle = None
+                    self.polygon_drag_points = None
                 else:
                     # if annotaion is cliked in annotaion then set to move all annotaion
                     self.select_actived_hander = "move"
@@ -318,6 +323,14 @@ class Edit_annotation:
         # miss or not select any annotations disable edit annotations and update current image
         self.deselecte_edited_mode()
         self.current_widget_image.update()
+
+    # if pinned option is selected then stop move
+    def if_pinned_then_cancel_move(self, current_annotation):
+        if self.select_current_annotation is current_annotation and self.select_actived_hander == "move":
+            self.select_actived_hander = None
+            self.drag_start_of_rectangle = None
+            self.polygon_drag_points = None
+            self.drag_annotaion_mouse_start = None
 
     def mouse_move_hander(self, point_posstion):
 

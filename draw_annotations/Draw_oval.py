@@ -113,6 +113,8 @@ class Draw_oval:
                 "visible": True,
                 #if is locked (option right panel)
                 "locked": False,
+                #if is pinned (option right panel
+                "pinned": False,
                 "x": concurrent_oval.x(),
                 "y": concurrent_oval.y(),
                 "width": concurrent_oval.width(),

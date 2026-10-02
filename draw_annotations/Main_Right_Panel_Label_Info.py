@@ -124,9 +124,25 @@ class Main_Right_Panel_Label_Info:
         #add button to widget
         annotation_row_layout.addWidget(locked_annotation_button)
 
-       #2 button not yet
+        #third button pin annotation
+        pinned_annotation_button = QPushButton()
+        pinned_annotation_button.setFixedSize(self.size_of_icon, self.size_of_icon)
+        pinned_annotation_button.setFlat(True)
+
+        self.pin_icon_button(pinned_annotation_button, curent_annotation.get("pinned", False))
+
+        #callback to pin fuction
+        pinned_annotation_button.clicked.connect(
+            lambda checked=False, current_annotation=curent_annotation, current_button=pinned_annotation_button:
+            self.current_all_annotation_pin(current_annotation, current_button)
+        )
+
+        #add button to widget
+        annotation_row_layout.addWidget(pinned_annotation_button)
+
+       #1 button not yet
         #futrure add
-        for _ in range(2):
+        for _ in range(1):
             button_slot = QWidget()
             button_slot.setFixedSize(self.size_of_icon, self.size_of_icon)
             annotation_row_layout.addWidget(button_slot)
@@ -163,6 +179,25 @@ class Main_Right_Panel_Label_Info:
     #set icon of locked
     def lock_icon_button(self, current_button, is_locked):
         current_button.setText("L" if is_locked else "U")
+
+    #redraw image and change pinned flag
+    def current_all_annotation_pin(self, curent_annotation, button):
+
+        #change flag
+        curent_annotation["pinned"] = not curent_annotation.get("pinned", False)
+        self.pin_icon_button(button, curent_annotation["pinned"])
+
+        #if is pin then stop move annotaion
+        edit_current_anotation = self.annotated_widget.edit_current_anotation
+        if curent_annotation["pinned"]:
+            edit_current_anotation.if_pinned_then_cancel_move(curent_annotation)
+
+        #redraw image
+        self.annotated_widget.update()
+
+    #set icon of pinned
+    def pin_icon_button(self, current_button, is_pinned):
+        current_button.setText("P" if is_pinned else "F")
 
     # Refresh list of labes (if exist in list)
     def refresh_all_labels_in_list(self):

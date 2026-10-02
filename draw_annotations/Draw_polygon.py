@@ -111,6 +111,8 @@ class Draw_polygon:
                 "visible": True,
                 #if is locked (option right panel)
                 "locked": False,
+                #if is pinned (option right panel)
+                "pinned": False,
                 #points of polyhon
                 "points": [{"x": point.x(), "y": point.y()} for point in base_points]
             }
