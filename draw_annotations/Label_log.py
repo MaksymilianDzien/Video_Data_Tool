@@ -29,7 +29,15 @@ class Label_log:
                 return existing_label["id"]
 
         #create new and +1 to next label
-        new_label = {"id": self.label_next_id, "name": current_name_of_label}
+        new_label = \
+            {
+                "id": self.label_next_id,
+                "name": current_name_of_label,
+                #group options (second tab labels)
+                "visible": True,
+                "locked": False,
+                "pinned": False
+            }
         self.current_labels.append(new_label)
         self.label_next_id += 1
 

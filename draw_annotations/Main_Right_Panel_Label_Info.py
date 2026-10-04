@@ -199,11 +199,149 @@ class Main_Right_Panel_Label_Info:
     def pin_icon_button(self, current_button, is_pinned):
         current_button.setText("P" if is_pinned else "F")
 
-    # Refresh list of labes (if exist in list)
+    # Refresh list of labes (if exist in list) and create annotaion option
     def refresh_all_labels_in_list(self):
 
         self.list_of_labels.clear()
 
         # current_labels
         for current_label in self.current_label_obiect.current_labels:
-            self.list_of_labels.addItem(QListWidgetItem(current_label["name"]))
+
+            #createn wighet for name and group option of label
+            list_widget_item = QListWidgetItem()
+            concurrent_row_widget = self.create_annotation_group_row_widget(current_label)
+            list_widget_item.setSizeHint(concurrent_row_widget.sizeHint())
+
+            #add to litems
+            self.list_of_labels.addItem(list_widget_item)
+            self.list_of_labels.setItemWidget(list_widget_item, concurrent_row_widget)
+
+    #crate row for one label (group)
+    def create_annotation_group_row_widget(self, curent_label):
+
+        #create new widget (right row)
+        annotation_group_row_widget = QWidget()
+        #set laout
+        annotation_group_layout = QHBoxLayout()
+        annotation_group_layout.setContentsMargins(4, 2, 4, 2)
+        annotation_group_layout.setSpacing(4)
+        #add layout to widged
+        annotation_group_row_widget.setLayout(annotation_group_layout)
+
+        #add to widget
+        text_label = QLabel(curent_label["name"])
+        annotation_group_layout.addWidget(text_label)
+
+        #Stretch row
+        annotation_group_layout.addStretch()
+
+        #first button visibility of group (label)
+        visibility_annotation_group_button = QPushButton()
+        visibility_annotation_group_button.setFixedSize(self.size_of_icon, self.size_of_icon)
+        visibility_annotation_group_button.setFlat(True)
+
+        self.visibility_icon_button(visibility_annotation_group_button, curent_label.get("visible", True))
+
+        #callback to group visibility fuction
+        visibility_annotation_group_button.clicked.connect(
+            lambda checked=False, current_label=curent_label, current_button=visibility_annotation_group_button:
+            self.current_all_annotation_group_visibility(current_label, current_button)
+        )
+
+        #add button to widget
+        annotation_group_layout.addWidget(visibility_annotation_group_button)
+
+        #second button lock of group (label)
+        locked_annotation_group_button = QPushButton()
+        locked_annotation_group_button.setFixedSize(self.size_of_icon, self.size_of_icon)
+        locked_annotation_group_button.setFlat(True)
+
+        self.lock_icon_button(locked_annotation_group_button, curent_label.get("locked", False))
+
+        #callback to group lock fuction
+        locked_annotation_group_button.clicked.connect(
+            lambda checked=False, current_label=curent_label, current_button=locked_annotation_group_button:
+            self.current_all_annotation_group_lock(current_label, current_button)
+        )
+
+        #add button to widget
+        annotation_group_layout.addWidget(locked_annotation_group_button)
+
+        #third button pin of group (label)
+        pin_annotation_group_button = QPushButton()
+        pin_annotation_group_button.setFixedSize(self.size_of_icon, self.size_of_icon)
+        pin_annotation_group_button.setFlat(True)
+
+        self.pin_icon_button(pin_annotation_group_button, curent_label.get("pinned", False))
+
+        #callback to group pin fuction
+        pin_annotation_group_button.clicked.connect(
+            lambda checked=False, current_label=curent_label, current_button=pin_annotation_group_button:
+            self.current_all_annotation_group_pin(current_label, current_button)
+        )
+
+        #add button to widget
+        annotation_group_layout.addWidget(pin_annotation_group_button)
+
+        #1 button not yet
+        #futrure add
+        for _ in range(1):
+            button_slot = QWidget()
+            button_slot.setFixedSize(self.size_of_icon, self.size_of_icon)
+            annotation_group_layout.addWidget(button_slot)
+
+        return annotation_group_row_widget
+
+    #redraw image and change visable flag
+    def current_all_annotation_group_visibility(self, curent_annotation_group, button):
+
+        #change flag of label
+        curent_annotation_group["visible"] = not curent_annotation_group.get("visible", True)
+        self.visibility_icon_button(button, curent_annotation_group["visible"])
+
+        #apply to all annotations of this label
+        self.annotated_widget.draw_rectangle.set_all_annotation_group_visible(curent_annotation_group["id"], curent_annotation_group["visible"])
+
+        #redraw image
+        self.annotated_widget.update()
+        self.refresh_all_objects_in_list()
+
+    # redraw image and change locked flag
+    def current_all_annotation_group_lock(self, curent_annotation_group, button):
+
+        #change flag of label
+        curent_annotation_group["locked"] = not curent_annotation_group.get("locked", False)
+        self.lock_icon_button(button, curent_annotation_group["locked"])
+
+        #apply to all annotations of this label
+        self.annotated_widget.draw_rectangle.set_all_annotation_group_locked(curent_annotation_group["id"], curent_annotation_group["locked"])
+
+        #if current anntaion is selected then clear select and handers
+        edit_current_anotation = self.annotated_widget.edit_current_anotation
+        select_annotation = edit_current_anotation.select_current_annotation
+        if select_annotation is not None and select_annotation.get("label_id") == curent_annotation_group["id"] and curent_annotation_group["locked"]:
+            edit_current_anotation.deselecte_edited_mode()
+
+        #redraw image
+        self.annotated_widget.update()
+        self.refresh_all_objects_in_list()
+
+    #redraw image and change pinned flag
+    def current_all_annotation_group_pin(self, curent_annotation_group, button):
+
+        #change flag
+        curent_annotation_group["pinned"] = not curent_annotation_group.get("pinned", False)
+        self.pin_icon_button(button, curent_annotation_group["pinned"])
+
+        #apply to all annotations of this label
+        self.annotated_widget.draw_rectangle.set_all_annotation_group_pinned(curent_annotation_group["id"], curent_annotation_group["pinned"])
+
+        #if is pin then stop move annotaion
+        edit_current_anotation = self.annotated_widget.edit_current_anotation
+        selected_annotation = edit_current_anotation.select_current_annotation
+        if selected_annotation is not None and selected_annotation.get("label_id") == curent_annotation_group["id"] and curent_annotation_group["pinned"]:
+            edit_current_anotation.if_pinned_then_cancel_move(selected_annotation)
+
+        # redraw image
+        self.annotated_widget.update()
+        self.refresh_all_objects_in_list()

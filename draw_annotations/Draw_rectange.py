@@ -241,6 +241,30 @@ class Draw_rectangle:
         annotations_visible = [annotation for annotation in current_frame_annotations if annotation.get("visible", True)]
         return sorted(annotations_visible, key=lambda annotation: annotation.get("layer", 1))
 
+    #set visible for all annotations all frames
+    def set_all_annotation_group_visible(self, labels_id, labels_is_visible):
+        for frame_annotations in self.fream_annotation.values():
+            for annotation in frame_annotations:
+                #set flag
+                if annotation["label_id"] == labels_id:
+                    annotation["visible"] = labels_is_visible
+
+    #set locked for all annotations all frames
+    def set_all_annotation_group_locked(self, labels_id, labels_is_locked):
+        for frame_annotations in self.fream_annotation.values():
+            for annotation in frame_annotations:
+                #set flag
+                if annotation["label_id"] == labels_id:
+                    annotation["locked"] = labels_is_locked
+
+    #set pinned for all annotations all frames
+    def set_all_annotation_group_pinned(self, labels_id, labels_is_pinned):
+        for frame_annotations in self.fream_annotation.values():
+            for annotation in frame_annotations:
+                #set flag
+                if annotation["label_id"] == labels_id:
+                    annotation["pinned"] = labels_is_pinned
+
     # draw all annotainon in frame
     def draw_rectangle_annotation(self, rectangle_painter, curent_frame_index):
 
