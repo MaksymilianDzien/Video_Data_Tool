@@ -1,7 +1,7 @@
 from PyQt5 import Qt , QtCore
 from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout,
-    QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit
+    QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit, QMessageBox
 )
 from buttons.Button_polygon_option import Button_polygon_option
 from buttons.Button_rotated_option import Button_rotated_option
@@ -10,6 +10,7 @@ from buttons.Button_logic_2 import ButtonLogic
 from buttons.Button_logic_3 import Button3
 from buttons.Button_frame_slider import Button_frame_slider
 from draw_annotations.Main_Right_Panel_Label_Info import  Main_Right_Panel_Label_Info
+from core.Saved_project import Saved_project
 
 class Main_Gui(QMainWindow):
 
@@ -394,6 +395,33 @@ class Main_Gui(QMainWindow):
         first_action.triggered.connect(self.find_image)
 
         file_menu.addAction(first_action)
+
+        #option to save all project
+        menu_action_save_project = QAction("Save project", self)
+        menu_action_save_project.triggered.connect(self.save_project_to_files)
+
+        file_menu.addAction(menu_action_save_project)
+
+    #save project fuction
+    def save_project_to_files(self):
+
+        #chose path to save
+        json_file_path, selected_filter = QFileDialog.getSaveFileName(
+            self, "Save project", "", "JSON Files (*.json)"
+        )
+
+        #user quit to chose option
+        if not json_file_path:
+            return
+
+        #add .json if user not pint this
+        if not json_file_path.lower().endswith(".json"):
+            json_file_path += ".json"
+
+
+        saved_project_logic = Saved_project(self.image)
+        #save and catch error masage for later
+        save_successful, error_message = saved_project_logic.save_current_project_to_files(json_file_path)
 
     # enable mouse drag
     def enable_move_mode(self):
