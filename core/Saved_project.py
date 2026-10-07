@@ -9,6 +9,7 @@ class Saved_project:
         #set image widget (connect  buttonLogic)
         self.save_file_image_widget = save_file_image_widget
 
+
     #save current porject to json file and save all iamge / video / frame
     def save_current_project_to_files(self, json_path_of_file):
 

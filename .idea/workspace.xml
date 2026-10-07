@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add all options to annotations group">
-      <change afterPath="$PROJECT_DIR$/core/Saved_project.py" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add save project option">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,14 +97,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00039" summary="add in top panel frame_slider(no fuction)">
-      <option name="closed" value="true" />
-      <created>1787090200776</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1787090200776</updated>
     </task>
     <task id="LOCAL-00040" summary="add in top panel frame_slider(no fuction)">
       <option name="closed" value="true" />
@@ -492,7 +482,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791122114559</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="add save project option">
+      <option name="closed" value="true" />
+      <created>1791319671937</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1791319671937</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -519,7 +517,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="/" />
     <MESSAGE value="Add load images and video frame in main panel" />
     <MESSAGE value="Fix zoom change erorr" />
     <MESSAGE value="add rectangle annotation" />
@@ -544,6 +541,7 @@
     <MESSAGE value="add lock to anntaion" />
     <MESSAGE value="add pinned to anntaion" />
     <MESSAGE value="add all options to annotations group" />
-    <option name="LAST_COMMIT_MESSAGE" value="add all options to annotations group" />
+    <MESSAGE value="add save project option" />
+    <option name="LAST_COMMIT_MESSAGE" value="add save project option" />
   </component>
 </project>
