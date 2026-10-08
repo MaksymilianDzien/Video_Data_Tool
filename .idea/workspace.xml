@@ -5,7 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add save project option">
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/mouse.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/move.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/oval.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/polygon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/rectangle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/reset.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/rotate.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/zoom.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,17 +52,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#1 on master&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.gui.executor": "Run",
+    "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "#1 on master",
+    "last_opened_file_path": "C:/Users/JA/PycharmProjects/Dane_wizyjne_projekt/gui/icons"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\icons" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Dane_wizyjne_projekt" />
@@ -97,14 +112,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00040" summary="add in top panel frame_slider(no fuction)">
-      <option name="closed" value="true" />
-      <created>1787090305727</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1787090305727</updated>
     </task>
     <task id="LOCAL-00041" summary="change image/video display to opvenCV (add more komand)">
       <option name="closed" value="true" />
@@ -490,7 +497,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791319671937</updated>
     </task>
-    <option name="localTasksCounter" value="89" />
+    <task id="LOCAL-00089" summary="add save project option">
+      <option name="closed" value="true" />
+      <created>1791406445358</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1791406445358</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

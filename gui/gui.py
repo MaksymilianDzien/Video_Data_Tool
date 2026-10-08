@@ -10,6 +10,8 @@ from buttons.Button_logic_2 import ButtonLogic
 from buttons.Button_logic_3 import Button3
 from buttons.Button_frame_slider import Button_frame_slider
 from draw_annotations.Main_Right_Panel_Label_Info import  Main_Right_Panel_Label_Info
+import os
+from PyQt5.QtGui import QIcon
 from core.Saved_project import Saved_project
 
 class Main_Gui(QMainWindow):
@@ -104,6 +106,7 @@ class Main_Gui(QMainWindow):
         self.info_label.setStyleSheet("color: white; font-size: 11px;")
         self.info_label.setAlignment(QtCore.Qt.AlignCenter)
 
+
         # qwigtet to info (contaner
         self.frame_info_slider_container = QWidget()
         frame_info_slider_container = QVBoxLayout()
@@ -187,47 +190,72 @@ class Main_Gui(QMainWindow):
     # left_panel
     def create_left_panel(self):
         left_panel = QFrame()
-        left_panel.setFixedWidth(80)
+        left_panel.setFixedWidth(50)
         left_panel.setStyleSheet("background-color: #e74c3c;")
 
         left_layout = QVBoxLayout()
         left_layout.setContentsMargins(5, 5, 5, 5)
-        left_layout.setSpacing(8)
+        left_layout.setSpacing(4)
 
-        #set drawing value
+        # set drawing value
         self.draw_mode_enabled = False
         self.draw_oval_mode_enabled = False
 
-        # Create 7 buttons
+        # folder with left_panel_icons
+        left_panel_icon_folder = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "left_panel_icons"
+        )
+
+        # left_panel_icons for buttons
+        left_panel_icon_paths = {
+            1: os.path.join(left_panel_icon_folder, "mouse.png"),
+            2: os.path.join(left_panel_icon_folder, "move.png"),
+            3: os.path.join(left_panel_icon_folder, "zoom.png"),
+            4: os.path.join(left_panel_icon_folder, "rotate.png"),
+            5: os.path.join(left_panel_icon_folder, "reset.jpg"),
+            6: os.path.join(left_panel_icon_folder, "rectangle.png"),
+            7: os.path.join(left_panel_icon_folder, "oval.png"),
+            8: os.path.join(left_panel_icon_folder, "polygon.png"),
+        }
+
+        # Create 8 buttons
         for i in range(1, 9):
-            left_buttons = QPushButton(str(i))
+
+            left_buttons = QPushButton()
+
             # size
-            left_buttons.setFixedSize(60, 60)
+            left_buttons.setFixedSize(40, 40)
+
+            # icon
+            left_buttons.setIcon(QIcon(left_panel_icon_paths[i]))
+            left_buttons.setIconSize(QtCore.QSize(24, 24))
+
             # normal mouse
             if i == 1:
                 left_buttons.clicked.connect(self.disable_move_mode)
-            #add moving image to second button
+            # add moving image to second button
             if i == 2:
-                 left_buttons.clicked.connect(self.enable_move_mode)
-            #reset iamge positon
-            #zoom button
+                left_buttons.clicked.connect(self.enable_move_mode)
+            # reset iamge positon
+            # zoom button
             if i == 3:
                 self.button3 = Button3(self, left_buttons)
-            #rotate 90 option
+            # rotate 90 option
             if i == 4:
-                self.button_rotated_option = Button_rotated_option(self, left_buttons)
+                self.button_rotated_option = Button_rotated_option(self,left_buttons)
             # reset position, rotation and zoom to original state
             if i == 5:
                 left_buttons.clicked.connect(self.reset_image_to_start_position)
-            #draw rectangle annotations
+            # draw rectangle annotations
             if i == 6:
                 left_buttons.clicked.connect(self.enable_rectangle_drawing)
-            #draw oval annotations
+            # draw oval annotations
             if i == 7:
                 left_buttons.clicked.connect(self.enable_oval_drawing)
-            #draw polygon annotations
+            # draw polygon annotations
             if i == 8:
-                self.button_polygon_option = Button_polygon_option(self, left_buttons)
+                self.button_polygon_option = Button_polygon_option(self,left_buttons)
 
             # style of button
             left_buttons.setStyleSheet("""
@@ -235,20 +263,25 @@ class Main_Gui(QMainWindow):
                     background-color: #ecf0f1;
                     border: 2px solid #2c3e50;
                     border-radius: 6px;
-                    font-weight: bold;
                 }
+
                 QPushButton:hover {
                     background-color: #bdc3c7;
                 }
+
                 QPushButton:pressed {
                     background-color: #95a5a6;
                 }
             """)
 
-            left_layout.addWidget(left_buttons)
+            left_layout.addWidget(
+                left_buttons,
+                alignment=QtCore.Qt.AlignHCenter
+            )
 
         left_layout.addStretch()
         left_panel.setLayout(left_layout)
+
         return left_panel
 
     def create_middle_panel(self):
