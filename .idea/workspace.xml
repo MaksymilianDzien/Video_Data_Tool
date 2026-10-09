@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add save project option">
-      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/mouse.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/move.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/oval.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/polygon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/rectangle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/reset.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/rotate.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/zoom.png" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add icon to left panel">
+      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_L_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_L_10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_L_f.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_R.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_R_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_R_10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_R_f.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
@@ -61,11 +60,12 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "#1 on master",
-    "last_opened_file_path": "C:/Users/JA/PycharmProjects/Dane_wizyjne_projekt/gui/icons"
+    "last_opened_file_path": "C:/Users/JA/PycharmProjects/Dane_wizyjne_projekt/gui/bottom_panel_icons"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\bottom_panel_icons" />
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\icons" />
     </key>
   </component>
@@ -112,14 +112,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00041" summary="change image/video display to opvenCV (add more komand)">
-      <option name="closed" value="true" />
-      <created>1787162173586</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1787162173586</updated>
     </task>
     <task id="LOCAL-00042" summary="add more komand">
       <option name="closed" value="true" />
@@ -505,7 +497,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791406445358</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="add icon to left panel">
+      <option name="closed" value="true" />
+      <created>1791489570826</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1791489570826</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -532,7 +532,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add load images and video frame in main panel" />
     <MESSAGE value="Fix zoom change erorr" />
     <MESSAGE value="add rectangle annotation" />
     <MESSAGE value="fix rectangle annotation" />
@@ -557,6 +556,7 @@
     <MESSAGE value="add pinned to anntaion" />
     <MESSAGE value="add all options to annotations group" />
     <MESSAGE value="add save project option" />
-    <option name="LAST_COMMIT_MESSAGE" value="add save project option" />
+    <MESSAGE value="add icon to left panel" />
+    <option name="LAST_COMMIT_MESSAGE" value="add icon to left panel" />
   </component>
 </project>

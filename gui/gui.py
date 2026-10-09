@@ -38,12 +38,15 @@ class Main_Gui(QMainWindow):
         main_gui_layout.setSpacing(0)
         main_widget.setLayout(main_gui_layout)
 
+        #first create booton panel before mid panel
+        bottom_panel = self.create_bottom_panel()
+
         # Create all panels
         main_gui_layout.addWidget(self.create_top_panel())
         main_gui_layout.addLayout(self.create_gui_main_content())
-        main_gui_layout.addWidget(self.create_bottom_panel())
+        main_gui_layout.addWidget(bottom_panel)
 
-    # top_panel
+    #create top panel
     def create_top_panel(self):
         top_panel = QFrame()
         top_panel.setFixedHeight(80)
@@ -57,19 +60,19 @@ class Main_Gui(QMainWindow):
 
         # button style same as main window
         button_style = """
-                QPushButton {
-                    background-color: #ecf0f1;
-                    border: 2px solid #2c3e50;
-                    border-radius: 6px;
-                    font-weight: bold;
-                }
-                QPushButton:hover {
-                    background-color: #bdc3c7;
-                }
-                QPushButton:pressed {
-                    background-color: #95a5a6;
-                }
-            """
+                   QPushButton {
+                       background-color: #ecf0f1;
+                       border: 2px solid #2c3e50;
+                       border-radius: 6px;
+                       font-weight: bold;
+                   }
+                   QPushButton:hover {
+                       background-color: #bdc3c7;
+                   }
+                   QPushButton:pressed {
+                       background-color: #95a5a6;
+                   }
+               """
 
         # top_left_button
         for i in range(1, 4):
@@ -85,92 +88,6 @@ class Main_Gui(QMainWindow):
             top_button_layout.addWidget(top_left_button)
 
         top_button_layout.addStretch()
-
-
-
-        # frame_slider
-        self.frame_slider = QSlider(QtCore.Qt.Horizontal)
-        self.frame_slider.setFixedSize(250, 45)
-        self.frame_slider.setMinimum(1)
-        self.frame_slider.setMaximum(100)
-        self.frame_slider.setValue(0)
-
-        # frame_slider_input
-        self.frame_slider_input = QLineEdit()
-        self.frame_slider_input.setFixedSize(60, 45)
-        self.frame_slider_input.setAlignment(QtCore.Qt.AlignCenter)
-        self.frame_slider_input.setText("1")
-
-        # name of info file style )
-        self.info_label = QLabel("")
-        self.info_label.setStyleSheet("color: white; font-size: 11px;")
-        self.info_label.setAlignment(QtCore.Qt.AlignCenter)
-
-
-        # qwigtet to info (contaner
-        self.frame_info_slider_container = QWidget()
-        frame_info_slider_container = QVBoxLayout()
-        frame_info_slider_container.setContentsMargins(0, 0, 0, 0)
-        frame_info_slider_container.setSpacing(2)
-        frame_info_slider_container.addWidget(self.frame_slider)
-        frame_info_slider_container.addWidget(self.info_label)
-        self.frame_info_slider_container.setLayout(frame_info_slider_container)
-
-
-        # add_button_slider_logick
-        self.create_button_frame_slider()
-
-        # top_mid_button
-        for i in range(4, 13):
-            top_mid_button = QPushButton(f"t.{i}")
-            top_mid_button.setFixedSize(60, 45)
-            top_mid_button.setStyleSheet(button_style)
-
-
-            match i:
-                #set value to start position
-                case 4:
-                    top_mid_button.clicked.connect(self.button_frame_slider.start_value)
-                # subtract to slider value 1
-                case 5:
-                    top_mid_button.clicked.connect(self.button_frame_slider.down_10)
-                # subtract to slider value 10
-                case 6:
-                    top_mid_button.clicked.connect(self.button_frame_slider.down_1)
-                #add to slider value 1
-                case 8:
-                    top_mid_button.clicked.connect(self.button_frame_slider.up_1)
-                # add to slider value 10
-                case 9:
-                    top_mid_button.clicked.connect(self.button_frame_slider.up_10)
-                # set value to max position
-                case 10:
-                    top_mid_button.clicked.connect(self.button_frame_slider.max_value)
-
-            top_button_layout.addWidget(top_mid_button)
-            top_button_layout.addStretch()
-
-            top_button_layout.addWidget(self.frame_info_slider_container)
-            top_button_layout.addWidget(self.frame_slider_input)
-        #input slider style
-        (self.frame_slider_input.setStyleSheet
-         ("""
-            QLineEdit {
-                background-color: #ecf0f1;
-                border: 2px solid #2c3e50;
-                border-radius: 6px;
-                font-weight: bold;
-            }
-        """))
-
-        # Slider to slider_input
-        (self.frame_slider.valueChanged.connect
-        (lambda slider_value: self.frame_slider_input.setText(str(slider_value)))
-         )
-
-        # slider_input to slider
-        self.frame_slider_input.returnPressed.connect(self.change_slider_value)
-
 
         return top_panel
 
@@ -332,29 +249,20 @@ class Main_Gui(QMainWindow):
 
         return self.right_panel_logic.get_widget()
 
-    # bottom_panel
+   #create bootn palen with slider
     def create_bottom_panel(self):
         bottom_panel = QFrame()
         bottom_panel.setFixedHeight(80)
         bottom_panel.setStyleSheet("background-color: #244eff;")
 
-        # layout
-        bottom_layout = QHBoxLayout()
-        bottom_layout.setContentsMargins(10, 10, 10, 10)
-        bottom_layout.setSpacing(10)
+        # Create button layout
+        bottom_button_layout = QHBoxLayout()
+        bottom_button_layout.setContentsMargins(5, 5, 5, 5)
+        bottom_button_layout.setSpacing(8)
+        bottom_panel.setLayout(bottom_button_layout)
 
-        # center button
-        bottom_layout.addStretch()
-
-        # Create 3 buttons
-        for i in range(1, 8):
-            bottom_buttons = QPushButton(str(i))
-
-            # size
-            bottom_buttons.setFixedSize(60, 60)
-
-            # style of button
-            bottom_buttons.setStyleSheet("""
+        # button style same as main window
+        button_style = """
                 QPushButton {
                     background-color: #ecf0f1;
                     border: 2px solid #2c3e50;
@@ -367,13 +275,113 @@ class Main_Gui(QMainWindow):
                 QPushButton:pressed {
                     background-color: #95a5a6;
                 }
-            """)
+            """
 
-            bottom_layout.addWidget(bottom_buttons)
+      #folder of botton icon
+        bottom_panel_icon_folder = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "bottom_panel_icons"
+        )
 
-        bottom_layout.addStretch()
+        #all path to slider ickons
+        bottom_panel_icon_paths = {
+            1: os.path.join(bottom_panel_icon_folder, "slider_L_f.png"),
+            2: os.path.join(bottom_panel_icon_folder, "slider_L_10.png"),
+            3: os.path.join(bottom_panel_icon_folder, "slider_L_1.png"),
+            4: os.path.join(bottom_panel_icon_folder, "slider_R.png"),
+            5: os.path.join(bottom_panel_icon_folder, "slider_R_1.png"),
+            6: os.path.join(bottom_panel_icon_folder, "slider_R_10.png"),
+            7: os.path.join(bottom_panel_icon_folder, "slider_R_f.png"),
+            8: os.path.join(bottom_panel_icon_folder, "slot11.png"),#change
+        }
 
-        bottom_panel.setLayout(bottom_layout)
+
+
+        # frame_slider
+        self.frame_slider = QSlider(QtCore.Qt.Horizontal)
+        self.frame_slider.setFixedSize(250, 45)
+        self.frame_slider.setMinimum(1)
+        self.frame_slider.setMaximum(100)
+        self.frame_slider.setValue(0)
+
+        # frame_slider_input
+        self.frame_slider_input = QLineEdit()
+        self.frame_slider_input.setFixedSize(60, 45)
+        self.frame_slider_input.setAlignment(QtCore.Qt.AlignCenter)
+        self.frame_slider_input.setText("1")
+
+        # name of info file style )
+        self.info_label = QLabel("")
+        self.info_label.setStyleSheet("color: white; font-size: 11px;")
+        self.info_label.setAlignment(QtCore.Qt.AlignCenter)
+
+
+        # qwigtet to info (contaner
+        self.frame_info_slider_container = QWidget()
+        frame_info_slider_container = QVBoxLayout()
+        frame_info_slider_container.setContentsMargins(0, 0, 0, 0)
+        frame_info_slider_container.setSpacing(2)
+        frame_info_slider_container.addWidget(self.frame_slider)
+        frame_info_slider_container.addWidget(self.info_label)
+        self.frame_info_slider_container.setLayout(frame_info_slider_container)
+
+
+        # add_button_slider_logick
+        self.create_button_frame_slider()
+
+        # top_mid_button
+        for i in range(1, 8):
+            top_mid_button = QPushButton()
+            top_mid_button.setFixedSize(60, 45)
+            top_mid_button.setIcon(QIcon(bottom_panel_icon_paths[i]))
+            top_mid_button.setIconSize(QtCore.QSize(24, 24))
+            top_mid_button.setStyleSheet(button_style)
+
+
+            match i:
+                #set value to start position
+                case 1:
+                    top_mid_button.clicked.connect(self.button_frame_slider.start_value)
+                # subtract to slider value 1
+                case 2:
+                    top_mid_button.clicked.connect(self.button_frame_slider.down_10)
+                # subtract to slider value 10
+                case 3:
+                    top_mid_button.clicked.connect(self.button_frame_slider.down_1)
+                #add to slider value 1
+                case 5:
+                    top_mid_button.clicked.connect(self.button_frame_slider.up_1)
+                # add to slider value 10
+                case 6:
+                    top_mid_button.clicked.connect(self.button_frame_slider.up_10)
+                # set value to max position
+                case 7:
+                    top_mid_button.clicked.connect(self.button_frame_slider.max_value)
+
+            bottom_button_layout.addWidget(top_mid_button)
+            bottom_button_layout.addStretch()
+
+            bottom_button_layout.addWidget(self.frame_info_slider_container)
+            bottom_button_layout.addWidget(self.frame_slider_input)
+        #input slider style
+        (self.frame_slider_input.setStyleSheet
+         ("""
+            QLineEdit {
+                background-color: #ecf0f1;
+                border: 2px solid #2c3e50;
+                border-radius: 6px;
+                font-weight: bold;
+            }
+        """))
+
+        # Slider to slider_input
+        (self.frame_slider.valueChanged.connect
+        (lambda slider_value: self.frame_slider_input.setText(str(slider_value)))
+         )
+
+        # slider_input to slider
+        self.frame_slider_input.returnPressed.connect(self.change_slider_value)
+
 
         return bottom_panel
 
