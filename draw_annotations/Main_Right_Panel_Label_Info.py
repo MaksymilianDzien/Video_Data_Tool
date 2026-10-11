@@ -1,7 +1,10 @@
+import os
 from PyQt5.QtWidgets import (
     QFrame, QVBoxLayout, QHBoxLayout, QTabWidget, QListWidget, QListWidgetItem,
     QWidget, QPushButton, QLabel
 )
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QSize
 
 
 class Main_Right_Panel_Label_Info:
@@ -13,6 +16,22 @@ class Main_Right_Panel_Label_Info:
     size_of_icon = 22
 
     def __init__(self, annotated_widget, current_label_obiect):
+
+       #folder with panel panel ikons
+        annotation_option_icon_folder = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),"annotaion_option_icons")
+
+        # icon visible/hidden paths
+        self.visible_icon = os.path.join(annotation_option_icon_folder, "visible.png")
+        self.hidden_icon = os.path.join(annotation_option_icon_folder, "hidden.png")
+
+        # icon locked/unlocked paths
+        self.locked_icon = os.path.join(annotation_option_icon_folder, "locked.png")
+        self.unlocked_icon = os.path.join(annotation_option_icon_folder, "unlocked.png")
+
+        # icon pinned/unpinned paths
+        self.pinned_icon = os.path.join(annotation_option_icon_folder, "pinned.png")
+        self.unpinned_icon = os.path.join(annotation_option_icon_folder, "unpinned.png")
 
         # set image wiget (buuton 2 logick)
         self.annotated_widget = annotated_widget
@@ -96,6 +115,7 @@ class Main_Right_Panel_Label_Info:
         visibility_annotation_button = QPushButton()
         visibility_annotation_button.setFixedSize(self.size_of_icon, self.size_of_icon)
         visibility_annotation_button.setFlat(True)
+        visibility_annotation_button.setStyleSheet("QPushButton { border: none; background: transparent; }")
 
         self.visibility_icon_button(visibility_annotation_button, curent_annotation.get("visible", True))
 
@@ -112,6 +132,7 @@ class Main_Right_Panel_Label_Info:
         locked_annotation_button = QPushButton()
         locked_annotation_button.setFixedSize(self.size_of_icon, self.size_of_icon)
         locked_annotation_button.setFlat(True)
+        locked_annotation_button.setStyleSheet("QPushButton { border: none; background: transparent; }")
 
         self.lock_icon_button(locked_annotation_button, curent_annotation.get("locked", False))
 
@@ -128,6 +149,7 @@ class Main_Right_Panel_Label_Info:
         pinned_annotation_button = QPushButton()
         pinned_annotation_button.setFixedSize(self.size_of_icon, self.size_of_icon)
         pinned_annotation_button.setFlat(True)
+        pinned_annotation_button.setStyleSheet("QPushButton { border: none; background: transparent; }")
 
         self.pin_icon_button(pinned_annotation_button, curent_annotation.get("pinned", False))
 
@@ -159,7 +181,8 @@ class Main_Right_Panel_Label_Info:
 
     #set icon of visable
     def visibility_icon_button(self, current_button, is_visible):
-        current_button.setText("V" if is_visible else "X")
+        current_button.setIcon(QIcon(self.visible_icon if is_visible else self.hidden_icon))
+        current_button.setIconSize(QSize(self.size_of_icon, self.size_of_icon))
 
     #redraw image and change locked flag
     def current_all_annotation_lock(self, curent_annotation, button):
@@ -178,7 +201,8 @@ class Main_Right_Panel_Label_Info:
 
     #set icon of locked
     def lock_icon_button(self, current_button, is_locked):
-        current_button.setText("L" if is_locked else "U")
+        current_button.setIcon(QIcon(self.locked_icon if is_locked else self.unlocked_icon))
+        current_button.setIconSize(QSize(self.size_of_icon, self.size_of_icon))
 
     #redraw image and change pinned flag
     def current_all_annotation_pin(self, curent_annotation, button):
@@ -197,7 +221,8 @@ class Main_Right_Panel_Label_Info:
 
     #set icon of pinned
     def pin_icon_button(self, current_button, is_pinned):
-        current_button.setText("P" if is_pinned else "F")
+        current_button.setIcon(QIcon(self.pinned_icon if is_pinned else self.unpinned_icon))
+        current_button.setIconSize(QSize(self.size_of_icon, self.size_of_icon))
 
     # Refresh list of labes (if exist in list) and create annotaion option
     def refresh_all_labels_in_list(self):
@@ -239,6 +264,7 @@ class Main_Right_Panel_Label_Info:
         visibility_annotation_group_button = QPushButton()
         visibility_annotation_group_button.setFixedSize(self.size_of_icon, self.size_of_icon)
         visibility_annotation_group_button.setFlat(True)
+        visibility_annotation_group_button.setStyleSheet("QPushButton { border: none; background: transparent; }")
 
         self.visibility_icon_button(visibility_annotation_group_button, curent_label.get("visible", True))
 
@@ -255,6 +281,7 @@ class Main_Right_Panel_Label_Info:
         locked_annotation_group_button = QPushButton()
         locked_annotation_group_button.setFixedSize(self.size_of_icon, self.size_of_icon)
         locked_annotation_group_button.setFlat(True)
+        locked_annotation_group_button.setStyleSheet("QPushButton { border: none; background: transparent; }")
 
         self.lock_icon_button(locked_annotation_group_button, curent_label.get("locked", False))
 
@@ -271,6 +298,7 @@ class Main_Right_Panel_Label_Info:
         pin_annotation_group_button = QPushButton()
         pin_annotation_group_button.setFixedSize(self.size_of_icon, self.size_of_icon)
         pin_annotation_group_button.setFlat(True)
+        pin_annotation_group_button.setStyleSheet("QPushButton { border: none; background: transparent; }")
 
         self.pin_icon_button(pin_annotation_group_button, curent_label.get("pinned", False))
 

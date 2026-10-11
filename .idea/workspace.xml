@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add icon to left panel">
-      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_L_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_L_10.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_L_f.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_R.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_R_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_R_10.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/bottom_panel_icons/slider_R_f.png" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add icon to botton&#10; panel">
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/hidden.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/locked.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/pinned.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/unlocked.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/unpinned.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/visible.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,13 +59,17 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "#1 on master",
-    "last_opened_file_path": "C:/Users/JA/PycharmProjects/Dane_wizyjne_projekt/gui/bottom_panel_icons"
+    "last_opened_file_path": "C:/Users/JA/PycharmProjects/Dane_wizyjne_projekt/gui/annotaion_option_icons"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\annotaion_option_icons" />
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\bottom_panel_icons" />
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\icons" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\draw_annotations" />
     </key>
   </component>
   <component name="RunManager">
@@ -112,14 +115,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00042" summary="add more komand">
-      <option name="closed" value="true" />
-      <created>1787240687635</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1787240687635</updated>
     </task>
     <task id="LOCAL-00043" summary="same change in display">
       <option name="closed" value="true" />
@@ -505,7 +500,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791489570826</updated>
     </task>
-    <option name="localTasksCounter" value="91" />
+    <task id="LOCAL-00091" summary="add icon to botton&#10; panel">
+      <option name="closed" value="true" />
+      <created>1791574649938</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1791574649938</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -532,7 +535,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix zoom change erorr" />
     <MESSAGE value="add rectangle annotation" />
     <MESSAGE value="fix rectangle annotation" />
     <MESSAGE value="add select or add labes" />
@@ -557,6 +559,7 @@
     <MESSAGE value="add all options to annotations group" />
     <MESSAGE value="add save project option" />
     <MESSAGE value="add icon to left panel" />
-    <option name="LAST_COMMIT_MESSAGE" value="add icon to left panel" />
+    <MESSAGE value="add icon to botton&#10; panel" />
+    <option name="LAST_COMMIT_MESSAGE" value="add icon to botton&#10; panel" />
   </component>
 </project>
