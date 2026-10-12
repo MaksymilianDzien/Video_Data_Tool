@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add icon to botton&#10; panel">
-      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/hidden.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/locked.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/pinned.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/unlocked.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/unpinned.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/visible.png" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add icon to right  anotation&#10; panel">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,18 +43,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.gui.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#1 on master",
-    "last_opened_file_path": "C:/Users/JA/PycharmProjects/Dane_wizyjne_projekt/gui/annotaion_option_icons"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#1 on master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/JA/PycharmProjects/Dane_wizyjne_projekt/gui/annotaion_option_icons&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\annotaion_option_icons" />
@@ -115,14 +108,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00043" summary="same change in display">
-      <option name="closed" value="true" />
-      <created>1787242793611</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1787242793611</updated>
     </task>
     <task id="LOCAL-00044" summary="same change in display">
       <option name="closed" value="true" />
@@ -508,7 +493,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791574649938</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="add icon to right  anotation&#10; panel">
+      <option name="closed" value="true" />
+      <created>1791750930506</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1791750930506</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -535,7 +528,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add rectangle annotation" />
     <MESSAGE value="fix rectangle annotation" />
     <MESSAGE value="add select or add labes" />
     <MESSAGE value="small chane in comment and code" />
@@ -560,6 +552,7 @@
     <MESSAGE value="add save project option" />
     <MESSAGE value="add icon to left panel" />
     <MESSAGE value="add icon to botton&#10; panel" />
-    <option name="LAST_COMMIT_MESSAGE" value="add icon to botton&#10; panel" />
+    <MESSAGE value="add icon to right  anotation&#10; panel" />
+    <option name="LAST_COMMIT_MESSAGE" value="add icon to right  anotation&#10; panel" />
   </component>
 </project>

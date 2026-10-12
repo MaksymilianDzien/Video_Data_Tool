@@ -354,6 +354,7 @@ class Main_Right_Panel_Label_Info:
         self.annotated_widget.update()
         self.refresh_all_objects_in_list()
 
+
     #redraw image and change pinned flag
     def current_all_annotation_group_pin(self, curent_annotation_group, button):
 
