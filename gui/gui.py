@@ -13,6 +13,7 @@ from draw_annotations.Main_Right_Panel_Label_Info import  Main_Right_Panel_Label
 import os
 from PyQt5.QtGui import QIcon
 from core.Saved_project import Saved_project
+from core.Load_projects import Load_projects
 
 class Main_Gui(QMainWindow):
 
@@ -249,7 +250,7 @@ class Main_Gui(QMainWindow):
 
         return self.right_panel_logic.get_widget()
 
-   #create bootn palen with slider
+    # create bootn palen with slider
     def create_bottom_panel(self):
         bottom_panel = QFrame()
         bottom_panel.setFixedHeight(80)
@@ -277,13 +278,13 @@ class Main_Gui(QMainWindow):
                 }
             """
 
-      #folder of botton icon
+        # folder of botton icon
         bottom_panel_icon_folder = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             "bottom_panel_icons"
         )
 
-        #all path to slider ickons
+        # all path to slider ickons
         bottom_panel_icon_paths = {
             1: os.path.join(bottom_panel_icon_folder, "slider_L_f.png"),
             2: os.path.join(bottom_panel_icon_folder, "slider_L_10.png"),
@@ -292,14 +293,12 @@ class Main_Gui(QMainWindow):
             5: os.path.join(bottom_panel_icon_folder, "slider_R_1.png"),
             6: os.path.join(bottom_panel_icon_folder, "slider_R_10.png"),
             7: os.path.join(bottom_panel_icon_folder, "slider_R_f.png"),
-            8: os.path.join(bottom_panel_icon_folder, "slot11.png"),#change
+            8: os.path.join(bottom_panel_icon_folder, "slot11.png"),  # change
         }
-
-
 
         # frame_slider
         self.frame_slider = QSlider(QtCore.Qt.Horizontal)
-        self.frame_slider.setFixedSize(250, 45)
+        self.frame_slider.setFixedHeight(45)
         self.frame_slider.setMinimum(1)
         self.frame_slider.setMaximum(100)
         self.frame_slider.setValue(0)
@@ -315,7 +314,6 @@ class Main_Gui(QMainWindow):
         self.info_label.setStyleSheet("color: white; font-size: 11px;")
         self.info_label.setAlignment(QtCore.Qt.AlignCenter)
 
-
         # qwigtet to info (contaner
         self.frame_info_slider_container = QWidget()
         frame_info_slider_container = QVBoxLayout()
@@ -325,9 +323,14 @@ class Main_Gui(QMainWindow):
         frame_info_slider_container.addWidget(self.info_label)
         self.frame_info_slider_container.setLayout(frame_info_slider_container)
 
-
         # add_button_slider_logick
+        #change order of buttons
         self.create_button_frame_slider()
+        bottom_button_layout.addWidget(self.frame_info_slider_container, 1)
+        bottom_button_layout.addWidget(self.frame_slider_input)
+        bottom_buttons_layout = QHBoxLayout()
+        bottom_buttons_layout.setContentsMargins(0, 0, 0, 0)
+        bottom_buttons_layout.setSpacing(2)
 
         # top_mid_button
         for i in range(1, 8):
@@ -337,9 +340,8 @@ class Main_Gui(QMainWindow):
             top_mid_button.setIconSize(QtCore.QSize(24, 24))
             top_mid_button.setStyleSheet(button_style)
 
-
             match i:
-                #set value to start position
+                # set value to start position
                 case 1:
                     top_mid_button.clicked.connect(self.button_frame_slider.start_value)
                 # subtract to slider value 1
@@ -348,7 +350,7 @@ class Main_Gui(QMainWindow):
                 # subtract to slider value 10
                 case 3:
                     top_mid_button.clicked.connect(self.button_frame_slider.down_1)
-                #add to slider value 1
+                # add to slider value 1
                 case 5:
                     top_mid_button.clicked.connect(self.button_frame_slider.up_1)
                 # add to slider value 10
@@ -358,12 +360,13 @@ class Main_Gui(QMainWindow):
                 case 7:
                     top_mid_button.clicked.connect(self.button_frame_slider.max_value)
 
-            bottom_button_layout.addWidget(top_mid_button)
-            bottom_button_layout.addStretch()
+            #add botton butons layaout to widget
+            bottom_buttons_layout.addWidget(top_mid_button)
 
-            bottom_button_layout.addWidget(self.frame_info_slider_container)
-            bottom_button_layout.addWidget(self.frame_slider_input)
-        #input slider style
+        # addbotton layaout
+        bottom_button_layout.addLayout(bottom_buttons_layout)
+
+        # input slider style
         (self.frame_slider_input.setStyleSheet
          ("""
             QLineEdit {
@@ -376,12 +379,11 @@ class Main_Gui(QMainWindow):
 
         # Slider to slider_input
         (self.frame_slider.valueChanged.connect
-        (lambda slider_value: self.frame_slider_input.setText(str(slider_value)))
+         (lambda slider_value: self.frame_slider_input.setText(str(slider_value)))
          )
 
         # slider_input to slider
         self.frame_slider_input.returnPressed.connect(self.change_slider_value)
-
 
         return bottom_panel
 
@@ -443,6 +445,12 @@ class Main_Gui(QMainWindow):
 
         file_menu.addAction(menu_action_save_project)
 
+        #option to load saved project to current loaded images / video
+        menu_action_load_project = QAction("Load project", self)
+        menu_action_load_project.triggered.connect(self.load_project_from_file)
+
+        file_menu.addAction(menu_action_load_project)
+
     #save project fuction
     def save_project_to_files(self):
 
@@ -463,6 +471,34 @@ class Main_Gui(QMainWindow):
         saved_project_logic = Saved_project(self.image)
         #save and catch error masage for later
         save_successful, error_message = saved_project_logic.save_current_project_to_files(json_file_path)
+
+    #load project fuction
+    def load_project_from_file(self):
+
+        #chose json file
+        json_file_path, selected_filter = QFileDialog.getOpenFileName(self, "Load project", "", "JSON Files (*.json)")
+
+        #user quit if is not select
+        if not json_file_path:
+            return
+
+        #ask if current annotations will be replace
+        if any(self.image.draw_rectangle.fream_annotation.values()):
+            answer = QMessageBox.question(self, "Load project","Current annotations will be replaced. Continue?")
+            if answer != QMessageBox.Yes:
+                return
+
+        #load
+        loaded_project_logic = Load_projects(self.image)
+        load_successful, error_message = loaded_project_logic.load_current_project_from_file(json_file_path)
+
+        #show error
+        if not load_successful:
+            QMessageBox.critical(self, "Load project failed", error_message)
+            return
+
+        #old history of undo
+        self.button_ctrl_z.clear_saved_snapshots()
 
     # enable mouse drag
     def enable_move_mode(self):
