@@ -51,7 +51,7 @@ class Main_Gui(QMainWindow):
     def create_top_panel(self):
         top_panel = QFrame()
         top_panel.setFixedHeight(80)
-        top_panel.setStyleSheet("background-color: #2c3e50;")
+        top_panel.setStyleSheet("background-color: #CFC3CC;")
 
         # Create button layout
         top_button_layout = QHBoxLayout()
@@ -109,7 +109,7 @@ class Main_Gui(QMainWindow):
     def create_left_panel(self):
         left_panel = QFrame()
         left_panel.setFixedWidth(50)
-        left_panel.setStyleSheet("background-color: #e74c3c;")
+        left_panel.setStyleSheet("background-color: #D7D7D7;")
 
         left_layout = QVBoxLayout()
         left_layout.setContentsMargins(5, 5, 5, 5)
@@ -204,7 +204,7 @@ class Main_Gui(QMainWindow):
 
     def create_middle_panel(self):
         middle_panel = QFrame()
-        middle_panel.setStyleSheet("background-color: #1abc9c;")
+        middle_panel.setStyleSheet("background-color: #F5F5F5;")
 
         image_layout = QVBoxLayout()
         middle_panel.setLayout(image_layout)
@@ -254,7 +254,7 @@ class Main_Gui(QMainWindow):
     def create_bottom_panel(self):
         bottom_panel = QFrame()
         bottom_panel.setFixedHeight(80)
-        bottom_panel.setStyleSheet("background-color: #244eff;")
+        bottom_panel.setStyleSheet("background-color: #CFC3CC;")
 
         # Create button layout
         bottom_button_layout = QHBoxLayout()

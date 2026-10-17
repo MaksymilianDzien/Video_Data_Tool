@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="fix save file">
-      <change afterPath="$PROJECT_DIR$/core/Load_projects.py" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add load project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -111,14 +111,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00046" summary="/">
-      <option name="closed" value="true" />
-      <created>1787346948080</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1787346948080</updated>
     </task>
     <task id="LOCAL-00047" summary="/">
       <option name="closed" value="true" />
@@ -504,7 +496,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791906146422</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="add load project">
+      <option name="closed" value="true" />
+      <created>1792083088881</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1792083088882</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -531,7 +531,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add select or add labes" />
     <MESSAGE value="small chane in comment and code" />
     <MESSAGE value="fix button left buttons error" />
     <MESSAGE value="fix error value name" />
@@ -556,6 +555,7 @@
     <MESSAGE value="add icon to botton&#10; panel" />
     <MESSAGE value="add icon to right  anotation&#10; panel" />
     <MESSAGE value="fix save file" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix save file" />
+    <MESSAGE value="add load project" />
+    <option name="LAST_COMMIT_MESSAGE" value="add load project" />
   </component>
 </project>

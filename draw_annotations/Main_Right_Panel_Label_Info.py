@@ -42,7 +42,7 @@ class Main_Right_Panel_Label_Info:
         # set frame of right panel
         self.main_right_panel = QFrame()
         self.main_right_panel.setFixedWidth(self.info_labels_width)
-        self.main_right_panel.setStyleSheet("background-color: #f1c40f;")
+        self.main_right_panel.setStyleSheet("background-color: #D7D7D7;")
 
         # tabls
         self.object_and_labels_tabs = QTabWidget()
