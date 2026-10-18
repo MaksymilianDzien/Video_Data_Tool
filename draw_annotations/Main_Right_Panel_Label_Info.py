@@ -15,6 +15,38 @@ class Main_Right_Panel_Label_Info:
     #size of right icon
     size_of_icon = 22
 
+    #height of rows
+    height_of_rows = 36
+
+    #spacting bettowen rows
+    spacing_of_rows = 3
+
+   #style of annotaion  row (slimar to left panel buttons)
+    row_frame_style = """
+        QFrame#annotation_row_frame {
+            background-color: #ecf0f1;
+            border: 2px solid #2c3e50;
+            border-radius: 3px;
+        }
+        QFrame#annotation_row_frame:hover {
+            background-color: #bdc3c7;
+        }
+        QWidget {
+            background: transparent;
+        }
+        QLabel {
+            border: none;
+            font-weight: bold;
+        }
+    """
+
+    #list transparnt
+    style_of_list_items = """
+        QListWidget::item { background: transparent; }
+        QListWidget::item:selected { background: transparent; }
+        QListWidget::item:hover { background: transparent; }
+    """
+
     def __init__(self, annotated_widget, current_label_obiect):
 
        #folder with panel panel ikons
@@ -49,10 +81,16 @@ class Main_Right_Panel_Label_Info:
 
         # create list of id object
         self.list_of_object = QListWidget()
+        #set style and spacing
+        self.list_of_object.setSpacing(self.spacing_of_rows)
+        self.list_of_object.setStyleSheet(self.style_of_list_items)
         self.object_and_labels_tabs.addTab(self.list_of_object, "Objects")
 
         # create list of labes
         self.list_of_labels = QListWidget()
+        #set style and spacing
+        self.list_of_labels.setSpacing(self.spacing_of_rows)
+        self.list_of_labels.setStyleSheet(self.style_of_list_items)
         self.object_and_labels_tabs.addTab(self.list_of_labels, "Labels")
 
         # layaout of panel
@@ -90,11 +128,18 @@ class Main_Right_Panel_Label_Info:
     #crate row annotation
     def create_object_row_widget(self, curent_annotation):
 
-        #create new widget (right row)
-        annotation_row_widget = QWidget()
+        #create new QFrame (right row)
+        annotation_row_widget = QFrame()
+        #set obcject name for find style
+        annotation_row_widget.setObjectName("annotation_row_frame")
+        #set height of rows
+        annotation_row_widget.setFixedHeight(self.height_of_rows)
+        #set style a
+        annotation_row_widget.setStyleSheet(self.row_frame_style)
         #set laout
         annotation_row_layout = QHBoxLayout()
-        annotation_row_layout.setContentsMargins(4, 2, 4, 2)
+        #set  in margin
+        annotation_row_layout.setContentsMargins(8, 2, 6, 2)
         annotation_row_layout.setSpacing(4)
         #add layout to widged
         annotation_row_widget.setLayout(annotation_row_layout)
@@ -244,11 +289,18 @@ class Main_Right_Panel_Label_Info:
     #crate row for one label (group)
     def create_annotation_group_row_widget(self, curent_label):
 
-        #create new widget (right row)
-        annotation_group_row_widget = QWidget()
+        #create new QFrame (right row)
+        annotation_group_row_widget = QFrame()
+        #set obcject name for find style
+        annotation_group_row_widget.setObjectName("annotation_row_frame")
+        #set height of rows
+        annotation_group_row_widget.setFixedHeight(self.height_of_rows)
+        #set style a
+        annotation_group_row_widget.setStyleSheet(self.row_frame_style)
         #set laout
         annotation_group_layout = QHBoxLayout()
-        annotation_group_layout.setContentsMargins(4, 2, 4, 2)
+        #set  in margin
+        annotation_group_layout.setContentsMargins(8, 2, 6, 2)
         annotation_group_layout.setSpacing(4)
         #add layout to widged
         annotation_group_row_widget.setLayout(annotation_group_layout)
