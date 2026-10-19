@@ -253,14 +253,21 @@ class Main_Gui(QMainWindow):
     # create bootn palen with slider
     def create_bottom_panel(self):
         bottom_panel = QFrame()
-        bottom_panel.setFixedHeight(80)
+
+        #two rows first slider with number second button slider
+        bottom_panel.setFixedHeight(100)
         bottom_panel.setStyleSheet("background-color: #CFC3CC;")
 
-        # Create button layout
-        bottom_button_layout = QHBoxLayout()
+        # Create button QVBoxLayout layout
+        bottom_button_layout = QVBoxLayout()
         bottom_button_layout.setContentsMargins(5, 5, 5, 5)
-        bottom_button_layout.setSpacing(8)
+        bottom_button_layout.setSpacing(4)
         bottom_panel.setLayout(bottom_button_layout)
+
+        # all bottom button size (3/4)
+        bottom_button_width = 45
+        bottom_button_height = 34
+        bottom_icon_size = 18
 
         # button style same as main window
         button_style = """
@@ -312,22 +319,24 @@ class Main_Gui(QMainWindow):
         # name of info file style )
         self.info_label = QLabel("")
         self.info_label.setStyleSheet("color: white; font-size: 11px;")
-        self.info_label.setAlignment(QtCore.Qt.AlignCenter)
 
-        # qwigtet to info (contaner
-        self.frame_info_slider_container = QWidget()
-        frame_info_slider_container = QVBoxLayout()
-        frame_info_slider_container.setContentsMargins(0, 0, 0, 0)
-        frame_info_slider_container.setSpacing(2)
-        frame_info_slider_container.addWidget(self.frame_slider)
-        frame_info_slider_container.addWidget(self.info_label)
-        self.frame_info_slider_container.setLayout(frame_info_slider_container)
+        #file name and number of frame right size alignLeft
+        self.info_label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
 
         # add_button_slider_logick
         #change order of buttons
         self.create_button_frame_slider()
-        bottom_button_layout.addWidget(self.frame_info_slider_container, 1)
-        bottom_button_layout.addWidget(self.frame_slider_input)
+
+        #first row slider
+        bottom_slider_row_layout = QHBoxLayout()
+        bottom_slider_row_layout.setContentsMargins(0, 0, 0, 0)
+        bottom_slider_row_layout.setSpacing(8)
+        bottom_slider_row_layout.addWidget(self.frame_slider, 1)
+        bottom_slider_row_layout.addWidget(self.frame_slider_input)
+
+        #add row in top of layout
+        bottom_button_layout.addLayout(bottom_slider_row_layout)
+
         bottom_buttons_layout = QHBoxLayout()
         bottom_buttons_layout.setContentsMargins(0, 0, 0, 0)
         bottom_buttons_layout.setSpacing(2)
@@ -335,9 +344,10 @@ class Main_Gui(QMainWindow):
         # top_mid_button
         for i in range(1, 8):
             top_mid_button = QPushButton()
-            top_mid_button.setFixedSize(60, 45)
+            #size of button and icon size
+            top_mid_button.setFixedSize(bottom_button_width, bottom_button_height)
             top_mid_button.setIcon(QIcon(bottom_panel_icon_paths[i]))
-            top_mid_button.setIconSize(QtCore.QSize(24, 24))
+            top_mid_button.setIconSize(QtCore.QSize(bottom_icon_size, bottom_icon_size))
             top_mid_button.setStyleSheet(button_style)
 
             match i:
@@ -363,8 +373,18 @@ class Main_Gui(QMainWindow):
             #add botton butons layaout to widget
             bottom_buttons_layout.addWidget(top_mid_button)
 
+        #secont row add button margin and spacing
+        bottom_controls_row_layout = QHBoxLayout()
+        bottom_controls_row_layout.setContentsMargins(0, 0, 0, 0)
+        bottom_controls_row_layout.setSpacing(8)
+        #left size empty
+        bottom_controls_row_layout.addStretch(1)
+        bottom_controls_row_layout.addLayout(bottom_buttons_layout)
+        #file name or farme number in right size of buttons
+        bottom_controls_row_layout.addWidget(self.info_label, 1)
+
         # addbotton layaout
-        bottom_button_layout.addLayout(bottom_buttons_layout)
+        bottom_button_layout.addLayout(bottom_controls_row_layout)
 
         # input slider style
         (self.frame_slider_input.setStyleSheet

@@ -1,8 +1,6 @@
 import os
 from PyQt5.QtWidgets import (
-    QFrame, QVBoxLayout, QHBoxLayout, QTabWidget, QListWidget, QListWidgetItem,
-    QWidget, QPushButton, QLabel
-)
+    QFrame, QVBoxLayout, QHBoxLayout, QTabWidget, QListWidget, QListWidgetItem,QWidget, QPushButton, QLabel, QMenu)
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize
 
@@ -15,13 +13,14 @@ class Main_Right_Panel_Label_Info:
     #size of right icon
     size_of_icon = 22
 
-    #height of rows
-    height_of_rows = 36
+    #height of one row
+    height_of_row = 36
 
-    #spacting bettowen rows
-    spacing_of_rows = 3
+    #spacing bettwen rows
+    spacing_of_row = 3
 
-   #style of annotaion  row (slimar to left panel buttons)
+
+    #style of annotaion table (silmilar to left panel)
     row_frame_style = """
         QFrame#annotation_row_frame {
             background-color: #ecf0f1;
@@ -40,8 +39,8 @@ class Main_Right_Panel_Label_Info:
         }
     """
 
-    #list transparnt
-    style_of_list_items = """
+    #style of list
+    list_of_items_style = """
         QListWidget::item { background: transparent; }
         QListWidget::item:selected { background: transparent; }
         QListWidget::item:hover { background: transparent; }
@@ -65,6 +64,9 @@ class Main_Right_Panel_Label_Info:
         self.pinned_icon = os.path.join(annotation_option_icon_folder, "pinned.png")
         self.unpinned_icon = os.path.join(annotation_option_icon_folder, "unpinned.png")
 
+       #icon of delete option
+        self.delete_icon = os.path.join(annotation_option_icon_folder, "delete.png")
+
         # set image wiget (buuton 2 logick)
         self.annotated_widget = annotated_widget
 
@@ -81,16 +83,17 @@ class Main_Right_Panel_Label_Info:
 
         # create list of id object
         self.list_of_object = QListWidget()
-        #set style and spacing
-        self.list_of_object.setSpacing(self.spacing_of_rows)
-        self.list_of_object.setStyleSheet(self.style_of_list_items)
+
+        #set spacing and style of list of obieckt
+        self.list_of_object.setSpacing(self.spacing_of_row)
+        self.list_of_object.setStyleSheet(self.list_of_items_style)
         self.object_and_labels_tabs.addTab(self.list_of_object, "Objects")
 
         # create list of labes
         self.list_of_labels = QListWidget()
-        #set style and spacing
-        self.list_of_labels.setSpacing(self.spacing_of_rows)
-        self.list_of_labels.setStyleSheet(self.style_of_list_items)
+        # odstęp między ramkami i styl elementów listy labeli
+        self.list_of_labels.setSpacing(self.spacing_of_row)
+        self.list_of_labels.setStyleSheet(self.list_of_items_style)
         self.object_and_labels_tabs.addTab(self.list_of_labels, "Labels")
 
         # layaout of panel
@@ -102,6 +105,86 @@ class Main_Right_Panel_Label_Info:
     # getter to return right wighet to main gui
     def get_widget(self):
         return self.main_right_panel
+
+    #create 4 button for more anntaion option
+    def create_options_more_option_button(self, delete_text, delete_function):
+
+        #set "x" for buton now
+        more_options_button = QPushButton("X")
+        #set size of button
+        more_options_button.setFixedSize(self.size_of_icon, self.size_of_icon)
+        #set style of this button
+        more_options_button.setFlat(True)
+        more_options_button.setStyleSheet("QPushButton { border: none; background: transparent; font-weight: bold; }")
+
+        #if is cliked open more option menu
+        more_options_button.clicked.connect(lambda checked=False, current_button=more_options_button:
+            self.show_more_options_menu(current_button, delete_text, delete_function))
+
+        #retun this more option button
+        return more_options_button
+
+    #show more option menu witch options
+    def show_more_options_menu(self, more_option_button, delete_text, delete_function):
+
+        #create new mini menu for annotaion option
+        more_options_menu = QMenu()
+
+        #ony one option delete annotaion or label
+        delete_action = more_options_menu.addAction(QIcon(self.delete_icon), delete_text)
+
+        #menu is create from bottom left and retrun chose of menu
+        more_option_chosen_action = more_options_menu.exec_(more_option_button.mapToGlobal(more_option_button.rect().bottomLeft()))
+
+        #if chose delete action call delete fucotn
+        if more_option_chosen_action == delete_action:
+            delete_function()
+
+    #electe curent annotaion
+    def delete_current_annotation(self, curent_annotation):
+
+        #create new annotaion
+        current_ddraw_rectangle = self.annotated_widget.draw_rectangle
+
+        #find and delate current annotaion ( is equals and change value in list)
+        for for_frame_annotations in current_ddraw_rectangle.fream_annotation.values():
+            for_frame_annotations[:] = [annotation for annotation in for_frame_annotations if annotation is not curent_annotation]
+
+        #if annotation is selected then unselect grab and edited mode
+        edit_current_anotation = self.annotated_widget.edit_current_anotation
+        if edit_current_anotation.select_current_annotation is curent_annotation:
+            edit_current_anotation.deselecte_edited_mode()
+
+        #save stage to ctrl z history
+        current_ddraw_rectangle.on_annotion_comit()
+
+        #refrash list of obciet right panel
+        self.annotated_widget.update()
+        self.refresh_all_objects_in_list()
+
+    #delate all annotan of labels
+    def delete_all_annotations_of_label(self, curent_label):
+
+        #create new annotaion and label of id
+        current_draw_rectangle = self.annotated_widget.draw_rectangle
+        curent_label_id = curent_label["id"]
+
+        #dealte all annotaion in current label (rest is stay)
+        for for_frame_annotations in current_draw_rectangle.fream_annotation.values():
+            for_frame_annotations[:] = [annotation for annotation in for_frame_annotations if annotation.get("label_id") != curent_label_id]
+
+        #if annotation is selected then unselect grab and edited mode
+        edit_current_anotation = self.annotated_widget.edit_current_anotation
+        current_select_annotation = edit_current_anotation.select_current_annotation
+        if current_select_annotation is not None and current_select_annotation.get("label_id") == curent_label_id:
+            edit_current_anotation.deselecte_edited_mode()
+
+        #save stage to ctrl z history
+        current_draw_rectangle.on_annotion_comit()
+
+        #refrash list of obciet right panel
+        self.annotated_widget.update()
+        self.refresh_all_objects_in_list()
 
     # Refresh list of oject
     def refresh_all_objects_in_list(self):
@@ -130,15 +213,19 @@ class Main_Right_Panel_Label_Info:
 
         #create new QFrame (right row)
         annotation_row_widget = QFrame()
-        #set obcject name for find style
+
+        #name of objeict style
         annotation_row_widget.setObjectName("annotation_row_frame")
-        #set height of rows
-        annotation_row_widget.setFixedHeight(self.height_of_rows)
-        #set style a
+
+        #set const fixed height of row
+        annotation_row_widget.setFixedHeight(self.height_of_row)
+
+        #set style of row widget
         annotation_row_widget.setStyleSheet(self.row_frame_style)
         #set laout
         annotation_row_layout = QHBoxLayout()
-        #set  in margin
+
+        #set left margin and spacing of layout
         annotation_row_layout.setContentsMargins(8, 2, 6, 2)
         annotation_row_layout.setSpacing(4)
         #add layout to widged
@@ -207,12 +294,11 @@ class Main_Right_Panel_Label_Info:
         #add button to widget
         annotation_row_layout.addWidget(pinned_annotation_button)
 
-       #1 button not yet
-        #futrure add
-        for _ in range(1):
-            button_slot = QWidget()
-            button_slot.setFixedSize(self.size_of_icon, self.size_of_icon)
-            annotation_row_layout.addWidget(button_slot)
+       #4 button more option
+        #add futorue now is only delate
+        more_action_button_menu = self.create_options_more_option_button(
+            "Delete annotation",lambda current_annotation=curent_annotation: self.delete_current_annotation(current_annotation))
+        annotation_row_layout.addWidget(more_action_button_menu)
 
         return annotation_row_widget
 
@@ -289,17 +375,21 @@ class Main_Right_Panel_Label_Info:
     #crate row for one label (group)
     def create_annotation_group_row_widget(self, curent_label):
 
-        #create new QFrame (right row)
+        #create new widget (QFrame row)
         annotation_group_row_widget = QFrame()
-        #set obcject name for find style
+
+        #name of objeict style
         annotation_group_row_widget.setObjectName("annotation_row_frame")
-        #set height of rows
-        annotation_group_row_widget.setFixedHeight(self.height_of_rows)
-        #set style a
+
+        #set const fixed height of row
+        annotation_group_row_widget.setFixedHeight(self.height_of_row)
+
+        #set style of row widget
         annotation_group_row_widget.setStyleSheet(self.row_frame_style)
         #set laout
         annotation_group_layout = QHBoxLayout()
-        #set  in margin
+
+        #set left margin and spacing of layout
         annotation_group_layout.setContentsMargins(8, 2, 6, 2)
         annotation_group_layout.setSpacing(4)
         #add layout to widged
@@ -363,12 +453,11 @@ class Main_Right_Panel_Label_Info:
         #add button to widget
         annotation_group_layout.addWidget(pin_annotation_group_button)
 
-        #1 button not yet
-        #futrure add
-        for _ in range(1):
-            button_slot = QWidget()
-            button_slot.setFixedSize(self.size_of_icon, self.size_of_icon)
-            annotation_group_layout.addWidget(button_slot)
+        # 4 button more option
+        # add futorue now is only delate
+        more_action_button_grupe_menu = self.create_options_more_option_button(
+            "Delete label",lambda current_label=curent_label: self.delete_all_annotations_of_label(current_label))
+        annotation_group_layout.addWidget(more_action_button_grupe_menu)
 
         return annotation_group_row_widget
 
