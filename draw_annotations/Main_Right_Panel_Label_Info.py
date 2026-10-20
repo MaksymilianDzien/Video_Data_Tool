@@ -67,6 +67,15 @@ class Main_Right_Panel_Label_Info:
        #icon of delete option
         self.delete_icon = os.path.join(annotation_option_icon_folder, "delete.png")
 
+        #icon of back to last layer
+        self.max_back_icon = os.path.join(annotation_option_icon_folder, "max_to_back.png")
+        #icon of backward one layer
+        self.one_backward_icon = os.path.join(annotation_option_icon_folder, "one_backward.png")
+        #icon of forward one layer
+        self.one_forward_icon = os.path.join(annotation_option_icon_folder, "one_forward.png")
+        #icon of forward first layer
+        self.max_front_icon = os.path.join(annotation_option_icon_folder, "max_to_front.png")
+
         # set image wiget (buuton 2 logick)
         self.annotated_widget = annotated_widget
 
@@ -107,7 +116,7 @@ class Main_Right_Panel_Label_Info:
         return self.main_right_panel
 
     #create 4 button for more anntaion option
-    def create_options_more_option_button(self, delete_text, delete_function):
+    def create_more_option_button(self, more_options_list):
 
         #set "x" for buton now
         more_options_button = QPushButton("X")
@@ -119,26 +128,137 @@ class Main_Right_Panel_Label_Info:
 
         #if is cliked open more option menu
         more_options_button.clicked.connect(lambda checked=False, current_button=more_options_button:
-            self.show_more_options_menu(current_button, delete_text, delete_function))
+            self.show_more_options_menu(current_button, more_options_list))
 
         #retun this more option button
         return more_options_button
 
     #show more option menu witch options
-    def show_more_options_menu(self, more_option_button, delete_text, delete_function):
+    def show_more_options_menu(self, more_option_button, more_options_list):
 
         #create new mini menu for annotaion option
         more_options_menu = QMenu()
 
-        #ony one option delete annotaion or label
-        delete_action = more_options_menu.addAction(QIcon(self.delete_icon), delete_text)
+        #new QAction menu option
+        Qactions_with_functions = {}
+
+        #add all option to list
+        for more_option in more_options_list:
+
+            #if is none add seprator to menu
+            if more_option is None:
+                more_options_menu.addSeparator()
+                continue
+
+            #set with icon and name
+            more_option_icon_path, more_option_text, more_option_function = more_option
+            option_action = more_options_menu.addAction(QIcon(more_option_icon_path), more_option_text)
+            Qactions_with_functions[option_action] = more_option_function
 
         #menu is create from bottom left and retrun chose of menu
         more_option_chosen_action = more_options_menu.exec_(more_option_button.mapToGlobal(more_option_button.rect().bottomLeft()))
 
-        #if chose delete action call delete fucotn
-        if more_option_chosen_action == delete_action:
-            delete_function()
+        #if chose any action call function of this action
+        if more_option_chosen_action in Qactions_with_functions:
+            Qactions_with_functions[more_option_chosen_action]()
+
+    #create more option list of fuction
+    def create_more_options_list(self, more_layer_function, more_delete_text, more_delete_function):
+        return [
+            #(1)max back
+            (self.max_back_icon, "Send to back", lambda: more_layer_function("to_back")),
+            #(2)one back
+            (self.one_backward_icon, "Send backward", lambda: more_layer_function("backward")),
+            #(3)one up
+            (self.one_forward_icon, "Bring forward", lambda: more_layer_function("forward")),
+            #(4)max up
+            (self.max_front_icon, "Bring to front", lambda: more_layer_function("to_front")),
+            #seperator
+            None,
+            #(5) delete
+            (self.delete_icon, more_delete_text, more_delete_function),
+        ]
+
+    #reorder layer in frames
+    def reorder_current_layer_in_frame(self, current_frame_annotations, is_selected, action_of_layer):
+
+        #order annotaion in front (first layer)
+        order_annotations = sorted(current_frame_annotations, key=lambda annotation: annotation.get("layer", 1))
+
+        #if
+        if not any(is_selected(annotation) for annotation in order_annotations):
+            return
+
+        if action_of_layer == "to_front":
+            #add layer in fornt of list of annotaion
+            order_annotations = (
+                [annotation for annotation in order_annotations if is_selected(annotation)]
+                + [annotation for annotation in order_annotations if not is_selected(annotation)])
+
+        elif action_of_layer == "to_back":
+            #one back in annotaion list
+            order_annotations = (
+                [annotation for annotation in order_annotations if not is_selected(annotation)]
+                + [annotation for annotation in order_annotations if is_selected(annotation)])
+
+        elif action_of_layer == "forward":
+            #one to front to annotaion list
+            for index in range(1, len(order_annotations)):
+                if is_selected(order_annotations[index]) and not is_selected(order_annotations[index - 1]):
+                    order_annotations[index - 1], order_annotations[index] = \
+                        order_annotations[index], order_annotations[index - 1]
+
+        elif action_of_layer == "backward":
+            #add current layer to last value in annotaion list
+            for index in range(len(order_annotations) - 2, -1, -1):
+                if is_selected(order_annotations[index]) and not is_selected(order_annotations[index + 1]):
+                    order_annotations[index + 1], order_annotations[index] = \
+                        order_annotations[index], order_annotations[index + 1]
+
+        #change all anntaion order in list in layers
+        max_layer = self.annotated_widget.draw_rectangle.layers
+        for index, annotation in enumerate(order_annotations):
+            annotation["layer"] = min(index + 1, max_layer)
+
+    #change annotaion layers ( 1 - 4 options in menu )
+    def change_layers_of_annotations(self, curent_annotation, change_layer_action):
+
+        #create new rectangle
+        change_current_draw_rectangle = self.annotated_widget.draw_rectangle
+
+        #find current annotaion in list ( is e)
+        for for_frame_annotations in change_current_draw_rectangle.fream_annotation.values():
+            if any(annotation is curent_annotation for annotation in for_frame_annotations):
+                self.reorder_current_layer_in_frame(
+                    for_frame_annotations,
+                    lambda annotation: annotation is curent_annotation,change_layer_action)
+                break
+
+        #save ctrl + z history
+        #redraw all
+        self.finish_layer_change()
+
+    #change labels layers ( 1 - 4 options in menu )
+    def change_layers_of_labels_annotations(self, curent_label, change_layer_action):
+
+        #create labes
+        change_current_draw_rectangle = self.annotated_widget.draw_rectangle
+        change_curent_label_id = curent_label["id"]
+
+        #find current labels in list ( is e )
+        for for_frame_annotations in change_current_draw_rectangle.fream_annotation.values():
+            self.reorder_current_layer_in_frame(
+                for_frame_annotations,
+                lambda annotation: annotation.get("label_id") == change_curent_label_id,change_layer_action)
+
+        # save ctrl + z history
+        # redraw all
+        self.finish_layer_change()
+
+    #redraw all frame and save in ctr + z (end change in layers)
+    def finish_layer_change(self):
+        self.annotated_widget.draw_rectangle.on_annotion_comit()
+        self.annotated_widget.update()
 
     #electe curent annotaion
     def delete_current_annotation(self, curent_annotation):
@@ -295,9 +415,13 @@ class Main_Right_Panel_Label_Info:
         annotation_row_layout.addWidget(pinned_annotation_button)
 
        #4 button more option
-        #add futorue now is only delate
-        more_action_button_menu = self.create_options_more_option_button(
-            "Delete annotation",lambda current_annotation=curent_annotation: self.delete_current_annotation(current_annotation))
+       #deleate and layers change option
+        more_action_button_menu = self.create_more_option_button(
+            self.create_more_options_list(
+                lambda layer_action, current_annotation=curent_annotation:
+                    self.change_layers_of_annotations(current_annotation, layer_action),
+                "Delete annotation",
+                lambda current_annotation=curent_annotation: self.delete_current_annotation(current_annotation)))
         annotation_row_layout.addWidget(more_action_button_menu)
 
         return annotation_row_widget
@@ -454,9 +578,13 @@ class Main_Right_Panel_Label_Info:
         annotation_group_layout.addWidget(pin_annotation_group_button)
 
         # 4 button more option
-        # add futorue now is only delate
-        more_action_button_grupe_menu = self.create_options_more_option_button(
-            "Delete label",lambda current_label=curent_label: self.delete_all_annotations_of_label(current_label))
+        # deleate and layers change option
+        more_action_button_grupe_menu = self.create_more_option_button(
+            self.create_more_options_list(
+                lambda layer_action, current_label=curent_label:
+                    self.change_layers_of_labels_annotations(current_label, layer_action),
+                "Delete label",
+                lambda current_label=curent_label: self.delete_all_annotations_of_label(current_label)))
         annotation_group_layout.addWidget(more_action_button_grupe_menu)
 
         return annotation_group_row_widget
