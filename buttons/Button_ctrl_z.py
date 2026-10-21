@@ -15,6 +15,9 @@ class Button_ctrl_z:
         # set new table of saved annotation
         self.saved_history = []
 
+        #set list of undo
+        self.redo_history = []
+
     # sabe current state of annotaion
     def save_current_state_of_label(self):
 
@@ -29,13 +32,18 @@ class Button_ctrl_z:
         #svaet to snapshot history
         self.saved_history.append(snapshot_of_annotation)
 
+        #if is ctrl z then is clear redo histroy
+        self.redo_history = []
+
         # chek if is in range to max undo
         if len(self.saved_history) > self.undo_step:
             self.saved_history.pop(0)
 
     # clear all history
     def clear_saved_snapshots(self):
+
         self.saved_history = []
+        self.redo_history = []
 
     # undo fuction
     def undo_current_frame(self):
@@ -45,7 +53,7 @@ class Button_ctrl_z:
             return
 
         # delete current state of frame
-        self.saved_history.pop()
+        self.redo_history.append(self.saved_history.pop())
 
         # refer to drawing rectangle
         current_draw_rectangle = self.main_window.image.draw_rectangle

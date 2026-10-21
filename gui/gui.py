@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import (
 from buttons.Button_polygon_option import Button_polygon_option
 from buttons.Button_rotated_option import Button_rotated_option
 from buttons.Button_ctrl_z import Button_ctrl_z
+from buttons.Button_ctrl_d import Button_ctrl_d
 from buttons.Button_logic_2 import ButtonLogic
 from buttons.Button_logic_3 import Button3
 from buttons.Button_frame_slider import Button_frame_slider
@@ -50,8 +51,10 @@ class Main_Gui(QMainWindow):
     #create top panel
     def create_top_panel(self):
         top_panel = QFrame()
-        top_panel.setFixedHeight(80)
-        top_panel.setStyleSheet("background-color: #CFC3CC;")
+
+        #style and height of button
+        top_panel.setFixedHeight(50)
+        top_panel.setStyleSheet("background-color: #B6B3C4;")
 
         # Create button layout
         top_button_layout = QHBoxLayout()
@@ -75,16 +78,36 @@ class Main_Gui(QMainWindow):
                    }
                """
 
+        #folder from icon path
+        top_panel_icon_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)),"ctrl_icons")
+
+        #set top panel icon
+        top_panel_icon_paths = {
+            1: os.path.join(top_panel_icon_folder, "t1.png"),
+            2: os.path.join(top_panel_icon_folder, "ctrl_z.png"),
+            3: os.path.join(top_panel_icon_folder, "ctrl_d.png"),}
+
         # top_left_button
         for i in range(1, 4):
-            top_left_button = QPushButton(f"t.{i}")
-            top_left_button.setFixedSize(60, 45)
+            top_left_button = QPushButton()
+
+            #set side of button
+            top_left_button.setFixedSize(40, 40)
+            top_left_button.setIconSize(QtCore.QSize(24, 24))
+
+            if os.path.exists(top_panel_icon_paths[i]):
+                top_left_button.setIcon(QIcon(top_panel_icon_paths[i]))
+                top_left_button.setText("")
+
             top_left_button.setStyleSheet(button_style)
-            top_button_layout.addWidget(top_left_button)
 
             # t.2 - ctl + z
             if i == 2:
                 self.button_ctrl_z = Button_ctrl_z(self, top_left_button)
+
+            # t.3 - ctrl + d
+            if i == 3:
+                self.button_ctrl_d = Button_ctrl_d(self, top_left_button, self.button_ctrl_z)
 
             top_button_layout.addWidget(top_left_button)
 
@@ -131,7 +154,7 @@ class Main_Gui(QMainWindow):
             2: os.path.join(left_panel_icon_folder, "move.png"),
             3: os.path.join(left_panel_icon_folder, "zoom.png"),
             4: os.path.join(left_panel_icon_folder, "rotate.png"),
-            5: os.path.join(left_panel_icon_folder, "reset.jpg"),
+            5: os.path.join(left_panel_icon_folder, "start.png"),
             6: os.path.join(left_panel_icon_folder, "rectangle.png"),
             7: os.path.join(left_panel_icon_folder, "oval.png"),
             8: os.path.join(left_panel_icon_folder, "polygon.png"),
@@ -254,17 +277,17 @@ class Main_Gui(QMainWindow):
     def create_bottom_panel(self):
         bottom_panel = QFrame()
 
-        #two rows first slider with number second button slider
+        #set hight and  style in qframe
         bottom_panel.setFixedHeight(100)
-        bottom_panel.setStyleSheet("background-color: #CFC3CC;")
+        bottom_panel.setStyleSheet("background-color: #B6B3C4;")
 
-        # Create button QVBoxLayout layout
+        # Create button layout
         bottom_button_layout = QVBoxLayout()
         bottom_button_layout.setContentsMargins(5, 5, 5, 5)
         bottom_button_layout.setSpacing(4)
         bottom_panel.setLayout(bottom_button_layout)
 
-        # all bottom button size (3/4)
+        #size of buttons
         bottom_button_width = 45
         bottom_button_height = 34
         bottom_icon_size = 18
@@ -319,22 +342,20 @@ class Main_Gui(QMainWindow):
         # name of info file style )
         self.info_label = QLabel("")
         self.info_label.setStyleSheet("color: white; font-size: 11px;")
-
-        #file name and number of frame right size alignLeft
         self.info_label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
 
         # add_button_slider_logick
         #change order of buttons
         self.create_button_frame_slider()
 
-        #first row slider
+        #slider and frame count style
         bottom_slider_row_layout = QHBoxLayout()
         bottom_slider_row_layout.setContentsMargins(0, 0, 0, 0)
         bottom_slider_row_layout.setSpacing(8)
         bottom_slider_row_layout.addWidget(self.frame_slider, 1)
         bottom_slider_row_layout.addWidget(self.frame_slider_input)
 
-        #add row in top of layout
+        #add slider in top layout
         bottom_button_layout.addLayout(bottom_slider_row_layout)
 
         bottom_buttons_layout = QHBoxLayout()
@@ -344,7 +365,7 @@ class Main_Gui(QMainWindow):
         # top_mid_button
         for i in range(1, 8):
             top_mid_button = QPushButton()
-            #size of button and icon size
+            #size of buttons and icons
             top_mid_button.setFixedSize(bottom_button_width, bottom_button_height)
             top_mid_button.setIcon(QIcon(bottom_panel_icon_paths[i]))
             top_mid_button.setIconSize(QtCore.QSize(bottom_icon_size, bottom_icon_size))
@@ -373,14 +394,17 @@ class Main_Gui(QMainWindow):
             #add botton butons layaout to widget
             bottom_buttons_layout.addWidget(top_mid_button)
 
-        #secont row add button margin and spacing
+
+        #set maring and spacing
         bottom_controls_row_layout = QHBoxLayout()
         bottom_controls_row_layout.setContentsMargins(0, 0, 0, 0)
         bottom_controls_row_layout.setSpacing(8)
-        #left size empty
+
+        #left empty
         bottom_controls_row_layout.addStretch(1)
         bottom_controls_row_layout.addLayout(bottom_buttons_layout)
-        #file name or farme number in right size of buttons
+
+        #file name / frame count
         bottom_controls_row_layout.addWidget(self.info_label, 1)
 
         # addbotton layaout

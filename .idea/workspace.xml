@@ -4,9 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add delete label">
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add change layers label">
+      <change afterPath="$PROJECT_DIR$/buttons/Button_ctrl_d.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/delete.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/max_to_back.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/max_to_front.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/more.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/one_backward.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/one_forward.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/ctrl_icons/ctrl_d.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/ctrl_icons/ctrl_z.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/start.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buttons/Button_ctrl_z.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_ctrl_z.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,26 +56,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#1 on master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/JA/PycharmProjects/Dane_wizyjne_projekt/draw_annotations/annotaion_option_icons&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.gui.executor": "Run",
+    "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "#1 on master",
+    "last_opened_file_path": "C:/Users/JA/PycharmProjects/Dane_wizyjne_projekt/draw_annotations/annotaion_option_icons"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\draw_annotations\annotaion_option_icons" />
+      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\buttons\ctrl_icons" />
+      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\left_panel_icons" />
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\annotaion_option_icons" />
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\bottom_panel_icons" />
-      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\icons" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui" />
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\draw_annotations" />
     </key>
   </component>
@@ -110,14 +124,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00050" summary="add frame_slider_input and connect frame_slider">
-      <option name="closed" value="true" />
-      <created>1787662784603</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1787662784603</updated>
     </task>
     <task id="LOCAL-00051" summary="simpe koments">
       <option name="closed" value="true" />
@@ -503,7 +509,15 @@
       <option name="project" value="LOCAL" />
       <updated>1792445116366</updated>
     </task>
-    <option name="localTasksCounter" value="99" />
+    <task id="LOCAL-00099" summary="add change layers label">
+      <option name="closed" value="true" />
+      <created>1792514955848</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1792514955849</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -530,7 +544,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add right panel" />
     <MESSAGE value="add 2 left button rotate and reset image postion" />
     <MESSAGE value="add file info under frame slinder" />
     <MESSAGE value="add contr z button" />
@@ -555,6 +568,7 @@
     <MESSAGE value="change colors" />
     <MESSAGE value="change right panel style" />
     <MESSAGE value="add delete label" />
-    <option name="LAST_COMMIT_MESSAGE" value="add delete label" />
+    <MESSAGE value="add change layers label" />
+    <option name="LAST_COMMIT_MESSAGE" value="add change layers label" />
   </component>
 </project>

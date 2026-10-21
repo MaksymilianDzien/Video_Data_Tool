@@ -76,6 +76,9 @@ class Main_Right_Panel_Label_Info:
         #icon of forward first layer
         self.max_front_icon = os.path.join(annotation_option_icon_folder, "max_to_front.png")
 
+       #icon of more option
+        self.more_option_icon = os.path.join(annotation_option_icon_folder, "more.png")
+
         # set image wiget (buuton 2 logick)
         self.annotated_widget = annotated_widget
 
@@ -118,8 +121,10 @@ class Main_Right_Panel_Label_Info:
     #create 4 button for more anntaion option
     def create_more_option_button(self, more_options_list):
 
-        #set "x" for buton now
-        more_options_button = QPushButton("X")
+        #set icon and size more option
+        more_options_button = QPushButton()
+        more_options_button.setIcon(QIcon(self.more_option_icon))
+        more_options_button.setIconSize(QSize(self.size_of_icon, self.size_of_icon))
         #set size of button
         more_options_button.setFixedSize(self.size_of_icon, self.size_of_icon)
         #set style of this button
@@ -165,17 +170,17 @@ class Main_Right_Panel_Label_Info:
     #create more option list of fuction
     def create_more_options_list(self, more_layer_function, more_delete_text, more_delete_function):
         return [
-            #(1)max back
-            (self.max_back_icon, "Send to back", lambda: more_layer_function("to_back")),
-            #(2)one back
-            (self.one_backward_icon, "Send backward", lambda: more_layer_function("backward")),
-            #(3)one up
-            (self.one_forward_icon, "Bring forward", lambda: more_layer_function("forward")),
-            #(4)max up
+            # (1)max up
             (self.max_front_icon, "Bring to front", lambda: more_layer_function("to_front")),
-            #seperator
+            # (2)one up
+            (self.one_forward_icon, "Bring forward", lambda: more_layer_function("forward")),
+            # (3)one back
+            (self.one_backward_icon, "Send backward", lambda: more_layer_function("backward")),
+            # (4)max back
+            (self.max_back_icon, "Send to back", lambda: more_layer_function("to_back")),
+            # seperator
             None,
-            #(5) delete
+            # (5) delete
             (self.delete_icon, more_delete_text, more_delete_function),
         ]
 
