@@ -1,3 +1,7 @@
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtWidgets import QShortcut
+
+
 class Button_ctrl_z:
 
     #max undo step
@@ -17,6 +21,10 @@ class Button_ctrl_z:
 
         #set list of undo
         self.redo_history = []
+
+        # key shortcut button undo
+        self.shortcut_undo_button = QShortcut(QKeySequence("Ctrl+Z"), self.main_window)
+        self.shortcut_undo_button.activated.connect(self.undo_current_frame)
 
     # sabe current state of annotaion
     def save_current_state_of_label(self):

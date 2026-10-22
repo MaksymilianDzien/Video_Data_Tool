@@ -1,7 +1,7 @@
 import cv2
 import os
-from PyQt5.QtWidgets import QLabel
-from PyQt5.QtGui import QPixmap, QPainter, QImage, QTransform
+from PyQt5.QtWidgets import QLabel, QShortcut
+from PyQt5.QtGui import QPixmap, QPainter, QImage, QTransform, QKeySequence
 from PyQt5.QtCore import Qt, QPoint, QPointF
 from draw_annotations.Draw_rectange import Draw_rectangle
 from draw_annotations.Label_log import Label_log
@@ -64,6 +64,9 @@ class ButtonLogic(QLabel):
 
         # set exist objciet to edit anntaion
         self.edit_current_anotation = Edit_annotation(self, self.draw_rectangle)
+
+        #all shortcut
+        self.left_panel_all_shortcut()
 
     # cv_to_pixmap
     def cv_frame_to_pixmap(self, frame):
@@ -430,3 +433,9 @@ class ButtonLogic(QLabel):
             return f"{file_name} (frame {index + 1}/{len(self.All_frames)})"
 
         return file_name
+
+    def left_panel_all_shortcut(self):
+
+        # keyboard shortcut Ctrl + Space
+        self.shortcut_reset_image_button = QShortcut(QKeySequence("Ctrl+Space"), self)
+        self.shortcut_reset_image_button.activated.connect(self.reset_image_to_start_position)
