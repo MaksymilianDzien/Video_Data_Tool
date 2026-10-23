@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
-
+from PyQt5.QtGui import QPixmap, QKeySequence
+from PyQt5.QtWidgets import QShortcut
 
 class Button3:
 
@@ -22,6 +22,10 @@ class Button3:
         self.original_image = None
         self.button_3.clicked.connect(self.zoom_image)
 
+        #zoom shortcut
+        self.zoom_shortcut_plus = QShortcut(QKeySequence("Ctrl++"), self.main_window)
+        self.zoom_shortcut_plus.activated.connect(self.zoom_image)
+
     def zoom_image(self):
 
         #
@@ -33,10 +37,7 @@ class Button3:
         # orginal image
         if self.original_image is None:
 
-            self.original_image = (
-                QPixmap(
-                zoom_image.original_iamge
-                ))
+            self.original_image = (QPixmap(zoom_image.original_iamge))
 
         # zoom + 30 %
         self.main_zoom *= self.step_zoom
@@ -45,17 +46,9 @@ class Button3:
         zoom_image.base_zoom_level = self.main_zoom
 
         # calculeate new image
-        width = (
-            int(
-            self.original_image.width() * self.main_zoom
-            ))
+        width = (int(self.original_image.width() * self.main_zoom))
 
-
-
-        height = (
-            int(
-            self.original_image.height() * self.main_zoom
-            ))
+        height = (int(self.original_image.height() * self.main_zoom))
 
         # create new bigger iamge
         scaled_image = self.original_image.scaled(

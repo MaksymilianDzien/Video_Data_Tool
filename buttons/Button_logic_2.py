@@ -1,8 +1,8 @@
 import cv2
 import os
-from PyQt5.QtWidgets import QLabel, QShortcut
+from PyQt5.QtWidgets import QLabel, QShortcut, QApplication
 from PyQt5.QtGui import QPixmap, QPainter, QImage, QTransform, QKeySequence
-from PyQt5.QtCore import Qt, QPoint, QPointF
+from PyQt5.QtCore import Qt, QPoint, QPointF, QEvent
 from draw_annotations.Draw_rectange import Draw_rectangle
 from draw_annotations.Label_log import Label_log
 from draw_annotations.Edit_annotation import Edit_annotation
@@ -37,6 +37,11 @@ class ButtonLogic(QLabel):
         self.dragging = False
 
         self.last_mouse_positon = QPoint()
+
+        #set flag to move scroll
+        self.scroll_dragging = False
+        #set last postion of drag
+        self.scroll_last_mouse_positon = QPoint()
 
         # List of all frame (video or image)
         self.All_frames = []
@@ -329,6 +334,13 @@ class ButtonLogic(QLabel):
     # mose Event(button)
     def mousePressEvent(self, event):
 
+        #if is scrole clicked
+        if event.button() == Qt.MiddleButton:
+            self.scroll_dragging = True
+            self.scroll_last_mouse_positon = event.pos()
+            self.setCursor(Qt.ClosedHandCursor)
+            return
+
         #draw rectangle event
         if self.draw_rectangle.set_draw_enabled and event.button() == Qt.LeftButton:
             self.draw_rectangle.mouse_press_handler(event.pos())
@@ -356,6 +368,14 @@ class ButtonLogic(QLabel):
 
     # Mouse move
     def mouseMoveEvent(self, event):
+
+        #move imge if scrole is cliced
+        if self.scroll_dragging:
+            middle_delta = event.pos() - self.scroll_last_mouse_positon
+            self.positon += middle_delta
+            self.scroll_last_mouse_positon = event.pos()
+            self.update()
+            return
 
         # draw rectangle event
         if self.draw_rectangle.set_draw_enabled:
@@ -388,6 +408,12 @@ class ButtonLogic(QLabel):
 
     # mouse relase
     def mouseReleaseEvent(self, event):
+
+        #if scrol is uncliced then end move
+        if event.button() == Qt.MiddleButton:
+            self.scroll_dragging = False
+            self.unsetCursor()
+            return
 
         # draw rectangle event
         if self.draw_rectangle.set_draw_enabled and event.button() == Qt.LeftButton:
@@ -436,6 +462,59 @@ class ButtonLogic(QLabel):
 
     def left_panel_all_shortcut(self):
 
-        # keyboard shortcut Ctrl + Space
+        #sort cut to reset image to start poziton (lambda need)
         self.shortcut_reset_image_button = QShortcut(QKeySequence("Ctrl+Space"), self)
-        self.shortcut_reset_image_button.activated.connect(self.reset_image_to_start_position)
+        self.shortcut_reset_image_button.activated.connect(lambda: self.window().reset_image_to_start_position())
+
+        #shortcut rorate left
+        self.shortcut_rotate_left_button = QShortcut(QKeySequence(","), self)
+        self.shortcut_rotate_left_button.activated.connect(self.rotate_image_to_left)
+
+        #shortcut rorate right
+        self.shortcut_rotate_right_button = QShortcut(QKeySequence("."), self)
+        self.shortcut_rotate_right_button.activated.connect(self.rotate_image_to_right)
+
+        #shortcut draw rectangle (lambda need)
+        self.shortcut_draw_rectangle_button = QShortcut(QKeySequence("R"), self)
+        self.shortcut_draw_rectangle_button.activated.connect(lambda: self.window().enable_rectangle_drawing())
+
+        #shortcut draw oval (lambda need)
+        self.shortcut_draw_oval_button = QShortcut(QKeySequence("O"), self)
+        self.shortcut_draw_oval_button.activated.connect(lambda: self.window().enable_oval_drawing())
+
+        #shortcut draw polygon (lambda need)
+        self.shortcut_draw_polygon_button = QShortcut(QKeySequence("P"), self)
+        self.shortcut_draw_polygon_button.activated.connect(lambda: self.window().button_polygon_option.toggle_polygon_mode())
+
+        #ctrl start mouse
+        self.control_pressed_alone = False
+        QApplication.instance().installEventFilter(self)
+
+    #ctrl clear
+    def eventFilter(self, current_watched_object, current_event):
+
+        #set event type
+        event_type = current_event.type()
+
+        #chek if is only ctrl is cliced
+        #and set contol to true
+        if event_type == QEvent.KeyPress and current_event.key() == Qt.Key_Control:
+            if not current_event.isAutoRepeat():
+                self.control_pressed_alone = True
+
+        #chek if ctl with any
+        #set alone
+        elif event_type in (QEvent.KeyPress, QEvent.ShortcutOverride):
+            if current_event.key() != Qt.Key_Control:
+                self.control_pressed_alone = False
+        elif event_type in (QEvent.MouseButtonPress, QEvent.Wheel):
+            self.control_pressed_alone = False
+
+        #Ctrl released with nothing else button 1
+        elif event_type == QEvent.KeyRelease and current_event.key() == Qt.Key_Control:
+            if self.control_pressed_alone and not current_event.isAutoRepeat():
+                self.control_pressed_alone = False
+                self.window().disable_move_mode()
+
+        #retrun false other
+        return False
