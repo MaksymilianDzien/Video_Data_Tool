@@ -101,6 +101,12 @@ class Main_Right_Panel_Label_Info:
         self.list_of_object.setStyleSheet(self.list_of_items_style)
         self.object_and_labels_tabs.addTab(self.list_of_object, "Objects")
 
+       #set annotations  list of rows
+        self.annotations_of_rows = []
+
+       #if annotations are clicked then select annotation from list
+        self.list_of_object.itemClicked.connect(self.select_annotation_from_list)
+
         # create list of labes
         self.list_of_labels = QListWidget()
         # odstęp między ramkami i styl elementów listy labeli
@@ -317,6 +323,9 @@ class Main_Right_Panel_Label_Info:
         #clear current list of annotations
         self.list_of_object.clear()
 
+        #clear list of annotations rows
+        self.annotations_of_rows = []
+
         #set annotations
         current_frame_index = self.annotated_widget.index_frame
         current_frame_annotations = self.annotated_widget.draw_rectangle.fream_annotation.get(current_frame_index, [])
@@ -332,6 +341,30 @@ class Main_Right_Panel_Label_Info:
             #add to litems
             self.list_of_object.addItem(list_widget_item)
             self.list_of_object.setItemWidget(list_widget_item, concurrent_row_widget)
+
+            #zapamietaj adnotacje tego wiersza (ta sama kolejnosc co w liscie)
+            self.annotations_of_rows.append(current_annotation)
+
+    #select annotation if is cliked in right panel
+    def select_annotation_from_list(self, clicked_annotation):
+
+        #cliked row = annotaion in list
+        clicked_row_index = self.list_of_object.row(clicked_annotation)
+        if clicked_row_index < 0 or clicked_row_index >= len(self.annotations_of_rows):
+            return
+
+        #set cliked annotation in list (index)
+        clicked_annotation = self.annotations_of_rows[clicked_row_index]
+
+        #annotation edit object
+        edit_current_anotation = self.annotated_widget.edit_current_anotation
+
+        #if edit is disable then enable edit
+        if not edit_current_anotation.edit_of_annotation:
+            self.annotated_widget.window().disable_move_mode()
+
+        #select current annotation in frame
+        edit_current_anotation.select_annotation_right_panel(clicked_annotation, self.annotated_widget.index_frame)
 
     #crate row annotation
     def create_object_row_widget(self, curent_annotation):

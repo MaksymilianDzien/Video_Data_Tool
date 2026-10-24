@@ -332,6 +332,19 @@ class Edit_annotation:
             self.polygon_drag_points = None
             self.drag_annotaion_mouse_start = None
 
+    #selected current annotaion from right panel
+    def select_annotation_right_panel(self, annotation_from_panel, curent_index_frame):
+
+        #clear select
+        self.deselecte_edited_mode()
+
+        #set new annotaion and frame
+        self.select_current_annotation = annotation_from_panel
+        self.select_curennt_frame_index = curent_index_frame
+
+        #update image
+        self.current_widget_image.update()
+
     def mouse_move_hander(self, point_posstion):
 
         # if is not enable or is not selectet or is not active
