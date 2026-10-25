@@ -109,10 +109,17 @@ class Main_Right_Panel_Label_Info:
 
         # create list of labes
         self.list_of_labels = QListWidget()
-        # odstęp między ramkami i styl elementów listy labeli
+
+       #set label style and spacing
         self.list_of_labels.setSpacing(self.spacing_of_row)
         self.list_of_labels.setStyleSheet(self.list_of_items_style)
         self.object_and_labels_tabs.addTab(self.list_of_labels, "Labels")
+
+        #set labels  list of rows
+        self.labels_of_rows = []
+
+       #connet labels to select all annotations fuction
+        self.list_of_labels.itemClicked.connect(self.select_label_annotations_from_list)
 
         # layaout of panel
         main_layout_of_right_panel = QVBoxLayout()
@@ -522,6 +529,9 @@ class Main_Right_Panel_Label_Info:
 
         self.list_of_labels.clear()
 
+        #clear list of label rows
+        self.labels_of_rows = []
+
         # current_labels
         for current_label in self.current_label_obiect.current_labels:
 
@@ -533,6 +543,37 @@ class Main_Right_Panel_Label_Info:
             #add to litems
             self.list_of_labels.addItem(list_widget_item)
             self.list_of_labels.setItemWidget(list_widget_item, concurrent_row_widget)
+
+            #save label in this row
+            self.labels_of_rows.append(current_label)
+
+    #if label is clicked then select all annotations from list of label
+    def select_label_annotations_from_list(self, clicked_label_item):
+
+        # cliked row = label in list
+        clicked_row_index = self.list_of_labels.row(clicked_label_item)
+        if clicked_row_index < 0 or clicked_row_index >= len(self.labels_of_rows):
+            return
+
+        # set cliked label in list (index)
+        clicked_current_label = self.labels_of_rows[clicked_row_index]
+
+        #label edit object
+        edit_current_anotation = self.annotated_widget.edit_current_anotation
+
+        #if edit is disable then enable edit
+        if not edit_current_anotation.edit_of_annotation:
+            self.annotated_widget.window().disable_move_mode()
+
+        #all anotation from label in frame
+        current_frame_index = self.annotated_widget.index_frame
+        current_frame_annotations = self.annotated_widget.draw_rectangle.fream_annotation.get(current_frame_index, [])
+        annotations_of_clicked_label = [
+            annotation for annotation in current_frame_annotations if annotation.get("label_id") == clicked_current_label["id"]
+        ]
+
+        #select all anotation in label
+        edit_current_anotation.select_label_annotations_right_panel(annotations_of_clicked_label, current_frame_index)
 
     #crate row for one label (group)
     def create_annotation_group_row_widget(self, curent_label):

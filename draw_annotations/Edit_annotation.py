@@ -28,6 +28,9 @@ class Edit_annotation:
         self.select_current_annotation = None
         self.select_curennt_frame_index = None
 
+        #list of all annotaion in group
+        self.select_annotations_in_group = []
+
         #current actiateted handler rigth top ... dow right or none
         self.select_actived_hander = None
 
@@ -58,6 +61,9 @@ class Edit_annotation:
         self.drag_start_of_rectangle = None
         self.polygon_drag_points = None
         self.drag_annotaion_mouse_start = None
+
+        #clear all annotaion in group
+        self.select_annotations_in_group = []
 
     # rectangle after calkulated zomm and rotate
     def get_current_annotation_rectangle(self, annotation):
@@ -260,6 +266,9 @@ class Edit_annotation:
         # current unrorate points of rectangle
         point_posstion = self.current_widget_image.unrotate_point_of_screen(point_posstion)
 
+        #clik in frame clear selected annotaion
+        self.select_annotations_in_group = []
+
         # chek if hander is selected
         if self.select_current_annotation is not None and self.select_curennt_frame_index == curent_index_frame:
 
@@ -340,6 +349,19 @@ class Edit_annotation:
 
         #set new annotaion and frame
         self.select_current_annotation = annotation_from_panel
+        self.select_curennt_frame_index = curent_index_frame
+
+        #update image
+        self.current_widget_image.update()
+
+    #select all anntaion in label (right panel)
+    def select_label_annotations_right_panel(self, annotations_of_label, curent_index_frame):
+
+        #desalbe edited mode
+        self.deselecte_edited_mode()
+
+        #set list and group of label
+        self.select_annotations_in_group = list(annotations_of_label)
         self.select_curennt_frame_index = curent_index_frame
 
         #update image
@@ -503,30 +525,47 @@ class Edit_annotation:
     # drawing all hander
     def draw_selection_hander(self, current_painter, curent_frame_index):
 
-        #if edit is not ebale or is any annotation is selected
-        if not self.edit_of_annotation or self.select_current_annotation is None:
+        #if edit is not ebale
+        if not self.edit_of_annotation:
             return
 
         # not selected cirrent fame
         if self.select_curennt_frame_index != curent_frame_index:
             return
 
+        #if is one annotation selected
+        if self.select_current_annotation is not None:
+            self.draw_hander_of_annotation(current_painter, self.select_current_annotation)
+
+        #select all  annotation in label
+        current_frame_annotations = self.draw_rectangle.fream_annotation.get(curent_frame_index, [])
+        for group_annotation in self.select_annotations_in_group:
+
+            #if annotation is delate then skip
+            if not any(annotation is group_annotation for annotation in current_frame_annotations):
+                continue
+
+            self.draw_hander_of_annotation(current_painter, group_annotation)
+
+    #drawing hander of one annotation
+    def draw_hander_of_annotation(self, current_painter, annotation):
+
         #no draw hander if is not visable
-        if not self.select_current_annotation.get("visible", True):
+        if not annotation.get("visible", True):
             return
 
         #no draw hander if is locked
-        if self.select_current_annotation.get("locked", False):
+        if annotation.get("locked", False):
             return
 
         # download all  rectangle
-        screen_rectangle = self.get_current_annotation_rectangle(self.select_current_annotation)
+        screen_rectangle = self.get_current_annotation_rectangle(annotation)
 
         # download center of rectangle
         annotation_center = screen_rectangle.center()
 
         # download rotation of rectangle
-        annotation_rotation = self.select_current_annotation["rotation"]
+        annotation_rotation = annotation["rotation"]
 
         # current paitner optinon
         current_painter.save()
@@ -541,8 +580,8 @@ class Edit_annotation:
         current_painter.setBrush(QBrush(self.color_of_hander))
 
         #polygon all points are hander
-        if self.select_current_annotation.get("type") == "polygon":
-            base_polygon = self.draw_rectangle.build_polygon_for_annotation_info(self.select_current_annotation)
+        if annotation.get("type") == "polygon":
+            base_polygon = self.draw_rectangle.build_polygon_for_annotation_info(annotation)
             for base_point in base_polygon:
                 screen_point = self.draw_rectangle.convert_points_to_scren_scale(base_point)
                 current_painter.drawRect(
@@ -559,8 +598,7 @@ class Edit_annotation:
                     logical_corner.x() - self.corner_size_of_hander // 2,
                     logical_corner.y() - self.corner_size_of_hander // 2,
                     self.corner_size_of_hander,
-                    self.corner_size_of_hander
-                )
+                    self.corner_size_of_hander)
 
         # draw rotate point
         top_center = QPoint(screen_rectangle.center().x(), screen_rectangle.top())
