@@ -1,7 +1,7 @@
 import os
 from PyQt5.QtWidgets import (
-    QFrame, QVBoxLayout, QHBoxLayout, QTabWidget, QListWidget, QListWidgetItem,QWidget, QPushButton, QLabel, QMenu)
-from PyQt5.QtGui import QIcon
+    QFrame, QVBoxLayout, QHBoxLayout, QTabWidget, QListWidget, QListWidgetItem,QWidget, QPushButton, QLabel, QMenu, QShortcut)
+from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtCore import QSize
 
 
@@ -126,6 +126,9 @@ class Main_Right_Panel_Label_Info:
         main_layout_of_right_panel.setContentsMargins(0, 0, 0, 0)
         main_layout_of_right_panel.addWidget(self.object_and_labels_tabs)
         self.main_right_panel.setLayout(main_layout_of_right_panel)
+
+        #all shortcut funtcion
+        self.right_panel_all_shortcut()
 
     # getter to return right wighet to main gui
     def get_widget(self):
@@ -722,3 +725,199 @@ class Main_Right_Panel_Label_Info:
         # redraw image
         self.annotated_widget.update()
         self.refresh_all_objects_in_list()
+
+    ##################################
+    #shortcut
+    ##################################
+
+    #all shortcut for right panel
+    def right_panel_all_shortcut(self):
+
+        #V visible shortcut
+        self.shortcut_visible = QShortcut(QKeySequence("V"), self.main_right_panel)
+        self.shortcut_visible.activated.connect(self.shortcut_toggle_visible)
+
+        #L lock shortcut
+        self.shortcut_lock = QShortcut(QKeySequence("L"), self.main_right_panel)
+        self.shortcut_lock.activated.connect(self.shortcut_toggle_locked)
+
+        #M pin shortcut
+        self.shortcut_pin = QShortcut(QKeySequence("M"), self.main_right_panel)
+        self.shortcut_pin.activated.connect(self.shortcut_toggle_pinned)
+
+        #Ctrl up shortcut
+        self.shortcut_to_front = QShortcut(QKeySequence("Ctrl+Up"), self.main_right_panel)
+        self.shortcut_to_front.activated.connect(lambda: self.shortcut_layer_of_selected("to_front"))
+
+        #up shortcut
+        self.shortcut_forward = QShortcut(QKeySequence("Up"), self.main_right_panel)
+        self.shortcut_forward.activated.connect(lambda: self.shortcut_layer_of_selected("forward"))
+
+        #down shortcut
+        self.shortcut_backward = QShortcut(QKeySequence("Down"), self.main_right_panel)
+        self.shortcut_backward.activated.connect(lambda: self.shortcut_layer_of_selected("backward"))
+
+        #Ctrl + down shortcut
+        self.shortcut_to_back = QShortcut(QKeySequence("Ctrl+Down"), self.main_right_panel)
+        self.shortcut_to_back.activated.connect(lambda: self.shortcut_layer_of_selected("to_back"))
+
+        #Backspace shortcut
+        self.shortcut_delete = QShortcut(QKeySequence("Backspace"), self.main_right_panel)
+        self.shortcut_delete.activated.connect(self.shortcut_delete_selected)
+
+    #get selected annotation for shortcut
+    def get_selected_annotation(self):
+
+        #set selected annotation
+        current_selected_annotation = self.annotated_widget.edit_current_anotation.select_current_annotation
+
+        # if annotation is none then retrun none
+        if current_selected_annotation is None:
+            return None
+
+        #chek if annotation is on current frame
+        current_frame_index = self.annotated_widget.index_frame
+        current_frame_annotations = self.annotated_widget.draw_rectangle.fream_annotation.get(current_frame_index, [])
+        if any(current_selected_annotation is frame_annotation for frame_annotation in current_frame_annotations):
+            return current_selected_annotation
+
+        return None
+
+    #get selected label for shortcut
+    def get_selected_label(self):
+
+        #connect to object to edit annotation
+        edit_current_anotation = self.annotated_widget.edit_current_anotation
+
+        #one annotation is first
+        if edit_current_anotation.select_current_annotation is not None:
+            return None
+
+        #chek if group of annotation are in frame
+        current_frame_index = self.annotated_widget.index_frame
+        current_frame_annotations = self.annotated_widget.draw_rectangle.fream_annotation.get(current_frame_index, [])
+        group_annotations = [
+            group_annotation for group_annotation in edit_current_anotation.select_annotations_in_group
+            if any(group_annotation is frame_annotation for frame_annotation in current_frame_annotations)
+        ]
+        if not group_annotations:
+            return None
+
+        #get first label in annotation groupe
+        group_label_id = group_annotations[0].get("label_id")
+        for current_label in self.current_label_obiect.current_labels:
+            if current_label["id"] == group_label_id:
+                return current_label
+
+        return None
+
+    #shortcut visible
+    def shortcut_toggle_visible(self):
+
+        #set label and annotation
+        selected_annotation = self.get_selected_annotation()
+        selected_label = self.get_selected_label()
+
+
+        #one annotation
+        if selected_annotation is not None:
+            selected_annotation["visible"] = not selected_annotation.get("visible", True)
+
+        #label
+        elif selected_label is not None:
+            selected_label["visible"] = not selected_label.get("visible", True)
+            self.annotated_widget.draw_rectangle.set_all_annotation_group_visible(selected_label["id"], selected_label["visible"])
+            self.refresh_all_labels_in_list()
+
+        else:
+            return
+
+        #update frame and right panel
+        self.annotated_widget.update()
+        self.refresh_all_objects_in_list()
+
+    # shortcut visible
+    def shortcut_toggle_locked(self):
+
+        # set label and annotation
+        selected_annotation = self.get_selected_annotation()
+        selected_label = self.get_selected_label()
+
+        #one annotation
+        if selected_annotation is not None:
+            selected_annotation["locked"] = not selected_annotation.get("locked", False)
+
+        #label
+        elif selected_label is not None:
+            selected_label["locked"] = not selected_label.get("locked", False)
+            self.annotated_widget.draw_rectangle.set_all_annotation_group_locked(selected_label["id"], selected_label["locked"])
+            self.refresh_all_labels_in_list()
+
+        else:
+            return
+
+        #update frame and right panel
+        self.annotated_widget.update()
+        self.refresh_all_objects_in_list()
+
+    # shortcut visible
+    def shortcut_toggle_pinned(self):
+
+        # set label and annotation
+        selected_annotation = self.get_selected_annotation()
+        selected_label = self.get_selected_label()
+
+        #one annotation
+        if selected_annotation is not None:
+            selected_annotation["pinned"] = not selected_annotation.get("pinned", False)
+
+            #if is pinned then stop move
+            if selected_annotation["pinned"]:
+                self.annotated_widget.edit_current_anotation.if_pinned_then_cancel_move(selected_annotation)
+
+        #label
+        elif selected_label is not None:
+            selected_label["pinned"] = not selected_label.get("pinned", False)
+            self.annotated_widget.draw_rectangle.set_all_annotation_group_pinned(selected_label["id"], selected_label["pinned"])
+            self.refresh_all_labels_in_list()
+
+        else:
+            return
+
+        #update frame and right panel
+        self.annotated_widget.update()
+        self.refresh_all_objects_in_list()
+
+    #shortcut of layer
+    def shortcut_layer_of_selected(self, action_of_layer):
+
+        # set label and annotation
+        selected_annotation = self.get_selected_annotation()
+        selected_label = self.get_selected_label()
+
+        #one annotation
+        if selected_annotation is not None:
+            self.change_layers_of_annotations(selected_annotation, action_of_layer)
+
+        #label
+        elif selected_label is not None:
+            self.change_layers_of_labels_annotations(selected_label, action_of_layer)
+
+    #Backspace
+    def shortcut_delete_selected(self):
+
+        # set label and annotation
+        selected_annotation = self.get_selected_annotation()
+        selected_label = self.get_selected_label()
+
+        #one annotation
+        if selected_annotation is not None:
+            self.delete_current_annotation(selected_annotation)
+
+        #label
+        elif selected_label is not None:
+            self.delete_all_annotations_of_label(selected_label)
+
+            #disable edit
+            self.annotated_widget.edit_current_anotation.deselecte_edited_mode()
+            self.annotated_widget.update()

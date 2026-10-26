@@ -148,6 +148,9 @@ class Draw_oval:
 
         #set name off addnotaion
         new_oval_annotation["label_id"] = label_id
+
+        # new created  anotation  is selected
+        self.widget_image.edit_current_anotation.select_annotation_right_panel(new_oval_annotation, curent_index_frame)
         self.widget_image.update()
 
         #call back rgitht panel ababut name label
