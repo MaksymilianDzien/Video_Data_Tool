@@ -10,6 +10,7 @@ from buttons.Button_ctrl_d import Button_ctrl_d
 from buttons.Button_logic_2 import ButtonLogic
 from buttons.Button_logic_3 import Button3
 from buttons.Button_frame_slider import Button_frame_slider
+from core.Drag_drop_files import Drag_drop_files
 from draw_annotations.Main_Right_Panel_Label_Info import  Main_Right_Panel_Label_Info
 import os
 from PyQt5.QtGui import QIcon
@@ -249,6 +250,9 @@ class Main_Gui(QMainWindow):
 
         # connect undo history
         self.image.draw_rectangle.on_annotion_comit = self.button_ctrl_z.save_current_state_of_label
+
+        # drag and drop image to middle panel
+        self.button_drag_drop = Drag_drop_files(self, middle_panel)
 
         return middle_panel
 
