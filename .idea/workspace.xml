@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add right panel shortcut">
-      <change afterPath="$PROJECT_DIR$/core/Drag_drop_files.py" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="drag and drop">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buttons/Button_frame_slider.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_frame_slider.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,14 +112,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00057" summary="/">
-      <option name="closed" value="true" />
-      <created>1788210002408</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1788210002408</updated>
     </task>
     <task id="LOCAL-00058" summary="/">
       <option name="closed" value="true" />
@@ -507,7 +497,15 @@
       <option name="project" value="LOCAL" />
       <updated>1793052027571</updated>
     </task>
-    <option name="localTasksCounter" value="106" />
+    <task id="LOCAL-00106" summary="drag and drop">
+      <option name="closed" value="true" />
+      <created>1793314246740</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1793314246740</updated>
+    </task>
+    <option name="localTasksCounter" value="107" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -534,7 +532,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix annotation rotate error" />
     <MESSAGE value="add layers to annotation" />
     <MESSAGE value="add move a annotation" />
     <MESSAGE value="add left right rotate" />
@@ -559,6 +556,7 @@
     <MESSAGE value="add shortcut left panel" />
     <MESSAGE value="add selected" />
     <MESSAGE value="add right panel shortcut" />
-    <option name="LAST_COMMIT_MESSAGE" value="add right panel shortcut" />
+    <MESSAGE value="drag and drop" />
+    <option name="LAST_COMMIT_MESSAGE" value="drag and drop" />
   </component>
 </project>
