@@ -1,9 +1,9 @@
 from PyQt5 import Qt , QtCore
 from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout,
-    QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit, QMessageBox
-)
+    QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit, QMessageBox)
 from buttons.Button_polygon_option import Button_polygon_option
+from buttons.Button_wand import Button_wand
 from buttons.Button_rotated_option import Button_rotated_option
 from buttons.Button_ctrl_z import Button_ctrl_z
 from buttons.Button_ctrl_d import Button_ctrl_d
@@ -159,10 +159,11 @@ class Main_Gui(QMainWindow):
             6: os.path.join(left_panel_icon_folder, "rectangle.png"),
             7: os.path.join(left_panel_icon_folder, "oval.png"),
             8: os.path.join(left_panel_icon_folder, "polygon.png"),
+            9: os.path.join(left_panel_icon_folder, "magic_wand.png"),
         }
 
-        # Create 8 buttons
-        for i in range(1, 9):
+        # Create 9 buttons
+        for i in range(1, 10):
 
             left_buttons = QPushButton()
 
@@ -198,6 +199,9 @@ class Main_Gui(QMainWindow):
             # draw polygon annotations
             if i == 8:
                 self.button_polygon_option = Button_polygon_option(self,left_buttons)
+            #draw  magic wand
+            if i == 9:
+                self.button_magic_wand = Button_wand(self, left_buttons)
 
             # style of button
             left_buttons.setStyleSheet("""
@@ -385,6 +389,9 @@ class Main_Gui(QMainWindow):
                 # subtract to slider value 10
                 case 3:
                     top_mid_button.clicked.connect(self.button_frame_slider.down_1)
+                #stop / start play
+                case 4:
+                    top_mid_button.clicked.connect(self.button_frame_slider.play_frames)
                 # add to slider value 1
                 case 5:
                     top_mid_button.clicked.connect(self.button_frame_slider.up_1)
@@ -564,6 +571,9 @@ class Main_Gui(QMainWindow):
         #if move is enable drawing polygon is unable
         self.button_polygon_option.polygon_option_deactivate()
 
+        #wand deactivate
+        self.button_magic_wand.magic_wand_deactivate()
+
     # diabale move
     def disable_move_mode(self):
         self.image.enable_drag(False)
@@ -579,6 +589,9 @@ class Main_Gui(QMainWindow):
 
         #enable edit mode then unable darwing polygon
         self.button_polygon_option.polygon_option_deactivate()
+
+        #wand deactivate
+        self.button_magic_wand.magic_wand_deactivate()
 
     def enable_rectangle_drawing(self):
 
@@ -598,6 +611,9 @@ class Main_Gui(QMainWindow):
             #cannot create polygon if rectangle is created
             self.button_polygon_option.polygon_option_deactivate()
 
+            #wand deactivate
+            self.button_magic_wand.magic_wand_deactivate()
+
     #  enable/un enable drawing oval
     def enable_oval_drawing(self):
 
@@ -614,6 +630,9 @@ class Main_Gui(QMainWindow):
 
             #cannot draw polygon if darwaing oval
             self.button_polygon_option.polygon_option_deactivate()
+
+            #wand deactivate
+            self.button_magic_wand.magic_wand_deactivate()
 
     #convert string to slider_value
     def change_slider_value(self):

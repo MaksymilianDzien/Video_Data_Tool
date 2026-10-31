@@ -54,6 +54,9 @@ class Button_polygon_option:
         main_window.draw_oval_mode_enabled = False
         main_window.image.enable_oval_draw_mode(False)
 
+        #wand is deactivate
+        main_window.button_magic_wand.magic_wand_deactivate()
+
         self.drawing_is_enable = True
         main_window.image.enable_polygon_draw_mode(True, polygon_point)
 
