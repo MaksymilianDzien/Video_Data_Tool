@@ -316,7 +316,6 @@ class Draw_wand:
     #enable shortcut
     def set_shortcut_enabled(self, is_enable):
         self.shortcut_finish_return.setEnabled(is_enable)
-        self.shortcut_finish_enter.setEnabled(is_enable)
         self.shortcut_cancel.setEnabled(is_enable)
 
     #all shortcut

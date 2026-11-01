@@ -10,6 +10,9 @@ class Edit_annotation:
     rotate_of_hander = 6
     rotate_offset = 30
 
+    #edge size of hander in px
+    edge_size_of_hander = 6
+
     # clor handler
     color_of_hander = QColor(0, 150, 255)
 
@@ -166,6 +169,27 @@ class Edit_annotation:
             if abs(point_posstion.x() - visual_corner.x()) <= self.corner_size_of_hander \
                     and abs(point_posstion.y() - visual_corner.y()) <= self.corner_size_of_hander:
                 return handle_name
+
+        #chek if sides is selected
+        local_click_point = self.rotate_around_center_point(point_posstion, annotation_center, -annotation_rotation)
+        edge_tolerance = self.edge_size_of_hander
+
+        #is the click within the horizontal range
+        is_in_horizontal_range = screen_rectangle.left() <= local_click_point.x() <= screen_rectangle.right()
+        is_in_vertical_range = screen_rectangle.top() <= local_click_point.y() <= screen_rectangle.bottom()
+
+
+        #left and right sides
+        if is_in_vertical_range and abs(local_click_point.x() - screen_rectangle.left()) <= edge_tolerance:
+            return "left"
+        if is_in_vertical_range and abs(local_click_point.x() - screen_rectangle.right()) <= edge_tolerance:
+            return "right"
+
+        #top and  bottom sides
+        if is_in_horizontal_range and abs(local_click_point.y() - screen_rectangle.top()) <= edge_tolerance:
+            return "top"
+        if is_in_horizontal_range and abs(local_click_point.y() - screen_rectangle.bottom()) <= edge_tolerance:
+            return "bottom"
 
         return None
 
@@ -470,6 +494,29 @@ class Edit_annotation:
 
         # set new corner base no rotate no move
         new_cornerr_based = self.screen_points_to_primary_points(local_screen_point)
+
+        #side stretch
+        if self.select_actived_hander in ("left", "right", "top", "bottom"):
+
+            start_rectangle = self.drag_start_of_rectangle
+
+            if self.select_actived_hander == "left":
+                moved_rectangle = QRectF(QPointF(new_cornerr_based.x(), start_rectangle.top()), start_rectangle.bottomRight())
+            elif self.select_actived_hander == "right":
+                moved_rectangle = QRectF(start_rectangle.topLeft(), QPointF(new_cornerr_based.x(), start_rectangle.bottom()))
+            elif self.select_actived_hander == "top":
+                moved_rectangle = QRectF(QPointF(start_rectangle.left(), new_cornerr_based.y()), start_rectangle.bottomRight())
+            else:
+                moved_rectangle = QRectF(start_rectangle.topLeft(), QPointF(start_rectangle.right(), new_cornerr_based.y()))
+
+            #normalized allows to drag the side to the other side
+            moved_rectangle = moved_rectangle.normalized()
+
+            self.select_current_annotation["x"] = moved_rectangle.x()
+            self.select_current_annotation["y"] = moved_rectangle.y()
+            self.select_current_annotation["width"] = moved_rectangle.width()
+            self.select_current_annotation["height"] = moved_rectangle.height()
+            return
 
         # only opposite corner is stay in no move
         current_opposite_corner_map = {

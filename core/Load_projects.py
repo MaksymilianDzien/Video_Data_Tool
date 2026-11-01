@@ -87,7 +87,7 @@ class Load_projects:
                             f"'{saved_file_name}', but '{current_file_name}' is loaded."
                         )
                 #set table of annotaion
-                file_frame_annotations = []
+                file_one_frame_annotations = []
                 #loop for saved annotaion
                 for saved_annotation in file_frame_data.get("annotations", []):
 
@@ -104,10 +104,10 @@ class Load_projects:
                     file_new_annotation.setdefault("pinned", False)
 
                     #add to table
-                    file_frame_annotations.append(file_new_annotation)
+                    file_one_frame_annotations.append(file_new_annotation)
 
-                if file_frame_annotations:
-                    file_frame_annotations[file_frame_index] = file_frame_annotations
+                if file_one_frame_annotations:
+                    file_frame_annotations[file_frame_index] = file_one_frame_annotations
 
             #next ids  never smaller than used id
             used_annotation_ids = [annotation["id"]
