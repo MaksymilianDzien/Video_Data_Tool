@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (
     QFrame, QVBoxLayout, QHBoxLayout, QTabWidget, QListWidget, QListWidgetItem,QWidget, QPushButton, QLabel, QMenu, QShortcut)
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtCore import QSize
+from draw_annotations.More_option_copy_and_propagate import More_option_copy_and_propagate
 
 
 class Main_Right_Panel_Label_Info:
@@ -79,8 +80,15 @@ class Main_Right_Panel_Label_Info:
        #icon of more option
         self.more_option_icon = os.path.join(annotation_option_icon_folder, "more.png")
 
+        #icon for copy and propagate
+        self.copy_icon = os.path.join(annotation_option_icon_folder, "copy.png")
+        self.propagate_icon = os.path.join(annotation_option_icon_folder, "propagate.png")
+
         # set image wiget (buuton 2 logick)
         self.annotated_widget = annotated_widget
+
+        #set more copy and progate
+        self.copy_and_propagate = More_option_copy_and_propagate(annotated_widget)
 
         # set label object eqals
         self.current_label_obiect = current_label_obiect
@@ -184,7 +192,8 @@ class Main_Right_Panel_Label_Info:
             Qactions_with_functions[more_option_chosen_action]()
 
     #create more option list of fuction
-    def create_more_options_list(self, more_layer_function, more_delete_text, more_delete_function):
+    def create_more_options_list(self, more_layer_function, more_delete_text, more_delete_function,
+                                 more_copy_function, more_propagate_function):
         return [
             # (1)max up
             (self.max_front_icon, "Bring to front", lambda: more_layer_function("to_front")),
@@ -196,7 +205,13 @@ class Main_Right_Panel_Label_Info:
             (self.max_back_icon, "Send to back", lambda: more_layer_function("to_back")),
             # seperator
             None,
-            # (5) delete
+            # (5)make copy
+            (self.copy_icon, "Make a copy", more_copy_function),
+            # (6)propagate
+            (self.propagate_icon, "Propagate", more_propagate_function),
+            #seperator
+            None,
+            # (7) delete
             (self.delete_icon, more_delete_text, more_delete_function),
         ]
 
@@ -463,13 +478,15 @@ class Main_Right_Panel_Label_Info:
         annotation_row_layout.addWidget(pinned_annotation_button)
 
        #4 button more option
-       #deleate and layers change option
+       #deleate, layers, copy, propagate change option
         more_action_button_menu = self.create_more_option_button(
             self.create_more_options_list(
                 lambda layer_action, current_annotation=curent_annotation:
                     self.change_layers_of_annotations(current_annotation, layer_action),
                 "Delete annotation",
-                lambda current_annotation=curent_annotation: self.delete_current_annotation(current_annotation)))
+                lambda current_annotation=curent_annotation: self.delete_current_annotation(current_annotation),
+                lambda current_annotation=curent_annotation: self.copy_and_propagate.make_copy_of_annotation(current_annotation),
+                lambda current_annotation=curent_annotation: self.copy_and_propagate.propagate_annotation(current_annotation)))
         annotation_row_layout.addWidget(more_action_button_menu)
 
         return annotation_row_widget
@@ -660,13 +677,15 @@ class Main_Right_Panel_Label_Info:
         annotation_group_layout.addWidget(pin_annotation_group_button)
 
         # 4 button more option
-        # deleate and layers change option
+        #deleate, layers, copy, propagate change option
         more_action_button_grupe_menu = self.create_more_option_button(
             self.create_more_options_list(
                 lambda layer_action, current_label=curent_label:
                     self.change_layers_of_labels_annotations(current_label, layer_action),
                 "Delete label",
-                lambda current_label=curent_label: self.delete_all_annotations_of_label(current_label)))
+                lambda current_label=curent_label: self.delete_all_annotations_of_label(current_label),
+                lambda current_label=curent_label: self.copy_and_propagate.make_copy_of_label(current_label),
+                lambda current_label=curent_label: self.copy_and_propagate.propagate_label(current_label)))
         annotation_group_layout.addWidget(more_action_button_grupe_menu)
 
         return annotation_group_row_widget
