@@ -233,6 +233,54 @@ class Edit_annotation:
 
         return None
 
+    #get point in edge of polygon
+    def find_polygon_edge_press(self, point_posstion, annotation):
+
+        #center and rotation of polygon
+        screen_rectangle = self.get_current_annotation_rectangle(annotation)
+        polygon_annotation_center = screen_rectangle.center()
+        polygon_annotation_rotation = annotation["rotation"]
+
+        #a click, offset by the polygon's rotation and recalculated into image coordinates
+        local_click_point = self.rotate_around_center_point(point_posstion, polygon_annotation_center, -polygon_annotation_rotation)
+        base_click = self.screen_points_to_primary_points(local_click_point)
+
+        #tolerance made of pixels
+        nearest_distance = self.edge_size_of_hander / self.current_widget_image.base_zoom_level
+        nearest_edge = None
+
+        polygon_base_points = [(point["x"], point["y"]) for point in annotation["points"]]
+
+        for index in range(len(polygon_base_points)):
+
+            #the side from point "index" to the next one
+            start_x, start_y = polygon_base_points[index]
+            end_x, end_y = polygon_base_points[(index + 1) % len(polygon_base_points)]
+
+            edge_x = end_x - start_x
+            edge_y = end_y - start_y
+            edge_length_squared = edge_x * edge_x + edge_y * edge_y
+
+            #if edge is 0 then skip
+            if edge_length_squared == 0:
+                continue
+
+            #projection of the click onto the side
+            position_on_edge = ((base_click.x() - start_x) * edge_x + (base_click.y() - start_y) * edge_y) / edge_length_squared
+            position_on_edge = max(0.0, min(1.0, position_on_edge))
+
+            #closest point on the side and distance from click
+            point_on_edge_x = start_x + position_on_edge * edge_x
+            point_on_edge_y = start_y + position_on_edge * edge_y
+            distance_to_edge = math.hypot(base_click.x() - point_on_edge_x, base_click.y() - point_on_edge_y)
+
+            #remember the nearest side within range
+            if distance_to_edge <= nearest_distance:
+                nearest_distance = distance_to_edge
+                nearest_edge = (index, point_on_edge_x, point_on_edge_y)
+
+        return nearest_edge
+
     # chek if point is in anotation
     def is_point_in_rotated_anotation(self, point_posstion, annotation):
 
@@ -355,6 +403,44 @@ class Edit_annotation:
 
         # miss or not select any annotations disable edit annotations and update current image
         self.deselecte_edited_mode()
+        self.current_widget_image.update()
+
+    ##add new point to polygon
+    def mouse_right_press_hander(self, point_posstion, curent_index_frame):
+
+        #if edit is bot enable
+        if not self.edit_of_annotation or self.select_actived_hander is not None:
+            return
+
+        current_annotation = self.select_current_annotation
+
+        #noly selected polygon
+        if current_annotation is None or self.select_curennt_frame_index != curent_index_frame:
+            return
+
+        #if is locked or visible then no edit
+        if current_annotation.get("type") != "polygon" or current_annotation.get("locked", False) or not current_annotation.get("visible", True):
+            return
+
+        # current unrorate points of polygon
+        point_posstion = self.current_widget_image.unrotate_point_of_screen(point_posstion)
+
+        #if clicked in created point retrun
+        if self.find_polygon_hander_press(point_posstion, current_annotation) is not None:
+            return
+
+        #chek if is edge
+        polygon_edge = self.find_polygon_edge_press(point_posstion, current_annotation)
+        if polygon_edge is None:
+            return
+
+        edge_index, new_point_x, new_point_y = polygon_edge
+
+        #new point is placed between two adjacent points on this side
+        current_annotation["points"].insert(edge_index + 1, {"x": new_point_x, "y": new_point_y})
+
+        # save current stage of polygon to undo list and redraw
+        self.draw_rectangle.on_annotion_comit()
         self.current_widget_image.update()
 
     # if pinned option is selected then stop move

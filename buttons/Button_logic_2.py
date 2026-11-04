@@ -377,6 +377,11 @@ class ButtonLogic(QLabel):
             self.edit_current_anotation.mouse_press_hander(event.pos(), self.index_frame)
             return
 
+        #right click new polygon point
+        if self.edit_current_anotation.edit_of_annotation and event.button() == Qt.RightButton:
+            self.edit_current_anotation.mouse_right_press_hander(event.pos(), self.index_frame)
+            return
+
         #Drag iamge event
         if self.drag_enabled and event.button() == Qt.LeftButton:
             self.dragging = True

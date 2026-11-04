@@ -54,6 +54,9 @@ class Draw_wand:
         # all shorcut
         self.magic_wand_all_shortcut()
 
+        #fill mask
+        self.fill_mask = None
+
     #enable / disable wand
     def draw_mod_enable(self, is_enable, tolerance=20):
 
@@ -90,18 +93,19 @@ class Draw_wand:
     #convert pixmap to nupy
     def convert_pixmap_to_numpy(self, pixmap):
 
-        q_image = pixmap.toImage().convertToFormat(QImage.Format_RGB888)
+        # RGB32 = 4 B/px, bytesPerLine == width * 4
+        q_image = pixmap.toImage().convertToFormat(QImage.Format_RGB32)
         width = q_image.width()
         height = q_image.height()
-        bytes_per_line = q_image.bytesPerLine()
 
         pointer = q_image.constBits()
-        pointer.setsize(height * bytes_per_line)
+        pointer.setsize(height * width * 4)
 
-        rows = np.frombuffer(pointer, dtype=np.uint8).reshape(height, bytes_per_line)
+        #view of a QImage buffer, without copying
+        bgra = np.frombuffer(pointer, dtype=np.uint8).reshape(height, width, 4)
 
-        #remove line endings and copy the data
-        return np.ascontiguousarray(rows[:, :width * 3].reshape(height, width, 3))
+        # one copy
+        return cv2.cvtColor(bgra, cv2.COLOR_BGRA2RGB)
 
     #get the current frame as a numpy array
     def get_frame_for_wand(self):
@@ -110,11 +114,17 @@ class Draw_wand:
         if current_key is None:
             return None
 
-        #recalculate only when the frame is new
         if current_key != self.frame_key:
-            raw_frame = self.convert_pixmap_to_numpy(self.widget_image.All_frames[current_key[0]])
-            #median filter removes noise
-            self.frame_for_wand = cv2.medianBlur(raw_frame, 3)
+            #clear old frame
+            self.frame_for_wand = None
+            self.fill_mask = None
+            self.frame_key = None
+
+            frame = self.convert_pixmap_to_numpy(self.widget_image.All_frames[current_key[0]])
+            # median filter removes noise
+            self.frame_for_wand = cv2.medianBlur(frame, 3)
+            del frame
+
             self.frame_key = current_key
 
         return self.frame_for_wand
@@ -124,16 +134,18 @@ class Draw_wand:
 
         height, width = frame.shape[:2]
 
-        #floodFill need 2 px mask
-        fill_mask = np.zeros((height + 2, width + 2), dtype=np.uint8)
+        if self.fill_mask is None or self.fill_mask.shape != (height + 2, width + 2):
+            self.fill_mask = np.zeros((height + 2, width + 2), dtype=np.uint8)
+        else:
+            self.fill_mask.fill(0)
 
         tolerance_of_color = (self.tolerance, self.tolerance, self.tolerance)
 
-        #4 = neighbors excluding diagonals, fixed range = comparison against the clicked pixel
         flags = 4 | cv2.FLOODFILL_MASK_ONLY | cv2.FLOODFILL_FIXED_RANGE | (255 << 8)
-        cv2.floodFill(frame.copy(), fill_mask, (pixel_x, pixel_y), 0, tolerance_of_color, tolerance_of_color, flags)
+        cv2.floodFill(frame, self.fill_mask, (pixel_x, pixel_y), 0, tolerance_of_color, tolerance_of_color, flags)
 
-        return fill_mask[1:-1, 1:-1]
+        # view of the shared mask,
+        return self.fill_mask[1:-1, 1:-1]
 
     #largest mask outline as a simplified polygon
     def get_polygon_points_of_mask(self, mask):

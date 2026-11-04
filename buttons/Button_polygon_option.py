@@ -8,7 +8,7 @@ class Button_polygon_option:
     #min points of polygon
     min_points_of_polygon = 3
     #max point of polygon
-    max_points_of_polygon = 20
+    max_points_of_polygon = 50
 
     #main self image (button
     def __init__(self, main_window, polygon_option_button):
