@@ -37,6 +37,9 @@ class ButtonLogic(QLabel):
         self.drag_enabled = False
         self.dragging = False
 
+        #zoom enable
+        self.zoom_enabled = False
+
         self.last_mouse_positon = QPoint()
 
         #set flag to move scroll
@@ -201,29 +204,53 @@ class ButtonLogic(QLabel):
 
         self.update()
 
-    #  enable/unenable drag
+    #  enable/ disable  drag
     def enable_drag(self, enabled):
         self.drag_enabled = enabled
 
-    # enable/unenable drawing shape
+        if enabled:
+            self.zoom_enabled = False
+
+    #enable/ disable zoom mode
+    def enable_zoom_mode(self, enabled):
+        self.zoom_enabled = enabled
+
+    # enable/ disable drawing shape
     def enable_draw_mode(self, enabled):
         self.draw_rectangle.draw_mod_enable(enabled)
 
-    # enable/unenable drawing oval/circle shape
+        if enabled:
+            self.zoom_enabled = False
+
+    # enable/ disable drawing oval/circle shape
     def enable_oval_draw_mode(self, enabled):
         self.draw_oval.draw_mod_enable(enabled)
 
-    # enable/unenable drawing polygon
+
+        if enabled:
+            self.zoom_enabled = False
+
+    #enable/ disable drawing polygon
     def enable_polygon_draw_mode(self, enabled, polygon_point_count=3):
         self.draw_polygon.draw_mod_enable(enabled, polygon_point_count)
 
-    # enable/unenable wand tolerance
+
+        if enabled:
+            self.zoom_enabled = False
+
+    #enable/ disable wand tolerance
     def enable_magic_wand_draw_mode(self, enabled, tolerance=20):
         self.draw_magic_wand.draw_mod_enable(enabled, tolerance)
 
-    # enable/unenable edit annotaion mode
+        if enabled:
+            self.zoom_enabled = False
+
+    #enable/ disable edit annotaion mode
     def enable_edit_mode(self, enabled):
         self.edit_current_anotation.enable_edited_mode(enabled)
+
+        if enabled:
+            self.zoom_enabled = False
 
     # ritate image to left ( 90 )
     def rotate_image_to_left(self):
@@ -350,6 +377,11 @@ class ButtonLogic(QLabel):
             self.scroll_dragging = True
             self.scroll_last_mouse_positon = event.pos()
             self.setCursor(Qt.ClosedHandCursor)
+            return
+
+        #zoom left click zoom in 30%, right click zoom out 30%
+        if self.zoom_enabled and event.button() in (Qt.LeftButton, Qt.RightButton):
+            self.window().button3.mouse_press_handler(event.pos(), event.button())
             return
 
         #draw rectangle event
@@ -506,6 +538,10 @@ class ButtonLogic(QLabel):
         #shortcut draw polygon (lambda need)
         self.shortcut_draw_polygon_button = QShortcut(QKeySequence("P"), self)
         self.shortcut_draw_polygon_button.activated.connect(lambda: self.window().button_polygon_option.toggle_polygon_mode())
+
+        #shortcut zoom Z (lambda need)
+        self.shortcut_zoom_button = QShortcut(QKeySequence("Z"), self)
+        self.shortcut_zoom_button.activated.connect(lambda: self.window().button3.toggle_zoom_mode())
 
         #ctrl start mouse
         self.control_pressed_alone = False

@@ -521,8 +521,19 @@ class Edit_annotation:
     # upade annotation in drag mouse clik
     def update_annotation_rotation(self, point_posstion):
 
-        # set main center rotate point
-        screen_rectangle = self.draw_rectangle.convert_all_rectangle_to_scale(self.drag_start_of_rectangle)
+        #set center of rotation
+        if self.select_current_annotation.get("type") == "polygon":
+
+            #if not points
+            if not self.polygon_drag_points:
+                return
+
+            start_polygon = QPolygonF([QPointF(point["x"], point["y"]) for point in self.polygon_drag_points])
+            screen_rectangle = self.draw_rectangle.convert_all_rectangle_to_scale(start_polygon.boundingRect())
+        else:
+            # set main center rotate point
+            screen_rectangle = self.draw_rectangle.convert_all_rectangle_to_scale(self.drag_start_of_rectangle)
+
         annotation_center = screen_rectangle.center()
 
         # delta points
