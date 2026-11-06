@@ -96,6 +96,22 @@ class Edit_annotation:
 
         return QPoint(round(rotate_x + annotation_center.x()), round(rotate_y + annotation_center.y()))
 
+    # rotate current annotaion float
+    def rotate_around_center_point_float(self, current_point, annotation_center, angle_degrees):
+
+        #angle radnants
+        radians = math.radians(angle_degrees)
+
+        #delta points
+        delta_x = current_point.x() - annotation_center.x()
+        delta_y = current_point.y() - annotation_center.y()
+
+        #rorated x and y
+        rotate_x = delta_x * math.cos(radians) - delta_y * math.sin(radians)
+        rotate_y = delta_x * math.sin(radians) + delta_y * math.cos(radians)
+
+        return QPointF(rotate_x + annotation_center.x(), rotate_y + annotation_center.y())
+
 
     # screen potin to primary
     def screen_points_to_primary_points(self, current_screen_point):
@@ -521,10 +537,10 @@ class Edit_annotation:
     # upade annotation in drag mouse clik
     def update_annotation_rotation(self, point_posstion):
 
-        #set center of rotation
+        #polygon center point
         if self.select_current_annotation.get("type") == "polygon":
 
-            #if not points
+            #if not points then return
             if not self.polygon_drag_points:
                 return
 
@@ -587,7 +603,7 @@ class Edit_annotation:
         annotation_rotation = self.select_current_annotation["rotation"]
 
         #get center local point of anotation
-        local_screen_point = self.rotate_around_center_point(point_posstion, annotation_center, -annotation_rotation)
+        local_screen_point = self.rotate_around_center_point_float(point_posstion, annotation_center, -annotation_rotation)
 
         # set new corner base no rotate no move
         new_cornerr_based = self.screen_points_to_primary_points(local_screen_point)
@@ -609,10 +625,8 @@ class Edit_annotation:
             #normalized allows to drag the side to the other side
             moved_rectangle = moved_rectangle.normalized()
 
-            self.select_current_annotation["x"] = moved_rectangle.x()
-            self.select_current_annotation["y"] = moved_rectangle.y()
-            self.select_current_annotation["width"] = moved_rectangle.width()
-            self.select_current_annotation["height"] = moved_rectangle.height()
+            #rotate in center
+            self.save_resized_rectangle_fixed_opposite(moved_rectangle, annotation_center)
             return
 
         # only opposite corner is stay in no move
@@ -629,11 +643,30 @@ class Edit_annotation:
         #create new rectangle from move point and stay  opposite point
         create_new_rectangle = QRectF(fixed_corner_based, new_cornerr_based).normalized()
 
+        #save fix center
+        self.save_resized_rectangle_fixed_opposite(create_new_rectangle, annotation_center)
+
+    #save resized rectangle
+    def save_resized_rectangle_fixed_opposite(self, new_rectangle, old_screen_center):
+
+        #old center
+        old_center_base = self.screen_points_to_primary_points(old_screen_center)
+
+        #new center after rotate
+        new_center_local = new_rectangle.center()
+        new_center_visual = self.rotate_around_center_point_float(
+            new_center_local, old_center_base, self.select_current_annotation["rotation"])
+
+        #set new center
+        fixed_rectangle = new_rectangle.translated(
+            new_center_visual.x() - new_center_local.x(),
+            new_center_visual.y() - new_center_local.y())
+
         #save new created revtangle to current  annotation
-        self.select_current_annotation["x"] = create_new_rectangle.x()
-        self.select_current_annotation["y"] = create_new_rectangle.y()
-        self.select_current_annotation["width"] = create_new_rectangle.width()
-        self.select_current_annotation["height"] = create_new_rectangle.height()
+        self.select_current_annotation["x"] = fixed_rectangle.x()
+        self.select_current_annotation["y"] = fixed_rectangle.y()
+        self.select_current_annotation["width"] = fixed_rectangle.width()
+        self.select_current_annotation["height"] = fixed_rectangle.height()
 
     #move only one hander of polygon
     def update_polygon_hander(self, point_posstion):
@@ -654,7 +687,7 @@ class Edit_annotation:
         annotation_rotation = self.select_current_annotation["rotation"]
 
         #center and point positaion -rotaion and center
-        local_screen_point = self.rotate_around_center_point(point_posstion, annotation_center, -annotation_rotation)
+        local_screen_point = self.rotate_around_center_point_float(point_posstion, annotation_center, -annotation_rotation)
         #new base point of polygon
         new_point_base = self.screen_points_to_primary_points(local_screen_point)
 
@@ -662,6 +695,29 @@ class Edit_annotation:
         updated_points = [dict(point) for point in self.polygon_drag_points]
         #update one point of this list
         updated_points[current_vertex_index] = {"x": new_point_base.x(), "y": new_point_base.y()}
+
+        #polygon is rotated around the center of its bounding box.
+        screen_polygon_new = QPolygonF([
+            QPointF(self.draw_rectangle.convert_points_to_scren_scale(QPointF(point["x"], point["y"])))
+            for point in updated_points
+        ])
+        new_annotation_center = screen_polygon_new.boundingRect().center()
+
+        #shifting the center, and the same after rotation
+        center_shift_x = new_annotation_center.x() - annotation_center.x()
+        center_shift_y = new_annotation_center.y() - annotation_center.y()
+        rotated_center_shift = self.rotate_around_center_point_float(
+            QPointF(center_shift_x, center_shift_y), QPointF(0, 0), annotation_rotation)
+
+        #pixel-level image correction
+        current_zoom_level = self.current_widget_image.base_zoom_level
+        correction_x = (rotated_center_shift.x() - center_shift_x) / current_zoom_level
+        correction_y = (rotated_center_shift.y() - center_shift_y) / current_zoom_level
+
+        updated_points = [
+            {"x": point["x"] + correction_x, "y": point["y"] + correction_y}
+            for point in updated_points
+        ]
 
         #save list with new updated points
         self.select_current_annotation["points"] = updated_points
