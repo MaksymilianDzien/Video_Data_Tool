@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="fix polygone">
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="fix annotation">
+      <change afterPath="$PROJECT_DIR$/buttons/Slider_ruler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,14 +114,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00063" summary="fix rectangle annotation">
-      <option name="closed" value="true" />
-      <created>1788983834691</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1788983834691</updated>
     </task>
     <task id="LOCAL-00064" summary="add select or add labes">
       <option name="closed" value="true" />
@@ -505,7 +499,15 @@
       <option name="project" value="LOCAL" />
       <updated>1793918282848</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="fix annotation">
+      <option name="closed" value="true" />
+      <created>1794004228374</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1794004228374</updated>
+    </task>
+    <option name="localTasksCounter" value="113" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -532,7 +534,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add polygon annotation" />
     <MESSAGE value="add visibility annotation button" />
     <MESSAGE value="add lock to anntaion" />
     <MESSAGE value="add pinned to anntaion" />
@@ -557,6 +558,7 @@
     <MESSAGE value="add side stretch" />
     <MESSAGE value="fix wand" />
     <MESSAGE value="fix polygone" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix polygone" />
+    <MESSAGE value="fix annotation" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix annotation" />
   </component>
 </project>

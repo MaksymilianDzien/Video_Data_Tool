@@ -10,6 +10,7 @@ from buttons.Button_ctrl_d import Button_ctrl_d
 from buttons.Button_logic_2 import ButtonLogic
 from buttons.Button_logic_3 import Button3
 from buttons.Button_frame_slider import Button_frame_slider
+from buttons.Slider_ruler import Slider_ruler
 from core.Drag_drop_files import Drag_drop_files
 from draw_annotations.Main_Right_Panel_Label_Info import  Main_Right_Panel_Label_Info
 import os
@@ -54,21 +55,21 @@ class Main_Gui(QMainWindow):
         top_panel = QFrame()
 
         #style and height of button
-        top_panel.setFixedHeight(50)
+        top_panel.setFixedHeight(25)
         top_panel.setStyleSheet("background-color: #B6B3C4;")
 
         # Create button layout
         top_button_layout = QHBoxLayout()
-        top_button_layout.setContentsMargins(5, 5, 5, 5)
-        top_button_layout.setSpacing(8)
+        top_button_layout.setContentsMargins(2, 2, 2, 2)
+        top_button_layout.setSpacing(4)
         top_panel.setLayout(top_button_layout)
 
         # button style same as main window
         button_style = """
                    QPushButton {
                        background-color: #ecf0f1;
-                       border: 2px solid #2c3e50;
-                       border-radius: 6px;
+                       border: 1px solid #2c3e50;
+                       border-radius: 3px;
                        font-weight: bold;
                    }
                    QPushButton:hover {
@@ -84,17 +85,16 @@ class Main_Gui(QMainWindow):
 
         #set top panel icon
         top_panel_icon_paths = {
-            1: os.path.join(top_panel_icon_folder, "t1.png"),
             2: os.path.join(top_panel_icon_folder, "ctrl_z.png"),
             3: os.path.join(top_panel_icon_folder, "ctrl_d.png"),}
 
         # top_left_button
-        for i in range(1, 4):
+        for i in range(2, 4):
             top_left_button = QPushButton()
 
             #set side of button
-            top_left_button.setFixedSize(40, 40)
-            top_left_button.setIconSize(QtCore.QSize(24, 24))
+            top_left_button.setFixedSize(20, 20)
+            top_left_button.setIconSize(QtCore.QSize(12, 12))
 
             if os.path.exists(top_panel_icon_paths[i]):
                 top_left_button.setIcon(QIcon(top_panel_icon_paths[i]))
@@ -336,7 +336,7 @@ class Main_Gui(QMainWindow):
 
         # frame_slider
         self.frame_slider = QSlider(QtCore.Qt.Horizontal)
-        self.frame_slider.setFixedHeight(45)
+        self.frame_slider.setFixedHeight(30)
         self.frame_slider.setMinimum(1)
         self.frame_slider.setMaximum(100)
         self.frame_slider.setValue(0)
@@ -360,7 +360,47 @@ class Main_Gui(QMainWindow):
         bottom_slider_row_layout = QHBoxLayout()
         bottom_slider_row_layout.setContentsMargins(0, 0, 0, 0)
         bottom_slider_row_layout.setSpacing(8)
-        bottom_slider_row_layout.addWidget(self.frame_slider, 1)
+        # frame_slider
+        self.frame_slider = QSlider(QtCore.Qt.Horizontal)
+        self.frame_slider.setFixedHeight(30)
+        self.frame_slider.setMinimum(1)
+        self.frame_slider.setMaximum(100)
+        self.frame_slider.setValue(0)
+
+        # frame_slider_input
+        self.frame_slider_input = QLineEdit()
+        self.frame_slider_input.setFixedSize(60, 45)
+        self.frame_slider_input.setAlignment(QtCore.Qt.AlignCenter)
+        self.frame_slider_input.setText("1")
+
+        # name of info file style )
+        self.info_label = QLabel("")
+        self.info_label.setStyleSheet("color: white; font-size: 11px;")
+        self.info_label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+
+        # add_button_slider_logick
+        # change order of buttons
+        self.create_button_frame_slider()
+
+        # slider and frame count style
+        bottom_slider_row_layout = QHBoxLayout()
+        bottom_slider_row_layout.setContentsMargins(0, 0, 0, 0)
+        bottom_slider_row_layout.setSpacing(8)
+
+        #add tick
+        self.frame_slider_ruler = Slider_ruler(self.frame_slider)
+
+        slider_row_layout = QHBoxLayout()
+        slider_row_layout.setContentsMargins(Slider_ruler.margin, 0, Slider_ruler.margin, 0)
+        slider_row_layout.addWidget(self.frame_slider)
+
+        slider_with_ruler_layout = QVBoxLayout()
+        slider_with_ruler_layout.setContentsMargins(0, 0, 0, 0)
+        slider_with_ruler_layout.setSpacing(0)
+        slider_with_ruler_layout.addLayout(slider_row_layout)
+        slider_with_ruler_layout.addWidget(self.frame_slider_ruler)
+
+        bottom_slider_row_layout.addLayout(slider_with_ruler_layout, 1)
         bottom_slider_row_layout.addWidget(self.frame_slider_input)
 
         #add slider in top layout

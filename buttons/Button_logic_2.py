@@ -507,11 +507,8 @@ class ButtonLogic(QLabel):
 
         file_name = self.file_frame_name[index]
 
-        # chcel if is index
-        if self.it_is_video:
-            return f"{file_name} (frame {index + 1}/{len(self.All_frames)})"
-
-        return file_name
+        #number of frame in ()
+        return f"{file_name} (frame {index + 1}/{len(self.All_frames)})"
 
     def left_panel_all_shortcut(self):
 
