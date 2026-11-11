@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="fix annotation">
-      <change afterPath="$PROJECT_DIR$/buttons/Slider_ruler.py" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add slider ruler">
+      <change afterPath="$PROJECT_DIR$/core/Import_annotation_formats.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,14 +114,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00064" summary="add select or add labes">
-      <option name="closed" value="true" />
-      <created>1789062724555</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1789062724555</updated>
     </task>
     <task id="LOCAL-00065" summary="small chane in comment and code">
       <option name="closed" value="true" />
@@ -507,7 +499,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794004228374</updated>
     </task>
-    <option name="localTasksCounter" value="113" />
+    <task id="LOCAL-00113" summary="add slider ruler">
+      <option name="closed" value="true" />
+      <created>1794259692847</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1794259692847</updated>
+    </task>
+    <option name="localTasksCounter" value="114" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -534,7 +534,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add visibility annotation button" />
     <MESSAGE value="add lock to anntaion" />
     <MESSAGE value="add pinned to anntaion" />
     <MESSAGE value="add all options to annotations group" />
@@ -559,6 +558,7 @@
     <MESSAGE value="fix wand" />
     <MESSAGE value="fix polygone" />
     <MESSAGE value="fix annotation" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix annotation" />
+    <MESSAGE value="add slider ruler" />
+    <option name="LAST_COMMIT_MESSAGE" value="add slider ruler" />
   </component>
 </project>

@@ -17,6 +17,7 @@ import os
 from PyQt5.QtGui import QIcon
 from core.Saved_project import Saved_project
 from core.Load_projects import Load_projects
+from core.Import_annotation_formats import Import_annotation_formats
 
 class Main_Gui(QMainWindow):
 
@@ -546,6 +547,21 @@ class Main_Gui(QMainWindow):
 
         file_menu.addAction(menu_action_load_project)
 
+        #import coco , yolo , voc file
+        import_menu = file_menu.addMenu("Import annotations")
+
+        menu_action_import_coco = QAction("COCO 1.0 (.json)", self)
+        menu_action_import_coco.triggered.connect(lambda: self.import_annotations_from_format("coco"))
+        import_menu.addAction(menu_action_import_coco)
+
+        menu_action_import_yolo = QAction("YOLO 1.1 / Ultralytics YOLO (folder or .zip)", self)
+        menu_action_import_yolo.triggered.connect(lambda: self.import_annotations_from_format("yolo"))
+        import_menu.addAction(menu_action_import_yolo)
+
+        menu_action_import_voc = QAction("PASCAL VOC 1.1 (folder or .zip)", self)
+        menu_action_import_voc.triggered.connect(lambda: self.import_annotations_from_format("voc"))
+        import_menu.addAction(menu_action_import_voc)
+
     #save project fuction
     def save_project_to_files(self):
 
@@ -594,6 +610,64 @@ class Main_Gui(QMainWindow):
 
         #old history of undo
         self.button_ctrl_z.clear_saved_snapshots()
+
+    #import annotations from format
+    def import_annotations_from_format(self, format_name):
+
+        #first, select the source
+        if format_name == "coco":
+            source_path, selected_filter = QFileDialog.getOpenFileName(self, "Import COCO", "", "JSON Files (*.json)")
+        else:
+            source_path = self.choose_folder_or_zip_file()
+
+        #exit
+        if not source_path:
+            return
+
+        #warning regarding the replacement of existing annotations
+        if any(self.image.draw_rectangle.fream_annotation.values()):
+            answer = QMessageBox.question(self, "Import annotations", "Current annotations will be replaced. Continue?")
+            if answer != QMessageBox.Yes:
+                return
+
+        #import in a separate file
+        import_logic = Import_annotation_formats(self.image)
+        if format_name == "coco":
+            import_successful, import_message = import_logic.import_coco(source_path)
+        elif format_name == "yolo":
+            import_successful, import_message = import_logic.import_yolo(source_path)
+        else:
+            import_successful, import_message = import_logic.import_pascal_voc(source_path)
+
+        #error message or summary
+        if not import_successful:
+            QMessageBox.critical(self, "Import annotations failed", import_message)
+            return
+
+        QMessageBox.information(self, "Import annotations", import_message)
+
+        #old history of undo
+        self.button_ctrl_z.clear_saved_snapshots()
+
+    #chose folder or zip file
+    def choose_folder_or_zip_file(self):
+
+        source_message_box = QMessageBox(self)
+        source_message_box.setWindowTitle("Import annotations")
+        source_message_box.setText("Select annotations source:")
+        folder_button = source_message_box.addButton("Folder", QMessageBox.AcceptRole)
+        zip_button = source_message_box.addButton("ZIP file", QMessageBox.AcceptRole)
+        source_message_box.addButton(QMessageBox.Cancel)
+        source_message_box.exec_()
+
+        if source_message_box.clickedButton() == folder_button:
+            return QFileDialog.getExistingDirectory(self, "Select folder with annotations")
+
+        if source_message_box.clickedButton() == zip_button:
+            zip_path, selected_filter = QFileDialog.getOpenFileName(self, "Select ZIP file", "", "ZIP Files (*.zip)")
+            return zip_path
+
+        return ""
 
     # enable mouse drag
     def enable_move_mode(self):

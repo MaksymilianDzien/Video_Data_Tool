@@ -1,8 +1,9 @@
 import os
 from PyQt5.QtWidgets import (
-    QFrame, QVBoxLayout, QHBoxLayout, QTabWidget, QListWidget, QListWidgetItem,QWidget, QPushButton, QLabel, QMenu, QShortcut)
+    QFrame, QVBoxLayout, QHBoxLayout, QTabWidget, QListWidget, QListWidgetItem,QWidget, QPushButton, QLabel, QMenu, QShortcut,
+    QInputDialog, QLineEdit, QMessageBox)
 from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, Qt
 from draw_annotations.More_option_copy_and_propagate import More_option_copy_and_propagate
 
 
@@ -342,6 +343,64 @@ class Main_Right_Panel_Label_Info:
         self.annotated_widget.update()
         self.refresh_all_objects_in_list()
 
+    #change label
+    def show_rename_label_menu(self, clicked_row_widget, click_position, label_id):
+
+        #no label no change
+        if label_id is None:
+            return
+
+        #mini menu
+        rename_menu = QMenu()
+        rename_action = rename_menu.addAction("Rename label")
+        chosen_action = rename_menu.exec_(clicked_row_widget.mapToGlobal(click_position))
+
+        if chosen_action is rename_action:
+            self.rename_label(label_id)
+
+    #change name of label
+    def rename_label(self, label_id):
+
+        #find label id
+        label_to_rename = None
+        for current_label in self.current_label_obiect.current_labels:
+            if current_label["id"] == label_id:
+                label_to_rename = current_label
+                break
+
+        if label_to_rename is None:
+            return
+
+        #new input window with new name
+        new_label_name, name_accepted = QInputDialog.getText(
+            self.annotated_widget.window(), "Rename label", "New label name:",
+            QLineEdit.Normal, label_to_rename["name"])
+
+        #exit
+        if not name_accepted:
+            return
+
+        new_label_name = new_label_name.strip()
+
+        #is empty or the same not change
+        if not new_label_name or new_label_name == label_to_rename["name"]:
+            return
+
+        #if label alredy exist
+        for other_label in self.current_label_obiect.current_labels:
+            if other_label is not label_to_rename and other_label["name"].lower() == new_label_name.lower():
+                QMessageBox.warning(self.annotated_widget.window(), "Rename label",
+                                    f"Label '{other_label['name']}' already exists.")
+                return
+
+        #change name
+        label_to_rename["name"] = new_label_name
+
+        #update right panel
+        self.refresh_all_labels_in_list()
+        self.refresh_all_objects_in_list()
+        self.annotated_widget.update()
+
     # Refresh list of oject
     def refresh_all_objects_in_list(self):
 
@@ -413,6 +472,12 @@ class Main_Right_Panel_Label_Info:
         annotation_row_layout.setSpacing(4)
         #add layout to widged
         annotation_row_widget.setLayout(annotation_row_layout)
+
+        #right click change name of label
+        annotation_row_widget.setContextMenuPolicy(Qt.CustomContextMenu)
+        annotation_row_widget.customContextMenuRequested.connect(
+            lambda click_position, current_row=annotation_row_widget, current_annotation=curent_annotation:
+            self.show_rename_label_menu(current_row, click_position, current_annotation.get("label_id")))
 
         #set id and name of label
         object_id = curent_annotation["id"]
@@ -617,6 +682,12 @@ class Main_Right_Panel_Label_Info:
         annotation_group_layout.setSpacing(4)
         #add layout to widged
         annotation_group_row_widget.setLayout(annotation_group_layout)
+
+        #right click change name of label
+        annotation_group_row_widget.setContextMenuPolicy(Qt.CustomContextMenu)
+        annotation_group_row_widget.customContextMenuRequested.connect(
+            lambda click_position, current_row=annotation_group_row_widget, current_label=curent_label:
+            self.show_rename_label_menu(current_row, click_position, current_label["id"]))
 
         #add to widget
         text_label = QLabel(curent_label["name"])
