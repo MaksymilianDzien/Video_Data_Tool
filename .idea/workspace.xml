@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add slider ruler">
-      <change afterPath="$PROJECT_DIR$/core/Import_annotation_formats.py" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add import coco yolo files">
+      <change afterPath="$PROJECT_DIR$/core/Load_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Main_Right_Panel_Label_Info.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,14 +113,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00065" summary="small chane in comment and code">
-      <option name="closed" value="true" />
-      <created>1789145462644</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1789145462644</updated>
     </task>
     <task id="LOCAL-00066" summary="small chane in comment and code">
       <option name="closed" value="true" />
@@ -507,7 +498,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794259692847</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="add import coco yolo files">
+      <option name="closed" value="true" />
+      <created>1794436296429</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1794436296430</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -534,7 +533,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add lock to anntaion" />
     <MESSAGE value="add pinned to anntaion" />
     <MESSAGE value="add all options to annotations group" />
     <MESSAGE value="add save project option" />
@@ -559,6 +557,7 @@
     <MESSAGE value="fix polygone" />
     <MESSAGE value="fix annotation" />
     <MESSAGE value="add slider ruler" />
-    <option name="LAST_COMMIT_MESSAGE" value="add slider ruler" />
+    <MESSAGE value="add import coco yolo files" />
+    <option name="LAST_COMMIT_MESSAGE" value="add import coco yolo files" />
   </component>
 </project>

@@ -18,6 +18,7 @@ from PyQt5.QtGui import QIcon
 from core.Saved_project import Saved_project
 from core.Load_projects import Load_projects
 from core.Import_annotation_formats import Import_annotation_formats
+from core.Load_sequence import Load_sequence
 
 class Main_Gui(QMainWindow):
 
@@ -493,6 +494,25 @@ class Main_Gui(QMainWindow):
         if file_path:
             self.load_image_to_gui(file_path)
 
+    #find file for sequence
+    def find_image_sequence(self):
+
+        #loda image path and filter
+        selected_image_path, selected_filter = QFileDialog.getOpenFileName(
+            self, "Select image of sequence", "", "Images (*.png *.jpg *.jpeg *.bmp)")
+
+        #exit
+        if not selected_image_path:
+            return
+
+        #logic in load_sequence
+        sequence_logic = Load_sequence(self)
+        sequence_loaded, sequence_message = sequence_logic.load_sequence(selected_image_path)
+
+        #if error
+        if not sequence_loaded:
+            QMessageBox.critical(self, "Load image sequence failed", sequence_message)
+
     # Load image
     def load_image_to_gui(self, file_paths):
 
@@ -534,6 +554,12 @@ class Main_Gui(QMainWindow):
         first_action.triggered.connect(self.find_image)
 
         file_menu.addAction(first_action)
+
+       #load sequence of images
+        menu_action_load_sequence = QAction("Load image sequence", self)
+        menu_action_load_sequence.triggered.connect(self.find_image_sequence)
+
+        file_menu.addAction(menu_action_load_sequence)
 
         #option to save all project
         menu_action_save_project = QAction("Save project", self)
