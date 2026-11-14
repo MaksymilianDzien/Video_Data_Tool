@@ -19,6 +19,7 @@ from core.Saved_project import Saved_project
 from core.Load_projects import Load_projects
 from core.Import_annotation_formats import Import_annotation_formats
 from core.Load_sequence import Load_sequence
+from core.Extra_menus import Extra_menus
 
 class Main_Gui(QMainWindow):
 
@@ -588,6 +589,9 @@ class Main_Gui(QMainWindow):
         menu_action_import_voc.triggered.connect(lambda: self.import_annotations_from_format("voc"))
         import_menu.addAction(menu_action_import_voc)
 
+        #dodane: dodatkowe menu 1, 2, 3, 4 obok File
+        self.add_extra_menus()
+
     #save project fuction
     def save_project_to_files(self):
 
@@ -813,3 +817,8 @@ class Main_Gui(QMainWindow):
     # updae frame info
     def update_frame_info(self):
         self.info_label.setText(self.image.get_current_frame_info())
+
+    #dodane: dodaj do paska menu 4 dodatkowe menu (cala logika jest w core/Extra_menus.py)
+    def add_extra_menus(self):
+        self.extra_menus = Extra_menus(self)
+        self.extra_menus.add_extra_menus_to_bar(self.menuBar())

@@ -27,12 +27,13 @@ class Button3:
         # 130%
         self.step_zoom = 1.30
 
+        #whell zoom +- 10%
+        self.step_wheel_zoom = 1.10
 
         self.original_image = None
 
         #clicked to zoom
         self.button_3.clicked.connect(self.toggle_zoom_mode)
-        self.button_3.setToolTip("Zoom: left click - zoom in 30%, right click - zoom out 30% (in the place of the cursor)")
 
         #zoom  - shortcut
         self.zoom_shortcut_plus = QShortcut(QKeySequence("Ctrl++"), self.main_window)
@@ -193,3 +194,16 @@ class Button3:
             return
 
         self.zoom_image(cursor_point, 1 / self.step_zoom)
+
+    #wheel zoom
+    def wheel_zoom(self, wheel_point_of_screen, wheel_delta):
+
+        #then delta = 0 then return
+        if wheel_delta == 0:
+            return
+
+        #spin wheel zoom
+        wheel_zoom_factor = self.step_wheel_zoom ** (wheel_delta / 120)
+
+        #change image
+        self.zoom_image(wheel_point_of_screen, wheel_zoom_factor)

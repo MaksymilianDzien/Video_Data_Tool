@@ -492,6 +492,13 @@ class ButtonLogic(QLabel):
         if event.button() == Qt.LeftButton:
             self.dragging = False
 
+    #wheel zoom event up + 10% down - 10% zoom
+    def wheelEvent(self, event):
+
+        #zoom where mouse is
+        self.window().button3.wheel_zoom(event.pos(), event.angleDelta().y())
+        event.accept()
+
     # future add
     def process_frame(self, video_frames):
         return video_frames
@@ -507,8 +514,11 @@ class ButtonLogic(QLabel):
 
         file_name = self.file_frame_name[index]
 
-        #number of frame in ()
-        return f"{file_name} (frame {index + 1}/{len(self.All_frames)})"
+        # chcel if is index
+        if self.it_is_video:
+            return f"{file_name} (frame {index + 1}/{len(self.All_frames)})"
+
+        return file_name
 
     def left_panel_all_shortcut(self):
 
