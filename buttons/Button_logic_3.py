@@ -116,15 +116,15 @@ class Button3:
         # orginal image
         if self.original_image is None:
 
-            self.original_image = (QPixmap(zoom_image.original_iamge))
+            self.original_image = QPixmap(zoom_image.All_frames[zoom_image.index_frame])
 
         #set new zoom
         new_zoom = self.main_zoom * zoom_factor
 
         #set  width and height for  new image
-        width = (int(self.original_image.width() * new_zoom))
+        width = (int(self.original_image.width() * new_zoom * zoom_image.fit_scale))
 
-        height = (int(self.original_image.height() * new_zoom))
+        height = (int(self.original_image.height() * new_zoom * zoom_image.fit_scale))
 
         #limits of zoom
         if zoom_factor < 1 and (new_zoom < self.zoom_min or width < 1 or height < 1):
@@ -158,7 +158,7 @@ class Button3:
         self.main_zoom = new_zoom
 
         # set zoom to scale labes darwing
-        zoom_image.base_zoom_level = self.main_zoom
+        zoom_image.base_zoom_level = self.main_zoom * zoom_image.fit_scale
 
         # connect new image
         #  ButtonLogic
@@ -173,7 +173,7 @@ class Button3:
         self.original_image = None
 
         #reset zoom to curret value
-        self.main_window.image.base_zoom_level = 1.0
+        self.main_window.image.base_zoom_level = self.main_window.image.fit_scale
 
     #shortcut zoom in
     def zoom_in_shortcut(self):

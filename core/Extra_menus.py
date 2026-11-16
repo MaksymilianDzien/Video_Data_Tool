@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import (
     QAction, QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem,
     QHeaderView, QAbstractItemView, QPushButton)
@@ -20,8 +20,11 @@ class Extra_menus:
     #add menu to bar in gui
     def add_extra_menus_to_bar(self, extra_menu_bar):
 
-        #menu 1, 2, 3 empty
-        self.extra_menu_1 = extra_menu_bar.addMenu("1")
+        #menu 1 frame options
+        self.extra_menu_1 = extra_menu_bar.addMenu("Frame")
+        self.image_frame_options()
+
+        #menu 2, 3 empty
         self.extra_menu_2 = extra_menu_bar.addMenu("2")
         self.extra_menu_3 = extra_menu_bar.addMenu("3")
 
@@ -34,6 +37,75 @@ class Extra_menus:
         menu_action_shortcuts.triggered.connect(self.shortcuts_table)
 
         self.extra_menu_4.addAction(menu_action_shortcuts)
+
+    #frame option
+    def image_frame_options(self):
+
+        main_window = self.extra_main_window
+
+        #(name in menu, function), None = separator
+        image_frame_options = [
+            #button 1  normal mouse
+            ("Normal mouse mode", lambda: main_window.disable_move_mode()),
+            #button 2  move image
+            ("Move frame", lambda: main_window.enable_move_mode()),
+            None,
+            #button 3  zoom in / zoom out
+            ("Zoom in", self.zoom_in_from_menu),
+            ("Zoom out", self.zoom_out_from_menu),
+            None,
+            #button 4  rotate
+            ("Rotate left", lambda: main_window.image.rotate_image_to_left()),
+            ("Rotate right", lambda: main_window.image.rotate_image_to_right()),
+            None,
+            #button 5  reset position, rotation and zoom
+            ("Reset to start position", lambda: main_window.reset_image_to_start_position()),
+        ]
+
+        for image_frame_option in image_frame_options:
+
+            #separator
+            if image_frame_option is None:
+                self.extra_menu_1.addSeparator()
+                continue
+
+            #set option text and function
+            option_text, option_function = image_frame_option
+            #create QAction
+            option_action = QAction(option_text, main_window)
+            #connect function
+            option_action.triggered.connect(option_function)
+            self.extra_menu_1.addAction(option_action)
+
+    #zoom in
+    def zoom_in_from_menu(self):
+        self.zoom_from_menu(self.extra_main_window.button3.step_zoom)
+
+    #zoom out
+    def zoom_out_from_menu(self):
+        self.zoom_from_menu(1 / self.extra_main_window.button3.step_zoom)
+
+    #zoom in menu (in frame)
+    def zoom_from_menu(self, zoom_factor):
+
+        #set zoom and image widget
+        image_widget = self.extra_main_window.image
+        zoom_button = self.extra_main_window.button3
+
+        #no frame loaded
+        if image_widget.original_iamge is None:
+            return
+
+        #center of the visible window
+        zoom_point = QPoint(image_widget.width() // 2, image_widget.height() // 2)
+
+        #if there is no frame in the center, use the center of the frame
+        if not zoom_button.point_is_inside_frame(zoom_point):
+            zoom_point = QPoint(
+                image_widget.positon.x() + image_widget.original_iamge.width() // 2,
+                image_widget.positon.y() + image_widget.original_iamge.height() // 2)
+
+        zoom_button.zoom_image(zoom_point, zoom_factor)
 
     #show shortcuts table
     def shortcuts_table(self):

@@ -1,7 +1,7 @@
 from PyQt5 import Qt , QtCore
 from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout,
-    QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit, QMessageBox)
+    QVBoxLayout, QFrame, QFileDialog, QLabel, QPushButton, QAction, QSlider,QLineEdit, QMessageBox, QApplication)
 from buttons.Button_polygon_option import Button_polygon_option
 from buttons.Button_wand import Button_wand
 from buttons.Button_rotated_option import Button_rotated_option
@@ -29,7 +29,8 @@ class Main_Gui(QMainWindow):
 
         # Title and size gui
         self.setWindowTitle("Simple GUI")
-        self.resize(1200, 800)
+        available_screen = QApplication.primaryScreen().availableGeometry()
+        self.resize(min(1400, available_screen.width() - 20), min(900, available_screen.height() - 80))
         self.Create_GUI()
         self.add_menu()
 
@@ -58,7 +59,7 @@ class Main_Gui(QMainWindow):
         top_panel = QFrame()
 
         #style and height of button
-        top_panel.setFixedHeight(25)
+        top_panel.setFixedHeight(30)
         top_panel.setStyleSheet("background-color: #B6B3C4;")
 
         # Create button layout
@@ -96,8 +97,8 @@ class Main_Gui(QMainWindow):
             top_left_button = QPushButton()
 
             #set side of button
-            top_left_button.setFixedSize(20, 20)
-            top_left_button.setIconSize(QtCore.QSize(12, 12))
+            top_left_button.setFixedSize(24, 24)
+            top_left_button.setIconSize(QtCore.QSize(14, 14))
 
             if os.path.exists(top_panel_icon_paths[i]):
                 top_left_button.setIcon(QIcon(top_panel_icon_paths[i]))

@@ -4,12 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add sequence">
-      <change afterPath="$PROJECT_DIR$/core/Extra_menus.py" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add extra menu">
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/copy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/draw_annotations/annotaion_option_icons/propagate.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gui/left_panel_icons/magic_wand.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buttons/Button_logic_3.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Extra_menus.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/Extra_menus.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/ctrl_icons/ctrl_d.png" beforeDir="false" afterPath="$PROJECT_DIR$/gui/ctrl_icons/ctrl_d.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/ctrl_icons/ctrl_z.png" beforeDir="false" afterPath="$PROJECT_DIR$/gui/ctrl_icons/ctrl_z.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/left_panel_icons/start.png" beforeDir="false" afterPath="$PROJECT_DIR$/gui/left_panel_icons/start.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,10 +68,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\draw_annotations\annotaion_option_icons" />
-      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\buttons\ctrl_icons" />
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\left_panel_icons" />
+      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\ctrl_icons" />
+      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\buttons\ctrl_icons" />
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\annotaion_option_icons" />
-      <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui\bottom_panel_icons" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\JA\PycharmProjects\Dane_wizyjne_projekt\gui" />
@@ -115,14 +121,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00067" summary="fix button left buttons error">
-      <option name="closed" value="true" />
-      <created>1789242216394</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1789242216394</updated>
     </task>
     <task id="LOCAL-00068" summary="fix error value name">
       <option name="closed" value="true" />
@@ -508,7 +506,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794523915110</updated>
     </task>
-    <option name="localTasksCounter" value="116" />
+    <task id="LOCAL-00116" summary="add extra menu">
+      <option name="closed" value="true" />
+      <created>1794696832773</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1794696832773</updated>
+    </task>
+    <option name="localTasksCounter" value="117" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -535,7 +541,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add all options to annotations group" />
     <MESSAGE value="add save project option" />
     <MESSAGE value="add icon to left panel" />
     <MESSAGE value="add icon to botton&#10; panel" />
@@ -560,6 +565,7 @@
     <MESSAGE value="add slider ruler" />
     <MESSAGE value="add import coco yolo files" />
     <MESSAGE value="add sequence" />
-    <option name="LAST_COMMIT_MESSAGE" value="add sequence" />
+    <MESSAGE value="add extra menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="add extra menu" />
   </component>
 </project>

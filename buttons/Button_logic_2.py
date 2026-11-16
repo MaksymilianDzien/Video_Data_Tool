@@ -1,6 +1,6 @@
 import cv2
 import os
-from PyQt5.QtWidgets import QLabel, QShortcut, QApplication
+from PyQt5.QtWidgets import QLabel, QShortcut, QApplication, QSizePolicy
 from PyQt5.QtGui import QPixmap, QPainter, QImage, QTransform, QKeySequence
 from PyQt5.QtCore import Qt, QPoint, QPointF, QEvent
 from draw_annotations.Draw_rectange import Draw_rectangle
@@ -16,8 +16,16 @@ class ButtonLogic(QLabel):
     # chabge in future ( limit bc error)
     LIMIT_VIDEO_SECONDS = 300
 
+    #min size of image
+    min_width_view = 300
+    min_height_view = 200
+
     def __init__(self):
         super().__init__()
+
+        #set size of window
+        self.setMinimumSize(self.min_width_view, self.min_height_view)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         # center image
         self.setAlignment(Qt.AlignCenter)
@@ -32,6 +40,9 @@ class ButtonLogic(QLabel):
 
         # current zoom lvl
         self.base_zoom_level = 1.0
+
+        #scale of image
+        self.fit_scale = 1.0
 
         # drags flags
         self.drag_enabled = False
@@ -180,6 +191,10 @@ class ButtonLogic(QLabel):
             # save name to frames
             self.file_frame_name.append(video_file_name)
 
+        #show first frame
+        if self.All_frames:
+            self.show_frame(1)
+
     # lenght of all frames
     def get_frame_count(self):
         return len(self.All_frames)
@@ -197,7 +212,11 @@ class ButtonLogic(QLabel):
         index = max(0, min(index, len(self.All_frames) - 1))
 
         self.index_frame = index
-        self.original_iamge = self.All_frames[index]
+        #scale iamge
+        self.original_iamge = self.get_fitted_frame(index)
+
+        #set top left position of image
+        self.positon = self.get_start_position()
 
         # un select (bc  new annotaion is select)
         self.edit_current_anotation.deselecte_edited_mode()
@@ -256,12 +275,14 @@ class ButtonLogic(QLabel):
     def rotate_image_to_left(self):
 
         self.image_current_angle = (self.image_current_angle - 90) % 360
+        self.refit_image_to_window()
         self.update()
 
     # rotate image to right ( 90 )
     def rotate_image_to_right(self):
 
         self.image_current_angle = (self.image_current_angle + 90) % 360
+        self.refit_image_to_window()
         self.update()
 
     # reset image poziton and zoom in current image
@@ -273,10 +294,71 @@ class ButtonLogic(QLabel):
 
         # reset zoom current frame
         if self.All_frames:
-            self.original_iamge = self.All_frames[self.index_frame]
+            self.original_iamge = self.get_fitted_frame(self.index_frame)
+            self.positon = self.get_start_position()
 
         # instant refresh (only button need)
         self.repaint()
+
+    #frame scaled so that its width or height is equal to the window
+    def get_fitted_frame(self, frame_index):
+
+        #get original frame
+        original_frame = self.All_frames[frame_index]
+
+        #when rotated by 90/270 degrees, the image sides are reversed,
+        if self.image_current_angle in (90, 270):
+            frame_width_in_window = original_frame.height()
+            frame_height_in_window = original_frame.width()
+        else:
+            frame_width_in_window = original_frame.width()
+            frame_height_in_window = original_frame.height()
+
+        #current size of the window containing the image
+        self.fit_scale = min(max(self.width(), 1) / frame_width_in_window, max(self.height(), 1) / frame_height_in_window)
+
+        #base scale
+        self.base_zoom_level = self.fit_scale
+
+        fitted_width = max(1, round(original_frame.width() * self.fit_scale))
+        fitted_height = max(1, round(original_frame.height() * self.fit_scale))
+
+        return original_frame.scaled(fitted_width, fitted_height, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+
+    def get_start_position(self):
+
+        if self.original_iamge is None:
+            return QPoint(0, 0)
+
+        shown_width = self.original_iamge.width()
+        shown_height = self.original_iamge.height()
+
+        #90° / 270° rotation: the image rotates around its center, with its sides swapping positions,
+        if self.image_current_angle in (90, 270):
+            return QPoint(round((shown_height - shown_width) / 2), round((shown_width - shown_height) / 2))
+
+        return QPoint(0, 0)
+
+    #adjust the frame to the window again; the zoom resets to the start
+    def refit_image_to_window(self):
+
+        if not self.All_frames:
+            return
+
+        self.original_iamge = self.get_fitted_frame(self.index_frame)
+        self.positon = self.get_start_position()
+
+        #start zoom
+        main_window = self.window()
+        if hasattr(main_window, "button3"):
+            main_window.button3.reset_zoom()
+
+        self.update()
+
+    #resizing the program window
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.refit_image_to_window()
 
     #get main trasoftm to match paint event picture
     def get_current_transform_of_rotation(self):
