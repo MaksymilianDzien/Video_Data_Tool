@@ -24,8 +24,11 @@ class Extra_menus:
         self.extra_menu_1 = extra_menu_bar.addMenu("Frame")
         self.image_frame_options()
 
-        #menu 2, 3 empty
-        self.extra_menu_2 = extra_menu_bar.addMenu("2")
+        #menu 2 draw annotation options
+        self.extra_menu_2 = extra_menu_bar.addMenu("Draw annotation")
+        self.draw_annotation_options()
+
+        #menu 3 empty
         self.extra_menu_3 = extra_menu_bar.addMenu("3")
 
         #menu 4
@@ -76,6 +79,37 @@ class Extra_menus:
             #connect function
             option_action.triggered.connect(option_function)
             self.extra_menu_1.addAction(option_action)
+
+    #draw annotation option
+    def draw_annotation_options(self):
+
+        main_window = self.extra_main_window
+
+        #(name in menu, function), None = separator
+        draw_annotation_menu_options = [
+            #drawing - same as buttons in left panel
+            ("Draw rectangle", lambda: main_window.enable_rectangle_drawing()),
+            ("Draw oval", lambda: main_window.enable_oval_drawing()),
+            ("Draw polygon", lambda: main_window.button_polygon_option.toggle_polygon_mode()),
+            ("Magic wand", lambda: main_window.button_magic_wand.toggle_wand_mode()),
+            None,
+            #undo / redo - same as Ctrl + Z / Ctrl + D buttons
+            ("Undo (Ctrl + Z)", lambda: main_window.button_ctrl_z.undo_current_frame()),
+            ("Redo (Ctrl + D)", lambda: main_window.button_ctrl_d.redo_current_frame()),
+        ]
+
+        for draw_annotation_option in draw_annotation_menu_options:
+
+            #separator
+            if draw_annotation_option is None:
+                self.extra_menu_2.addSeparator()
+                continue
+
+            #set option text and function
+            option_text, option_function = draw_annotation_option
+            option_action = QAction(option_text, main_window)
+            option_action.triggered.connect(option_function)
+            self.extra_menu_2.addAction(option_action)
 
     #zoom in
     def zoom_in_from_menu(self):
@@ -180,6 +214,10 @@ def get_shortcuts_list():
         (".", "Rotate image to the right", "Image"),
         ("Mouse wheel up / down", "Zoom in / out by 10% ", "Image"),
         ("Ctrl ", "Normal mouse mode ", "Image"),
+
+        #copy / paste annotations
+        ("Ctrl + C", "Copy selected annotation ", "Image"),
+        ("Ctrl + V", "Paste copied annotation ", "Image"),
 
         #Magic wand
         ("Enter", "Finish magic wand polygon", "Magic wand"),

@@ -20,6 +20,7 @@ from core.Load_projects import Load_projects
 from core.Import_annotation_formats import Import_annotation_formats
 from core.Load_sequence import Load_sequence
 from core.Extra_menus import Extra_menus
+from draw_annotations.Copy_paste_annotations import Copy_paste_annotations
 
 class Main_Gui(QMainWindow):
 
@@ -261,6 +262,9 @@ class Main_Gui(QMainWindow):
 
         # drag and drop image to middle panel
         self.button_drag_drop = Drag_drop_files(self, middle_panel)
+
+        #Ctrl + C / Ctrl + V
+        self.copy_paste_annotations = Copy_paste_annotations(self)
 
         return middle_panel
 
