@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add frame extra menu">
-      <change afterPath="$PROJECT_DIR$/draw_annotations/Copy_paste_annotations.py" afterDir="false" />
+    <list default="true" id="12f0e611-8a1b-47e2-a20e-fde61fb6eb47" name="Changes" comment="add COPY">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Extra_menus.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/Extra_menus.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buttons/Button_logic_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/buttons/Button_logic_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/draw_annotations/Edit_annotation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,14 +113,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1777657841091</updated>
-    </task>
-    <task id="LOCAL-00069" summary="add right panel">
-      <option name="closed" value="true" />
-      <created>1789493465447</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1789493465447</updated>
     </task>
     <task id="LOCAL-00070" summary="add 2 left button rotate and reset image postion">
       <option name="closed" value="true" />
@@ -507,7 +498,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794864564022</updated>
     </task>
-    <option name="localTasksCounter" value="118" />
+    <task id="LOCAL-00118" summary="add COPY">
+      <option name="closed" value="true" />
+      <created>1795042338996</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1795042338999</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -534,7 +533,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add icon to left panel" />
     <MESSAGE value="add icon to botton&#10; panel" />
     <MESSAGE value="add icon to right  anotation&#10; panel" />
     <MESSAGE value="fix save file" />
@@ -559,6 +557,7 @@
     <MESSAGE value="add sequence" />
     <MESSAGE value="add extra menu" />
     <MESSAGE value="add frame extra menu" />
-    <option name="LAST_COMMIT_MESSAGE" value="add frame extra menu" />
+    <MESSAGE value="add COPY" />
+    <option name="LAST_COMMIT_MESSAGE" value="add COPY" />
   </component>
 </project>

@@ -13,6 +13,9 @@ class Edit_annotation:
     #edge size of hander in px
     edge_size_of_hander = 6
 
+    #min polygon points
+    min_polygon_points = 3
+
     # clor handler
     color_of_hander = QColor(0, 150, 255)
 
@@ -96,7 +99,7 @@ class Edit_annotation:
 
         return QPoint(round(rotate_x + annotation_center.x()), round(rotate_y + annotation_center.y()))
 
-    # rotate current annotaion float
+    # # rotate current annotaion float
     def rotate_around_center_point_float(self, current_point, annotation_center, angle_degrees):
 
         #angle radnants
@@ -459,6 +462,66 @@ class Edit_annotation:
         self.draw_rectangle.on_annotion_comit()
         self.current_widget_image.update()
 
+    #mose delete polygon points
+    def mouse_delete_polygon_points(self, point_posstion, curent_index_frame):
+
+        #if edit is not enable or point is moving now
+        if not self.edit_of_annotation or self.select_actived_hander is not None:
+            return False
+
+        current_annotation = self.select_current_annotation
+
+        #only selected polygon on current frame
+        if current_annotation is None or self.select_curennt_frame_index != curent_index_frame:
+            return False
+
+        #if is locked or not visible then no edit
+        if current_annotation.get("type") != "polygon" or current_annotation.get("locked", False) or not current_annotation.get("visible", True):
+            return False
+
+        # current unrorate point of click
+        point_posstion = self.current_widget_image.unrotate_point_of_screen(point_posstion)
+
+        #chek if clicked in point of polygon
+        hander_name = self.find_polygon_hander_press(point_posstion, current_annotation)
+        if hander_name is None or not hander_name.startswith("vertex:"):
+            return False
+
+        #polygon must have min points - click is used but nothing is deleted
+        if len(current_annotation["points"]) <= self.min_polygon_points:
+            return True
+
+        deleted_point_index = int(hander_name.split(":")[1])
+        old_points = current_annotation["points"]
+        new_points = [dict(point) for index, point in enumerate(old_points) if index != deleted_point_index]
+
+        #polygon rotate around center of its rectangle, after delete this center can move
+        old_center = self.get_center_of_points(old_points)
+        new_center = self.get_center_of_points(new_points)
+        center_shift = QPointF(new_center.x() - old_center.x(), new_center.y() - old_center.y())
+        rotated_center_shift = self.rotate_around_center_point_float(
+            center_shift, QPointF(0, 0), current_annotation["rotation"])
+
+        correction_x = rotated_center_shift.x() - center_shift.x()
+        correction_y = rotated_center_shift.y() - center_shift.y()
+
+        current_annotation["points"] = [
+            {"x": point["x"] + correction_x, "y": point["y"] + correction_y}
+            for point in new_points
+        ]
+
+        # save current stage of polygon to undo list and redraw
+        self.draw_rectangle.on_annotion_comit()
+        self.current_widget_image.update()
+        return True
+
+    #get center of rectangle around list of points
+    def get_center_of_points(self, polygon_points):
+
+        all_x = [point["x"] for point in polygon_points]
+        all_y = [point["y"] for point in polygon_points]
+        return QPointF((min(all_x) + max(all_x)) / 2, (min(all_y) + max(all_y)) / 2)
+
     # if pinned option is selected then stop move
     def if_pinned_then_cancel_move(self, current_annotation):
         if self.select_current_annotation is current_annotation and self.select_actived_hander == "move":
@@ -537,10 +600,9 @@ class Edit_annotation:
     # upade annotation in drag mouse clik
     def update_annotation_rotation(self, point_posstion):
 
-        #polygon center point
+        #take the center from the polygon's vertices
         if self.select_current_annotation.get("type") == "polygon":
 
-            #if not points then return
             if not self.polygon_drag_points:
                 return
 
@@ -625,7 +687,7 @@ class Edit_annotation:
             #normalized allows to drag the side to the other side
             moved_rectangle = moved_rectangle.normalized()
 
-            #rotate in center
+            #entry with a mid-point correction
             self.save_resized_rectangle_fixed_opposite(moved_rectangle, annotation_center)
             return
 
@@ -643,21 +705,19 @@ class Edit_annotation:
         #create new rectangle from move point and stay  opposite point
         create_new_rectangle = QRectF(fixed_corner_based, new_cornerr_based).normalized()
 
-        #save fix center
+        #entry with a mid-point correction
         self.save_resized_rectangle_fixed_opposite(create_new_rectangle, annotation_center)
 
-    #save resized rectangle
+    #saving the new rectangle after resizing a rotated annotation
     def save_resized_rectangle_fixed_opposite(self, new_rectangle, old_screen_center):
 
-        #old center
         old_center_base = self.screen_points_to_primary_points(old_screen_center)
 
-        #new center after rotate
+        #new center
         new_center_local = new_rectangle.center()
         new_center_visual = self.rotate_around_center_point_float(
             new_center_local, old_center_base, self.select_current_annotation["rotation"])
 
-        #set new center
         fixed_rectangle = new_rectangle.translated(
             new_center_visual.x() - new_center_local.x(),
             new_center_visual.y() - new_center_local.y())
@@ -696,7 +756,7 @@ class Edit_annotation:
         #update one point of this list
         updated_points[current_vertex_index] = {"x": new_point_base.x(), "y": new_point_base.y()}
 
-        #polygon is rotated around the center of its bounding box.
+        #polygon is rotated around the center of its bounding box,
         screen_polygon_new = QPolygonF([
             QPointF(self.draw_rectangle.convert_points_to_scren_scale(QPointF(point["x"], point["y"])))
             for point in updated_points

@@ -486,6 +486,12 @@ class ButtonLogic(QLabel):
             self.draw_magic_wand.mouse_press_handler(event.pos(), event.button())
             return
 
+        #Ctrl + left click on polygon point delete this point
+        if self.edit_current_anotation.edit_of_annotation and event.button() == Qt.LeftButton \
+                and event.modifiers() & Qt.ControlModifier:
+            if self.edit_current_anotation.mouse_delete_polygon_points(event.pos(), self.index_frame):
+                return
+
         #edit antaion event
         if self.edit_current_anotation.edit_of_annotation and event.button() == Qt.LeftButton:
             self.edit_current_anotation.mouse_press_hander(event.pos(), self.index_frame)
