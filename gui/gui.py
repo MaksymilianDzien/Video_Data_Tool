@@ -21,6 +21,7 @@ from core.Import_annotation_formats import Import_annotation_formats
 from core.Load_sequence import Load_sequence
 from core.Extra_menus import Extra_menus
 from draw_annotations.Copy_paste_annotations import Copy_paste_annotations
+from core.Load_labels_csv import Load_labels_csv
 
 class Main_Gui(QMainWindow):
 
@@ -594,6 +595,13 @@ class Main_Gui(QMainWindow):
         menu_action_import_voc.triggered.connect(lambda: self.import_annotations_from_format("voc"))
         import_menu.addAction(menu_action_import_voc)
 
+        #load labels from csv file
+        file_menu.addSeparator()
+        menu_action_load_labels_csv = QAction("Load labels from CSV", self)
+        menu_action_load_labels_csv.triggered.connect(lambda: Load_labels_csv(self.image).load_labels_from_csv())
+
+        file_menu.addAction(menu_action_load_labels_csv)
+
         #dodane: dodatkowe menu 1, 2, 3, 4 obok File
         self.add_extra_menus()
 
@@ -823,7 +831,7 @@ class Main_Gui(QMainWindow):
     def update_frame_info(self):
         self.info_label.setText(self.image.get_current_frame_info())
 
-    #dodane: dodaj do paska menu 4 dodatkowe menu (cala logika jest w core/Extra_menus.py)
+    #add extra menus to menu
     def add_extra_menus(self):
         self.extra_menus = Extra_menus(self)
         self.extra_menus.add_extra_menus_to_bar(self.menuBar())

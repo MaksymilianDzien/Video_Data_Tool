@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtCore import QSize, Qt
 from draw_annotations.More_option_copy_and_propagate import More_option_copy_and_propagate
+from core.Load_labels_csv import Load_labels_csv
 
 
 class Main_Right_Panel_Label_Info:
@@ -123,6 +124,10 @@ class Main_Right_Panel_Label_Info:
         self.list_of_labels.setSpacing(self.spacing_of_row)
         self.list_of_labels.setStyleSheet(self.list_of_items_style)
         self.object_and_labels_tabs.addTab(self.list_of_labels, "Labels")
+
+        #right click on tab "Labels"
+        self.object_and_labels_tabs.tabBar().setContextMenuPolicy(Qt.CustomContextMenu)
+        self.object_and_labels_tabs.tabBar().customContextMenuRequested.connect(self.show_labels_tab_menu)
 
         #set labels  list of rows
         self.labels_of_rows = []
@@ -357,6 +362,22 @@ class Main_Right_Panel_Label_Info:
 
         if chosen_action is rename_action:
             self.rename_label(label_id)
+
+    #menu of tab "Labels"
+    def show_labels_tab_menu(self, click_position):
+
+        tab_bar = self.object_and_labels_tabs.tabBar()
+
+        #only tab "Labels"
+        if tab_bar.tabAt(click_position) != self.object_and_labels_tabs.indexOf(self.list_of_labels):
+            return
+
+        labels_tab_menu = QMenu()
+        load_labels_action = labels_tab_menu.addAction("Load labels from CSV")
+        chosen_action = labels_tab_menu.exec_(tab_bar.mapToGlobal(click_position))
+
+        if chosen_action is load_labels_action:
+            Load_labels_csv(self.annotated_widget).load_labels_from_csv()
 
     #change name of label
     def rename_label(self, label_id):
