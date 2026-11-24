@@ -1,115 +1,268 @@
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import (
     QAction, QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem,
-    QHeaderView, QAbstractItemView, QPushButton)
+    QHeaderView, QAbstractItemView, QPushButton, QMessageBox)
+from core.Load_labels_csv import Load_labels_csv
 
 
 class Extra_menus:
+
+    #change
+    about_title = "About"
+    about_text = (
+        "Simple GUI - annotation tool\n\n"
+        "Rectangle, oval, polygon and magic wand annotations,\n"
+        "labels, frames of video / image sequence.\n\n"
+        "Author: ")
+
+    #image formats
+    open_file_images_formats = (".png", ".jpg", ".jpeg", ".bmp")
+    #video formats
+    open_file_video_formats = (".mp4", ".avi", ".mov", ".mkv")
+
+    open_file_short_info = "png, jpg, mp4, ..."
 
     def __init__(self, extra_main_window):
 
         #main window of program
         self.extra_main_window = extra_main_window
 
-        #create extra 4 menus
         self.extra_menu_1 = None
         self.extra_menu_2 = None
         self.extra_menu_3 = None
         self.extra_menu_4 = None
+        self.extra_menu_5 = None
+        self.extra_menu_6 = None
 
     #add menu to bar in gui
     def add_extra_menus_to_bar(self, extra_menu_bar):
 
-        #menu 1 frame options
-        self.extra_menu_1 = extra_menu_bar.addMenu("Frame")
-        self.image_frame_options()
+        #menu 1 file options
+        self.extra_menu_1 = extra_menu_bar.addMenu("File")
+        self.add_options_to_menu(self.extra_menu_1, self.file_options())
 
-        #menu 2 draw annotation options
-        self.extra_menu_2 = extra_menu_bar.addMenu("Draw annotation")
-        self.draw_annotation_options()
+        #menu 2 edit options
+        self.extra_menu_2 = extra_menu_bar.addMenu("Edit")
+        self.add_options_to_menu(self.extra_menu_2, self.edit_options())
 
-        #menu 3 empty
-        self.extra_menu_3 = extra_menu_bar.addMenu("3")
+        #menu 3 image options
+        self.extra_menu_3 = extra_menu_bar.addMenu("Image")
+        self.add_options_to_menu(self.extra_menu_3, self.image_frame_options())
 
-        #menu 4
-        self.extra_menu_4 = extra_menu_bar.addMenu("4")
+        #menu 4 draw options
+        self.extra_menu_4 = extra_menu_bar.addMenu("Draw")
+        self.add_options_to_menu(self.extra_menu_4, self.draw_annotation_options())
 
-        # only Shortcuts option
-        menu_action_shortcuts = QAction("Shortcuts", self.extra_main_window)
-        #connect Shortcuts table
-        menu_action_shortcuts.triggered.connect(self.shortcuts_table)
+        #menu 5 annotation options
+        self.extra_menu_5 = extra_menu_bar.addMenu("Annotation")
+        self.add_options_to_menu(self.extra_menu_5, self.annotation_options())
 
-        self.extra_menu_4.addAction(menu_action_shortcuts)
+        #menu 6 help options
+        self.extra_menu_6 = extra_menu_bar.addMenu("Help")
+        self.add_options_to_menu(self.extra_menu_6, self.help_options())
 
-    #frame option
+    #add list of options to menu
+    def add_options_to_menu(self, menu, menu_options):
+
+        for menu_option in menu_options:
+
+            #separator
+            if menu_option is None:
+                menu.addSeparator()
+                continue
+
+            #set option text and function
+            option_text, option_function = menu_option[0], menu_option[1]
+            option_tooltip = menu_option[2] if len(menu_option) > 2 else None
+
+            #submenu
+            if isinstance(option_function, list):
+                self.add_options_to_menu(menu.addMenu(option_text), option_function)
+                continue
+
+            #create QAction
+            option_action = QAction(option_text, self.extra_main_window)
+
+            #tooltip
+            if option_tooltip:
+                option_action.setToolTip(option_tooltip)
+                menu.setToolTipsVisible(True)
+
+            #connect function
+            option_action.triggered.connect(option_function)
+            menu.addAction(option_action)
+
+    #file options
+    def file_options(self):
+
+        main_window = self.extra_main_window
+
+        return [
+            #all file options
+            (f"Open file(s)  ({self.open_file_short_info})", lambda: main_window.find_image(),
+                "Supported formats:\n"
+                "Images: " + "  ".join(self.open_file_images_formats) + "\n"
+                "Video: " + "  ".join(self.open_file_video_formats)),
+            ("Open image sequence...", lambda: main_window.find_image_sequence()),
+            None,
+            ("Save project", lambda: main_window.save_project_to_files()),
+            ("Load project", lambda: main_window.load_project_from_file()),
+            None,
+            ("Import annotations", [
+                ("COCO 1.0 (.json)", lambda: main_window.import_annotations_from_format("coco")),
+                ("YOLO 1.1 / Ultralytics (folder or .zip)", lambda: main_window.import_annotations_from_format("yolo")),
+                ("PASCAL VOC 1.1 (folder or .zip)", lambda: main_window.import_annotations_from_format("voc")),
+            ]),
+            ("Load labels from CSV...", lambda: Load_labels_csv(main_window.image).load_labels_from_csv()),
+            None,
+            ("Exit", lambda: main_window.close()),
+        ]
+
+    #edit options
+    def edit_options(self):
+
+        main_window = self.extra_main_window
+
+        return [
+            #all edit options
+            ("Undo\tCtrl+Z", lambda: main_window.button_ctrl_z.undo_current_frame()),
+            ("Redo\tCtrl+D", lambda: main_window.button_ctrl_d.redo_current_frame()),
+            None,
+            ("Copy annotation\tCtrl+C", lambda: main_window.copy_paste_annotations.copy_selected_annotations()),
+            ("Paste annotation\tCtrl+V", lambda: main_window.copy_paste_annotations.paste_annotations()),
+            None,
+            ("Delete selected\tBackspace", lambda: main_window.right_panel_logic.shortcut_delete_selected()),
+        ]
+
+    #image option
     def image_frame_options(self):
 
         main_window = self.extra_main_window
 
-        #(name in menu, function), None = separator
-        image_frame_options = [
+        #all image options
+        return [
             #button 1  normal mouse
-            ("Normal mouse mode", lambda: main_window.disable_move_mode()),
+            ("Normal mouse mode\tCtrl", lambda: main_window.disable_move_mode()),
             #button 2  move image
-            ("Move frame", lambda: main_window.enable_move_mode()),
-            None,
-            #button 3  zoom in / zoom out
-            ("Zoom in", self.zoom_in_from_menu),
-            ("Zoom out", self.zoom_out_from_menu),
-            None,
+            ("Move image", lambda: main_window.enable_move_mode()),
+            #button 3  zoom
+            ("Zoom", [
+                ("Zoom tool\tZ", lambda: main_window.button3.toggle_zoom_mode()),
+                ("Zoom in", self.zoom_in_from_menu),
+                ("Zoom out", self.zoom_out_from_menu),
+            ]),
             #button 4  rotate
-            ("Rotate left", lambda: main_window.image.rotate_image_to_left()),
-            ("Rotate right", lambda: main_window.image.rotate_image_to_right()),
-            None,
+            ("Rotate", [
+                ("Rotate left\t,", lambda: main_window.image.rotate_image_to_left()),
+                ("Rotate right\t.", lambda: main_window.image.rotate_image_to_right()),
+            ]),
             #button 5  reset position, rotation and zoom
-            ("Reset to start position", lambda: main_window.reset_image_to_start_position()),
+            ("Reset to start position\tCtrl+Space", lambda: main_window.reset_image_to_start_position()),
+            None,
+            #frames (the same as buttons in bottom panel)
+            ("Go to frame", [
+                ("First frame\tShift+Left", lambda: main_window.button_frame_slider.start_value()),
+                ("Back 10 frames\tCtrl+Left", lambda: main_window.button_frame_slider.down_10()),
+                ("Back 1 frame\tLeft", lambda: main_window.button_frame_slider.down_1()),
+                ("Play / Stop\tSpace", lambda: main_window.button_frame_slider.play_frames()),
+                ("Forward 1 frame\tRight", lambda: main_window.button_frame_slider.up_1()),
+                ("Forward 10 frames\tCtrl+Right", lambda: main_window.button_frame_slider.up_10()),
+                ("Last frame\tShift+Right", lambda: main_window.button_frame_slider.max_value()),
+            ]),
         ]
 
-        for image_frame_option in image_frame_options:
-
-            #separator
-            if image_frame_option is None:
-                self.extra_menu_1.addSeparator()
-                continue
-
-            #set option text and function
-            option_text, option_function = image_frame_option
-            #create QAction
-            option_action = QAction(option_text, main_window)
-            #connect function
-            option_action.triggered.connect(option_function)
-            self.extra_menu_1.addAction(option_action)
-
-    #draw annotation option
+    #draw option
     def draw_annotation_options(self):
 
         main_window = self.extra_main_window
 
-        #(name in menu, function), None = separator
-        draw_annotation_menu_options = [
+        return [
             #drawing - same as buttons in left panel
-            ("Draw rectangle", lambda: main_window.enable_rectangle_drawing()),
-            ("Draw oval", lambda: main_window.enable_oval_drawing()),
-            ("Draw polygon", lambda: main_window.button_polygon_option.toggle_polygon_mode()),
+            ("Rectangle\tR", lambda: main_window.enable_rectangle_drawing()),
+            ("Oval\tO", lambda: main_window.enable_oval_drawing()),
+            ("Polygon\tP", lambda: main_window.button_polygon_option.toggle_polygon_mode()),
             ("Magic wand", lambda: main_window.button_magic_wand.toggle_wand_mode()),
-            None,
-            #undo / redo - same as Ctrl + Z / Ctrl + D buttons
-            ("Undo (Ctrl + Z)", lambda: main_window.button_ctrl_z.undo_current_frame()),
-            ("Redo (Ctrl + D)", lambda: main_window.button_ctrl_d.redo_current_frame()),
         ]
 
-        for draw_annotation_option in draw_annotation_menu_options:
+    #annotation options
+    def annotation_options(self):
 
-            #separator
-            if draw_annotation_option is None:
-                self.extra_menu_2.addSeparator()
-                continue
+        main_window = self.extra_main_window
+        #all annotation options
+        return [
+            ("Show / Hide\tV", lambda: main_window.right_panel_logic.shortcut_toggle_visible()),
+            ("Lock / Unlock\tL", lambda: main_window.right_panel_logic.shortcut_toggle_locked()),
+            ("Pin / Unpin\tM", lambda: main_window.right_panel_logic.shortcut_toggle_pinned()),
+            ("Layer", [
+                ("Bring to front\tCtrl+Up", lambda: main_window.right_panel_logic.shortcut_layer_of_selected("to_front")),
+                ("Bring forward\tUp", lambda: main_window.right_panel_logic.shortcut_layer_of_selected("forward")),
+                ("Send backward\tDown", lambda: main_window.right_panel_logic.shortcut_layer_of_selected("backward")),
+                ("Send to back\tCtrl+Down", lambda: main_window.right_panel_logic.shortcut_layer_of_selected("to_back")),
+            ]),
+            None,
+            ("Propagate", self.propagate_selected),
+            ("Rename label", self.rename_selected_label),
+            None,
+            ("Delete\tBackspace", lambda: main_window.right_panel_logic.shortcut_delete_selected()),
+        ]
 
-            #set option text and function
-            option_text, option_function = draw_annotation_option
-            option_action = QAction(option_text, main_window)
-            option_action.triggered.connect(option_function)
-            self.extra_menu_2.addAction(option_action)
+    #help options
+    def help_options(self):
+
+        return [
+            ("Shortcuts", self.shortcuts_table),
+            ("About", self.about_dialog),
+        ]
+
+    #propagate selected annotation
+    def propagate_selected(self):
+
+        right_panel_logic = self.extra_main_window.right_panel_logic
+
+        selected_annotation = right_panel_logic.get_selected_annotation()
+        if selected_annotation is not None:
+            right_panel_logic.copy_and_propagate.propagate_annotation(selected_annotation)
+            return
+
+        selected_label = right_panel_logic.get_selected_label()
+        if selected_label is not None:
+            right_panel_logic.copy_and_propagate.propagate_label(selected_label)
+            return
+
+        self.nothing_selected_message("Propagate")
+
+    #rename label of selected annotation
+    def rename_selected_label(self):
+
+        right_panel_logic = self.extra_main_window.right_panel_logic
+
+        selected_annotation = right_panel_logic.get_selected_annotation()
+        if selected_annotation is not None:
+
+            #annotation without label
+            if selected_annotation.get("label_id") is None:
+                QMessageBox.information(self.extra_main_window, "Rename label", "Selected annotation has no label.")
+                return
+
+            right_panel_logic.rename_label(selected_annotation["label_id"])
+            return
+
+        selected_label = right_panel_logic.get_selected_label()
+        if selected_label is not None:
+            right_panel_logic.rename_label(selected_label["id"])
+            return
+
+        self.nothing_selected_message("Rename label")
+
+    #message if nothing is selected
+    def nothing_selected_message(self, message_title):
+
+        QMessageBox.information(self.extra_main_window, message_title, "Select an annotation or a label first.")
+
+    #window About
+    def about_dialog(self):
+
+        QMessageBox.about(self.extra_main_window, self.about_title, self.about_text)
 
     #zoom in
     def zoom_in_from_menu(self):

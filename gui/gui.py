@@ -21,7 +21,6 @@ from core.Import_annotation_formats import Import_annotation_formats
 from core.Load_sequence import Load_sequence
 from core.Extra_menus import Extra_menus
 from draw_annotations.Copy_paste_annotations import Copy_paste_annotations
-from core.Load_labels_csv import Load_labels_csv
 
 class Main_Gui(QMainWindow):
 
@@ -552,57 +551,9 @@ class Main_Gui(QMainWindow):
 
     #Add top menu
     def add_menu(self):
-        menu_first_bar = self.menuBar()
 
-
-        file_menu = menu_first_bar.addMenu("File")
-
-        first_action = QAction("Find file", self)
-        first_action.triggered.connect(self.find_image)
-
-        file_menu.addAction(first_action)
-
-       #load sequence of images
-        menu_action_load_sequence = QAction("Load image sequence", self)
-        menu_action_load_sequence.triggered.connect(self.find_image_sequence)
-
-        file_menu.addAction(menu_action_load_sequence)
-
-        #option to save all project
-        menu_action_save_project = QAction("Save project", self)
-        menu_action_save_project.triggered.connect(self.save_project_to_files)
-
-        file_menu.addAction(menu_action_save_project)
-
-        #option to load saved project to current loaded images / video
-        menu_action_load_project = QAction("Load project", self)
-        menu_action_load_project.triggered.connect(self.load_project_from_file)
-
-        file_menu.addAction(menu_action_load_project)
-
-        #import coco , yolo , voc file
-        import_menu = file_menu.addMenu("Import annotations")
-
-        menu_action_import_coco = QAction("COCO 1.0 (.json)", self)
-        menu_action_import_coco.triggered.connect(lambda: self.import_annotations_from_format("coco"))
-        import_menu.addAction(menu_action_import_coco)
-
-        menu_action_import_yolo = QAction("YOLO 1.1 / Ultralytics YOLO (folder or .zip)", self)
-        menu_action_import_yolo.triggered.connect(lambda: self.import_annotations_from_format("yolo"))
-        import_menu.addAction(menu_action_import_yolo)
-
-        menu_action_import_voc = QAction("PASCAL VOC 1.1 (folder or .zip)", self)
-        menu_action_import_voc.triggered.connect(lambda: self.import_annotations_from_format("voc"))
-        import_menu.addAction(menu_action_import_voc)
-
-        #load labels from csv file
-        file_menu.addSeparator()
-        menu_action_load_labels_csv = QAction("Load labels from CSV", self)
-        menu_action_load_labels_csv.triggered.connect(lambda: Load_labels_csv(self.image).load_labels_from_csv())
-
-        file_menu.addAction(menu_action_load_labels_csv)
-
-        #dodane: dodatkowe menu 1, 2, 3, 4 obok File
+        #zmienione: BYLO menu File budowane tutaj (Find file, Load image sequence, Save / Load project, Import annotations, Load labels from CSV)
+        #zmienione: teraz wszystkie menu (File, Edit, Image, Draw, Annotation, Help) sa w core/Extra_menus.py
         self.add_extra_menus()
 
     #save project fuction
@@ -831,7 +782,7 @@ class Main_Gui(QMainWindow):
     def update_frame_info(self):
         self.info_label.setText(self.image.get_current_frame_info())
 
-    #add extra menus to menu
+    #add extra menus to menu (zmienione: teraz sa tu wszystkie menu)
     def add_extra_menus(self):
         self.extra_menus = Extra_menus(self)
         self.extra_menus.add_extra_menus_to_bar(self.menuBar())
